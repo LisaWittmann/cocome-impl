@@ -1,0 +1,42 @@
+.product-list-item {
+  align-items: center;
+  background-color: #f6f6f6;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 15px;
+}
+
+.product-list-item:nth-child(2n-1) {
+  background-color: #f1f1f1;
+}
+
+p {
+  margin: 0;
+}
+
+.button--icon {
+  background-color: transparent;
+  border: none;
+  margin: 0 10px;
+  font-size: 18px;
+  font-weight: 400;
+}
+
+  .button--icon:hover {
+    color: pink;
+    font-weight: 600;
+  }
+
+.product-price {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.product-list-total {
+  margin: 20px;
+  justify-content: flex-end;
+}
+
+.product-list-total > * {
+  margin-left: 30px;
+}
