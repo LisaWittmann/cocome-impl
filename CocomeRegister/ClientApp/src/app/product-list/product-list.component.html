@@ -1,18 +1,4 @@
-<div *ngFor="let product of getProductSet()" class="product-list-item row">
-    <div class="product-info col-8">
-        <strong>{{ product.name }}</strong>
-        <p>{{ product.id }}</p>
-    </div>
-    <div class="product-amount col-2">
-        <button class="button--icon" (click)="removeProduct(product)">-</button>
-        <span>{{ getAmount(products, product) }}</span>
-        <button class="button--icon" (click)="addProduct(product)">+</button>
-    </div>
-    <div class="product-price col-2">
-        <p>{{ product.price.toFixed(2) }} €</p>
-    </div>
-</div>
-<div class="product-list-total row">
-    <span>Gesamt:</span>
-    <strong>{{ getTotalPrice() }} €</strong>
+
+<div class="product-list">
+    <app-product-card *ngFor="let product of products" [product]="product" (click)="clickProductCard(product)"></app-product-card>
 </div>

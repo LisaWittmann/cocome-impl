@@ -1,0 +1,21 @@
+<div class="shopping-card">
+    <table class="shopping-card__items">
+        <tbody>
+            <tr *ngFor="let product of getProductSet()">
+                <td>{{ getAmount(product) }}</td>
+                <td>{{ product.name }}</td>
+                <td>{{ product.price.toFixed(2) }} €</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="shopping-card__summary">
+        <div class="shopping-card__total">
+            <strong>Total</strong>
+            <strong>{{ getTotalPrice() }} €</strong>
+        </div>
+        <div class="shopping-card__payment-buttons">
+            <button>Bar</button>
+            <button>Karte</button>
+        </div>
+    </div>
+</div>

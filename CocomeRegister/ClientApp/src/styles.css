@@ -1,5 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
 
+body {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+
+}   
 /* Provide sufficient contrast against white background */
 a {
   color: #0366d6;
@@ -14,3 +21,11 @@ code {
   background-color: #1b6ec2;
   border-color: #1861ac;
 }
+
+.flex-container {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  max-width: 1920px;
+  margin: auto;
+} 

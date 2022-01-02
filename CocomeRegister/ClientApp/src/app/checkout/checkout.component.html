@@ -1,0 +1,8 @@
+<div class="checkout">
+    <div class="checkout__products">
+        <app-product-list (clickProductEvent)="addToCard($event)"></app-product-list>
+    </div>
+    <div class="checkout__shopping-card">
+        <app-shopping-card [products]="shoppingCard"></app-shopping-card>
+    </div>
+</div>
