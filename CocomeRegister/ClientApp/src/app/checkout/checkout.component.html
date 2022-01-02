@@ -1,8 +1,21 @@
 <div class="checkout">
     <div class="checkout__products">
-        <app-product-list (clickProductEvent)="addToCard($event)"></app-product-list>
+        <div class="checkout__search-bar">
+            <input #filter
+                placeholder="Produkt suchen"
+                (change)="setFilter(filter.value)"
+            >
+        </div>
+        <app-product-list
+            [filter]="filter.value"
+            (clickProductEvent)="addToCard($event)"
+        ></app-product-list>
     </div>
     <div class="checkout__shopping-card">
-        <app-shopping-card [products]="shoppingCard"></app-shopping-card>
+        <app-shopping-card
+            [products]="shoppingCard"
+            (addProductEvent)="addToCard($event)"
+            (removeProductEvent)="removeFromCard($event)"
+        ></app-shopping-card>
     </div>
 </div>

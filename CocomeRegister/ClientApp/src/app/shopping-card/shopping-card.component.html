@@ -4,11 +4,11 @@
             <span>{{ getAmount(product) }}</span>
             <span>{{ product.name }}</span>
             <span>{{ product.price.toFixed(2) }} €</span>
-            <button *ngIf="isSelected(product)"
-                    class="shopping-card__remove-button"
-                    (click)="removeProduct(product)">
-                x
-            </button>
+            <button
+                *ngIf="isSelected(product)"
+                class="shopping-card__remove-button"
+                (click)="removeProduct(product)"
+            >x</button>
         </li>
     </ul>
     <div class="shopping-card__summary">

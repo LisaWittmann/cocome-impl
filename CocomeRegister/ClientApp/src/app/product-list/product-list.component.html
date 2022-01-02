@@ -1,4 +1,8 @@
 
 <div class="product-list">
-    <app-product-card *ngFor="let product of products" [product]="product" (click)="clickProductCard(product)"></app-product-card>
+    <app-product-card
+        *ngFor="let product of displayedProducts()"
+        [product]="product"
+        (click)="clickProductCard(product)"
+    ></app-product-card>
 </div>

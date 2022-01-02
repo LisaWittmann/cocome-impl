@@ -7,10 +7,19 @@ import { Product } from 'src/services/Product';
   styleUrls: ['./checkout.component.css']
 })
 export class CheckoutComponent {
-    shoppingCard = new Array<Product>();
+  shoppingCard = new Array<Product>();
+  filter: string;
 
-    addToCard(product: Product) {
-        this.shoppingCard.push(product);
-    }
+  addToCard(product: Product) {
+    this.shoppingCard.push(product);
+  }
+
+  removeFromCard(product: Product) {
+    this.shoppingCard = this.shoppingCard.filter(p => p.id != product.id);
+  }
+
+  setFilter(filter: string) {
+    this.filter = filter;
+  }
 
 }
