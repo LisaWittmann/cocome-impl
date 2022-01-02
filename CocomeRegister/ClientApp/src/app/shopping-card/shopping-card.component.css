@@ -1,52 +1,83 @@
 .shopping-card {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    width: inherit;
-    height: 100%;
-    padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: inherit;
+  height: 100%;
+  padding: 20px;
 }
 
 .shopping-card__items {
-    width: 100%;
+  width: 100%;
+  cursor: pointer;
 }
 
-.shopping-card__items tr > td:last-of-type {
-    text-align: right;
+.shopping-card__items {
+  list-style-type: none;
+  padding-inline-start: 0;
+}
+
+.shopping-card__items li {
+  width: 100%;
+  min-height: 35px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.shopping-card__items li > span:not(:last-of-type) {
+  margin-right: 10px;
+}
+
+.shopping-card li > span:nth-of-type(2) {
+  width: 70%;
+  word-wrap: break-word;
+  hyphens: auto;
+}
+
+.shopping-card__remove-button {
+  color: white;
+  background-color: darkred;
+  position: absolute;
+  right: 0;
+  border: none;
+  height: 35px;
+  width: 80px;
+  margin-left: 10px;
 }
 
 .shopping-card__summary {
-    padding: 20px;
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    border-top: 2px solid #eee;
+  padding: 20px;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  border-top: 2px solid #eee;
 }
 
 .shopping-card__total {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-} 
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
 
 .shopping-card__payment-buttons {
-    display: flex;
-    flex-direction: row;
-    margin-top: 20px;
-    margin-bottom: 20px;
+  display: flex;
+  flex-direction: row;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .shopping-card__payment-buttons > button {
-    width: 50%;
-    background-color: transparent;
-    min-height: 50px;
-    border-radius: 8px;
-    border: 3px solid green;
-    color: green;
+  width: 50%;
+  background-color: transparent;
+  min-height: 50px;
+  border-radius: 8px;
+  border: 3px solid green;
+  color: green;
 }
 
 .shopping-card__payment-buttons > button:not(:last-of-type) {
-    margin-right: 5px;
+  margin-right: 5px;
 }
-
