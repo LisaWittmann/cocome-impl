@@ -27,13 +27,13 @@ import { ProductCardComponent } from '../product-card/product-card.component';
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
-    RouterModule.forRoot([
+    RouterModule.forChild([
       { path: 'cashdesk', component: CashDeskHomeComponent },
       { path: 'cashdesk/checkout', component: CashDeskCheckoutComponent },
       { path: 'cashdesk/payment', component: CashDeskPaymentComponent },
     ])
   ],
   providers: [],
-  bootstrap: [CashDeskHomeComponent]
+  bootstrap: [CashDeskComponent]
 })
 export class CashDeskModule { }

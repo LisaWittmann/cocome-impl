@@ -5,6 +5,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
 import { CashDeskModule } from './cashdesk/cashdesk.module';
+import { StoreModule } from './store/store.module';
+import { EnterpriseModule } from './enterprise/enterprise.module';
 
 import { AppComponent } from './app.component';
 import { NavigationComponent } from './navigation/navigation.component';
@@ -19,7 +21,12 @@ import { NavigationComponent } from './navigation/navigation.component';
     HttpClientModule,
     FormsModule,
     CashDeskModule,
+    StoreModule,
+    EnterpriseModule,
     RouterModule.forRoot([
+      { path: 'cashdesk', component: CashDeskModule },
+      { path: 'store', component: StoreModule },
+      { path: 'enterprise', component: EnterpriseModule }
     ])
   ],
   providers: [],
