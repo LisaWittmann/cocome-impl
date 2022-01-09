@@ -4,10 +4,11 @@ import { Product } from 'src/services/Product';
 @Component({
   selector: 'app-product-list',
   templateUrl: './product-list.component.html',
-  styleUrls: ['./product-list.component.css']
+  styleUrls: ['./product-list.component.scss']
 })
 export class ProductListComponent {
   @Input() filter: string;
+  @Input() discount: number;
   @Input() products: Product[] = [
     {
       id: 12345,

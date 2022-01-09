@@ -1,0 +1,84 @@
+.navigation {
+    position: absolute;
+    background-color: white;
+    width: 100vw;
+    z-index: 9;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &__content {
+        font-size: 22px;
+        ul {
+            list-style: none;
+            padding-inline-start: 0;
+
+            li {
+                cursor: pointer;
+                padding: 5px;
+                &:hover {
+                    color: #9ACC91;
+                    text-decoration: underline;
+                }
+
+                a {
+                    color: inherit;
+                }
+            }  
+        } 
+    }
+
+    &__button {
+        position: absolute;
+        background-color: white;
+        z-index: 10;
+        top: 20px;
+        left: 20px;
+        width: 40px;
+        height: 40px;
+        transform: translate(0, 0);
+        box-shadow: 2px 2px 5px 2px rgba(0, 0, 0, 0.1);
+        border: none;
+        border-radius: 100%;
+        
+        .bar {
+            width: 100%;
+            max-width: 22px;
+            height: 3px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            background: black;
+            border-radius: 9999px;
+            transition: all 0.2s ease;
+        }
+        
+        .bar-1 {
+            transform: translate(-50%, calc(-50% - 7px));
+            &--open {
+                transform: translate(-50%, -50%) rotate(45deg);
+                margin-top: 0;
+            }
+        }
+    
+        .bar-2 {
+            transform: translate(-50%, -50%);
+            &--open {
+                opacity: 0;
+            }
+        }
+        
+        .bar-3 {
+            transform: translate(-50%, calc(-50% + 7px));
+            &--open {
+                top: 50%;
+                transform: translate(-50%, -50%) rotate(-45deg);
+            }
+        }
+    }
+}

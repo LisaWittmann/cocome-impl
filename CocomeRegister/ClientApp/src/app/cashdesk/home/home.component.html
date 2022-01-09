@@ -1,0 +1,13 @@
+<div class="cashdesk page-container">
+    <div class="column-wrapper">
+        <a
+            [routerLink]="'checkout'" 
+            class="button"
+        >Neuen Vorgang starten</a>
+        <button 
+            *ngIf="expressMode" 
+            class="button button--filled"
+            (click)="deactivateExpressMode()"
+        >Express Modus beenden</button>
+    </div>
+</div>
