@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { Product } from 'src/services/Product';
+import { CashDeskStateService } from '../cashdesk.service';
 
 @Component({
   selector: 'app-cashdesk-shopping-card',
@@ -8,67 +9,42 @@ import { Product } from 'src/services/Product';
   styleUrls: ['./shopping-card.component.scss']
 })
 export class CashDeskShoppingCardComponent {
-    @Input() products: Array<Product>;
     @Input() discount: number;
 
     @Output() addProductEvent = new EventEmitter<Product>();
     @Output() removeProductEvent = new EventEmitter<Product>();
 
     selectedProduct: Product | undefined = undefined;
+    shoppingCard: Product[];
+    shoppingCardSum: number;
+    totalDiscount: number;
+    totalPrice: number;
 
-    constructor(private router: Router) {}
+    constructor(
+        private router: Router,
+        private cashDeskState: CashDeskStateService,
+    ) {
+        this.cashDeskState.shoppingCard$.subscribe(shoppingCard => {
+            this.shoppingCard = shoppingCard;
+            this.shoppingCardSum = this.cashDeskState.shoppingCardSum;
+            this.totalDiscount = this.cashDeskState.totalDiscount;
+            this.totalPrice = this.cashDeskState.totalPrice;
+        })
+    }
 
-    /**
-     * get amount of product in product list
-     * products are compared by their id
-     * @param product product for which id the list will be filtered
-     * @returns amount of product in list
-     */
+    get productSet() {
+        return [...new Set(this.shoppingCard)];
+    }
+
     getAmount(product: Product): number {
-        return this.products.filter(p => p.id == product.id).length;
+        return this.shoppingCard.filter(p => p.id == product.id).length;
     }
 
-    /**
-     * transform product list into a set
-     * @returns array without dublicated items
-     */
-    getProducts(): Array<Product> {
-        return [...new Set(this.products)];
-    }
-
-    /**
-     * get sum of all product prices
-     * @returns total price of product list
-     */
-    getTotalPrice(): number {
-        return this.getSum() - this.getDiscount();
-    }
-
-    getSum(): number {
-        let sum = 0;
-        for (const product of this.products) {
-            sum += product.price;
-        }
-        return sum;
-    }
-
-    getDiscount(): number {
-        return this.getSum() * this.discount;
-    }
-
-    /**
-     * emit event to add product to product list
-     * @param product product that should be added
-     */
     addProduct(product: Product): void {
         this.selectedProduct = undefined;
         this.addProductEvent.emit(product);
     }
 
-    /**
-     * emit event to remove product to product list
-     * @param product product that should be removed
-     */
     removeProduct(product: Product): void {
         this.selectedProduct = undefined;
         this.removeProductEvent.emit(product);

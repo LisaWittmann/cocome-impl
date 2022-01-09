@@ -7,7 +7,6 @@ import { Product } from 'src/services/Product';
   styleUrls: ['./product-list.component.scss']
 })
 export class ProductListComponent {
-  @Input() filter: string;
   @Input() discount: number;
   @Input() products: Product[] = [
     {
@@ -103,12 +102,18 @@ export class ProductListComponent {
   ];
   @Output() clickProductEvent = new EventEmitter<Product>()
 
+  filter: string;
+
   clickProductCard(product: Product) {
     this.clickProductEvent.emit(product)
   }
 
+  setFilter(filter: string) {
+    this.filter = filter;
+  }
+
   displayedProducts(): Array<Product> {
-    if (this.filter == "") return this.products;
+    if (!this.filter) return this.products;
     return this.products.filter(p => p.id.toString().includes(this.filter) || p.name.includes(this.filter));
   }
 

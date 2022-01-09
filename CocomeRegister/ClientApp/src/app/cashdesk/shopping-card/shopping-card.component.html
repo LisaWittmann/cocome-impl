@@ -1,7 +1,7 @@
 <div class="shopping-card">
     <ul class="shopping-card__items">
         <li 
-            *ngFor="let product of getProducts()" 
+            *ngFor="let product of productSet" 
             (click)="select(product)"
         >
             <span>{{ getAmount(product) }}</span>
@@ -20,24 +20,24 @@
             class="shopping-card__total"
         >
             <span>Zwischensumme</span>
-            <span>{{ getSum().toFixed(2) }} €</span>
+            <span>{{ shoppingCardSum.toFixed(2) }} €</span>
         </div>
         <div 
             *ngIf="discount" 
             class="shopping-card__discount"
         >
             <strong>- {{ (discount * 100).toFixed(2) }}%</strong>
-            <strong>{{ getDiscount().toFixed(2) }} €</strong>
+            <strong>{{ totalDiscount.toFixed(2) }} €</strong>
         </div>
         <div class="shopping-card__total">
             <strong>Gesamtsumme</strong>
-            <strong>{{ getTotalPrice().toFixed(2) }} €</strong>
+            <strong>{{ totalPrice.toFixed(2) }} €</strong>
         </div>
         <div class="shopping-card__complete column-wrapper">
             <button 
                 class="button" 
                 (click)="completeCheckout()"
-                [class.disabled]="!getTotalPrice()"
+                [class.disabled]="!totalPrice"
             >Kauf abschließen</button>
         </div>
     </div>

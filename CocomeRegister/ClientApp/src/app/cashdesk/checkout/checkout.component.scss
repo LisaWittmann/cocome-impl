@@ -31,30 +31,6 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-    }    
-
-    &__search-bar {
-        margin-top: 10px;
-    
-        input {
-            min-width: 400px;
-            width: 60%;
-            min-height: 40px;
-            border-radius: 18px;
-            margin: 20px;
-            padding-left: 20px;
-            padding-right: 20px;
-            border: 1px solid #ddd;
-            box-shadow: 5px 5px 0 0 rgba(0, 0, 0, 0.04);
-
-            &::placeholder {
-                opacity: 0.3;
-            }
-
-            &:focus::placeholder {
-                opacity: 0;
-            }
-        }
     }
     
     &__shopping-card {

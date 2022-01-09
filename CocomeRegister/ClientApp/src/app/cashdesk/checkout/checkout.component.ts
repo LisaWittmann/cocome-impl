@@ -11,39 +11,21 @@ import { CashDeskStateService } from '../cashdesk.service';
 export class CashDeskCheckoutComponent {
     expressMode: boolean;
     discount: number;
-    shoppingCard = new Array<Product>();
-    filter: string;
 
     constructor(
       private cashdeskState: CashDeskStateService,
-      private cdr: ChangeDetectorRef
     ) {
       this.cashdeskState.expressMode$.subscribe(mode => {
         this.expressMode = mode;
-        this.cdr.markForCheck();
-      })
-      this.cashdeskState.discount$.subscribe(discount => {
-        this.discount = discount;
-        this.cdr.markForCheck();
+        this.discount = this.cashdeskState.discount;
       })
     } 
 
     addToCard(product: Product) {
-      if (this.expressMode && this.shoppingCard.length >= 8) return;
-      this.shoppingCard.push(product);
+      this.cashdeskState.addProduct(product);
     }
 
     removeFromCard(product: Product) {
-      this.shoppingCard = this.shoppingCard.filter(p => p.id != product.id);
-    } 
-
-    setFilter(filter: string) {
-      this.filter = filter;
+      this.cashdeskState.removeProduct(product);
     }
-
-    resetExpressMode() {
-      this.expressMode = false;
-      this.discount = 0;
-    }
-
 }

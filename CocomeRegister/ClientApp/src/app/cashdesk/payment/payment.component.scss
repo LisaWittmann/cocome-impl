@@ -1,9 +1,51 @@
 .payment {
     justify-content: center;
     align-items: center;
+    position: relative;
 
     h1 {
         font-size: 28px;
         margin-bottom: 40px;
+    }
+
+    &__overlay {
+        position: absolute;
+        z-index: 12;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(black, 0.5);
+
+        &-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: white;
+            border-radius: 12px;
+            width: 80%;
+            max-width: 600px;
+            min-height: 80%;
+            padding: 20px;
+            text-align: center;
+
+            .column-wrapper {
+                margin-top: 30px;
+            }
+
+            > *:not(:last-child) {
+                margin-bottom: 20px;
+            }
+
+            input {
+                border-radius: 12px;
+                padding: 5px 10px;
+                text-align: center;
+            }
+        }
     }
 }

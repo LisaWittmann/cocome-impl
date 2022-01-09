@@ -1,32 +1,63 @@
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
+import { Product } from "src/services/Product";
 import { StateService } from "src/services/StateService";
 
 interface CashDeskState {
     expressMode: boolean;
-    discount: number,
+    shoppingCard: Product[],
 }
 
 const initialState: CashDeskState = {
     expressMode: true,
-    discount: 0.5,
+    shoppingCard: [],
 }
 
 @Injectable({providedIn: 'root'})
 export class CashDeskStateService extends StateService<CashDeskState> {
     expressMode$: Observable<boolean> = this.select(state => state.expressMode);
-    discount$: Observable<number> = this.select(state => state.discount);
+    shoppingCard$: Observable<Product[]> = this.select(state => state.shoppingCard);
 
     constructor() {
         super(initialState);
     }
 
     setExpressMode(expressMode: boolean) {
-        this.setState({ expressMode: expressMode, discount: this.getDiscount(expressMode) });
+        this.setState({ expressMode: expressMode });
     }
 
-    private getDiscount(expressMode: boolean) {
-        if (expressMode) return 0.5;
-        return 0;
+    addProduct(product: Product) {
+        if (this.state.expressMode && this.state.shoppingCard.length > 8) return;
+        this.setState({ shoppingCard: [...this.state.shoppingCard, product] })
+    }
+
+    removeProduct(product: Product) {
+        this.setState({ shoppingCard: [...this.state.shoppingCard.filter(
+            cardItem => cardItem.id != product.id 
+        )]});
+    }
+
+    closeCheckoutSession() {
+        this.setState({ shoppingCard: [] });
+    }
+
+    get discount() {
+        return this.state.expressMode ? 0.5 : 0;
+    }
+
+    get totalPrice() {
+        return this.shoppingCardSum - this.totalDiscount;
+    }
+
+    get shoppingCardSum(): number {
+        let sum = 0;
+        for (const product of this.state.shoppingCard) {
+            sum += product.price;
+        }
+        return sum;
+    }
+
+    get totalDiscount(): number {
+        return this.shoppingCardSum * this.discount;
     }
 }

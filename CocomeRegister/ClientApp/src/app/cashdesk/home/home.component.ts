@@ -10,13 +10,9 @@ import { CashDeskStateService } from '../cashdesk.service';
 export class CashDeskHomeComponent {
   expressMode: boolean;
   
-  constructor(
-    private cashdeskState: CashDeskStateService,
-    private cdr: ChangeDetectorRef
-  ) {
+  constructor(private cashdeskState: CashDeskStateService) {
     this.cashdeskState.expressMode$.subscribe(mode => {
       this.expressMode = mode;
-      this.cdr.markForCheck();
     })
   }
 

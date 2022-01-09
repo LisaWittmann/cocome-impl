@@ -1,9 +1,16 @@
-
 <div class="product-list">
-    <app-product-card 
-        *ngFor="let product of displayedProducts()"
-        [product]="product"
-        [discount]="discount"
-        (click)="clickProductCard(product)"
-    ></app-product-card>
+    <div class="product-list__searchbar">
+        <input #filter 
+            placeholder="Produkt suchen" 
+            (change)="setFilter(filter.value)"
+        >
+    </div>
+    <div class="product-list__items">
+        <app-product-card 
+            *ngFor="let product of displayedProducts()"
+            [product]="product"
+            [discount]="discount"
+            (click)="clickProductCard(product)"
+        ></app-product-card>
+    </div>
 </div>

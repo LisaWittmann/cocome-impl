@@ -3,22 +3,14 @@
         <div *ngIf="expressMode" class="checkout__express">
             Express Modus - 50% Rabatt
         </div>
-        <div class="checkout__search-bar">
-            <input #filter 
-                placeholder="Produkt suchen" 
-                (change)="setFilter(filter.value)"
-            >
-        </div>
         <app-product-list 
             [discount]="discount"
-            [filter]="filter.value" 
             (clickProductEvent)="addToCard($event)"
         ></app-product-list>
     </div>
     <div class="checkout__shopping-card">
         <app-cashdesk-shopping-card
             [discount]="discount"
-            [products]="shoppingCard"
             (addProductEvent)="addToCard($event)"
             (removeProductEvent)="removeFromCard($event)"
         ></app-cashdesk-shopping-card>
