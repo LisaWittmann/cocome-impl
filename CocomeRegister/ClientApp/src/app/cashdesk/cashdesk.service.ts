@@ -2,8 +2,10 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { Product } from "src/services/Product";
 import { StateService } from "src/services/StateService";
+import { StoreStateService } from "../store/store.service";
 
 interface CashDeskState {
+    availableProducts: Product[],
     expressMode: boolean;
     shoppingCard: Product[],
 }
@@ -11,15 +13,21 @@ interface CashDeskState {
 const initialState: CashDeskState = {
     expressMode: true,
     shoppingCard: [],
+    availableProducts: [],
 }
 
 @Injectable({providedIn: 'root'})
 export class CashDeskStateService extends StateService<CashDeskState> {
     expressMode$: Observable<boolean> = this.select(state => state.expressMode);
     shoppingCard$: Observable<Product[]> = this.select(state => state.shoppingCard);
+    availableProducts$: Observable<Product[]> = this.select(state => state.availableProducts);
 
-    constructor() {
+    constructor(private storeState: StoreStateService) {
         super(initialState);
+        this.storeState.products$.subscribe(products => { 
+            // not working yet
+            this.setState({ availableProducts: this.storeState.availableProducts })
+        });
     }
 
     setExpressMode(expressMode: boolean) {
@@ -38,6 +46,7 @@ export class CashDeskStateService extends StateService<CashDeskState> {
     }
 
     closeCheckoutSession() {
+        this.storeState.removeProducts(this.state.shoppingCard);
         this.setState({ shoppingCard: [] });
     }
 

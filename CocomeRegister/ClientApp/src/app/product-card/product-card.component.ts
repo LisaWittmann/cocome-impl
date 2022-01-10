@@ -8,7 +8,7 @@ import { Product } from 'src/services/Product';
 })
 export class ProductCardComponent {
   @Input() product: Product;
-  @Input() discount: number; 
+  @Input() discount: number;
 
   getDiscountedPrice() {
     if (this.discount) {

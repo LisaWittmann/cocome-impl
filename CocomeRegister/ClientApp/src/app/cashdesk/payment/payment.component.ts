@@ -43,7 +43,6 @@ export class CashDeskPaymentComponent {
 
   checkoutCash() {
     this.paymentMethod = PaymentMethod.CASH;
-    console.log(this.paymentMethod);
   }
 
   checkoutCard() {
@@ -55,7 +54,6 @@ export class CashDeskPaymentComponent {
   }
 
   confirmPayment() {
-    console.log("payment confirmed")
     this.cashdeskState.closeCheckoutSession();
     this.router.navigate(['cashdesk']);
   }

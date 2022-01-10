@@ -1,8 +1,7 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
+import { CommonModule } from '@angular/common'; 
 
 import { CashDeskComponent } from './cashdesk.component';
 import { CashDeskHomeComponent } from './home/home.component';
@@ -12,8 +11,20 @@ import { CashDeskShoppingCardComponent } from './shopping-card/shopping-card.com
 
 import { ProductListComponent } from '../product-list/product-list.component';
 import { ProductCardComponent } from '../product-card/product-card.component';
+import { CashDeskStateService } from './cashdesk.service';
+
+const cashDeskRoutes: Routes = [
+  { path: 'cashdesk', component: CashDeskHomeComponent },
+  { path: 'cashdesk/checkout', component: CashDeskCheckoutComponent },
+  { path: 'cashdesk/payment', component: CashDeskPaymentComponent },
+];
 
 @NgModule({
+  imports: [
+    FormsModule,
+    CommonModule,
+    RouterModule.forChild(cashDeskRoutes),
+  ],
   declarations: [
     CashDeskComponent,
     CashDeskHomeComponent,
@@ -23,17 +34,7 @@ import { ProductCardComponent } from '../product-card/product-card.component';
     ProductListComponent,
     ProductCardComponent,
   ],
-  imports: [
-    BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
-    HttpClientModule,
-    FormsModule,
-    RouterModule.forChild([
-      { path: 'cashdesk', component: CashDeskHomeComponent },
-      { path: 'cashdesk/checkout', component: CashDeskCheckoutComponent },
-      { path: 'cashdesk/payment', component: CashDeskPaymentComponent },
-    ])
-  ],
-  providers: [],
+  providers: [CashDeskStateService],
   bootstrap: [CashDeskComponent]
 })
 export class CashDeskModule { }
