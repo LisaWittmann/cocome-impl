@@ -13,7 +13,7 @@ import { ProductListComponent } from '../product-list/product-list.component';
 import { ProductCardComponent } from '../product-card/product-card.component';
 import { CashDeskStateService } from './cashdesk.service';
 
-const cashDeskRoutes: Routes = [
+const cashdeskRoutes: Routes = [
   { path: 'cashdesk', component: CashDeskHomeComponent },
   { path: 'cashdesk/checkout', component: CashDeskCheckoutComponent },
   { path: 'cashdesk/payment', component: CashDeskPaymentComponent },
@@ -23,7 +23,7 @@ const cashDeskRoutes: Routes = [
   imports: [
     FormsModule,
     CommonModule,
-    RouterModule.forChild(cashDeskRoutes),
+    RouterModule.forChild(cashdeskRoutes),
   ],
   declarations: [
     CashDeskComponent,

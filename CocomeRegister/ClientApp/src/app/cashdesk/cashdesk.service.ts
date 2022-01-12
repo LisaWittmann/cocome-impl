@@ -24,7 +24,7 @@ export class CashDeskStateService extends StateService<CashDeskState> {
 
     constructor(private storeState: StoreStateService) {
         super(initialState);
-        this.storeState.products$.subscribe(products => { 
+        this.storeState.inventory$.subscribe(() => { 
             // not working yet
             this.setState({ availableProducts: this.storeState.availableProducts })
         });

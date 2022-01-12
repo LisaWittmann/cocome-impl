@@ -5,30 +5,31 @@ import { Product } from "src/services/Product";
 import { StateService } from "src/services/StateService";
 
 interface StoreState {
-    products: Map<Product, number>,
+    inventory: Map<Product, number>,
     currentOrder: Product[],
     orders: Order[],
 }
 
 const initialState: StoreState = {
-    products: new Map<Product, number>(),
+    inventory: new Map<Product, number>(),
     currentOrder: [],
     orders: [],
 }
 
 @Injectable({providedIn: 'root'})
 export class StoreStateService extends StateService<StoreState> {
-    products$: Observable<Map<Product, number>> = this.select(state => state.products);
+    inventory$: Observable<Map<Product, number>> = this.select(state => state.inventory);
     currentOrder$: Observable<Product[]> = this.select(state => state.currentOrder);
     orders$: Observable<Order[]> = this.select(state => state.orders);
 
     constructor() {
         super(initialState);
-        const productMap = new Map<Product, number>();
+        // test data
+        const inventory = new Map<Product, number>();
         for (const product of testProducts) {
-            productMap.set(product, Math.round(Math.random() * 100));
+            inventory.set(product, Math.round(Math.random() * 100));
         }
-        this.setState({ products: productMap });
+        this.setState({ inventory: inventory });
     }
 
     get closedOrders() {
@@ -45,7 +46,7 @@ export class StoreStateService extends StateService<StoreState> {
 
     get availableProducts() {
         const availableProducts = [];
-        for (const [key, value] of this.state.products) {
+        for (const [key, value] of this.state.inventory) {
             if (value > 0) {
                 console.log("available", key.name);
                 availableProducts.push(key);
@@ -60,14 +61,14 @@ export class StoreStateService extends StateService<StoreState> {
         for (const order of orders) {
             if (order.id == orderId) order.closed = true;
         }
-        const products = this.state.products;
+        const products = this.state.inventory;
         for (const key of products.keys()) {
             if (this.containsProduct(orderId, key.id)) {
                 const amount = products.get(key) + this.getAmount(orderId, key.id);
                 products.set(key, amount);
             }
         }
-        this.setState({ orders: orders, products: products })
+        this.setState({ orders: orders, inventory: products })
     }
 
     private getAmount(productId: number, orderId: number) {
@@ -81,21 +82,21 @@ export class StoreStateService extends StateService<StoreState> {
     }
 
     changePrice(productId: number, price: number) {
-        const products = this.state.products;
+        const products = this.state.inventory;
         for (const key of products.keys()) {
             if (key.id == productId) key.price = price;
         }
-        this.setState({ products: products });
+        this.setState({ inventory: products });
     }
 
     removeProducts(products: Product[]) {
-        const storeProducts = this.state.products;
+        const storeProducts = this.state.inventory;
         for (const key of storeProducts.keys()) {
             const productsToKey = products.filter(product => product.id == key.id); 
             storeProducts.set(key, storeProducts.get(key) - productsToKey.length);
         }
-        this.setState({ products: storeProducts });
-        console.log(this.state.products);
+        this.setState({ inventory: storeProducts });
+        console.log(this.state.inventory);
     }
 }
 
