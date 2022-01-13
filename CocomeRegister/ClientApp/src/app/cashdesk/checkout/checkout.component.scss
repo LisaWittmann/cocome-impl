@@ -1,3 +1,5 @@
+@import "../../../styles.scss";
+
 .checkout {
     overflow: hidden;
     flex-direction: row;
@@ -5,32 +7,19 @@
 
     &__express {
         position: relative;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        @include flex-center();
+        @include color-scheme-green();
         width: 100%;
-        background-color: #9ACC91;
         padding: 25px;
-        font-size: 22px;
-        font-weight: 500;
-
-        &-reset {
-            position: absolute;
-            right: 0;
-            height: 30px;
-            width: 30px;
-            background-color: transparent;
-            border: none;
-        }
+        font-size: $text-l;
+        font-weight: $poppins-medium;
     }
  
     &__products {
         width: 70%;
-        background-color: #eee;
+        @include color-scheme-grey();
         overflow-y: auto;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+        @include flex-center(flex-start, column);
     }
     
     &__shopping-card {

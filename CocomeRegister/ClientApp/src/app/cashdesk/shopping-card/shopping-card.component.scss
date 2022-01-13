@@ -1,35 +1,28 @@
+@import "../../../styles.scss";
+
 .shopping-card {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
+    @include flex-center(flex-start, column);
     width: inherit;
     height: 100%;
-    padding: 20px;
+    padding: $spacing-s;
 
     &__items {
         width: 100%;
         cursor: pointer;
-        list-style-type: none;
-        padding-inline-start: 0;
 
         li {
             width: 100%;
             min-height: 35px;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: space-between;
+            @include flex-center(space-between);
 
             & > span {
                 &:not(:last-of-type) {
-                    margin-right: 10px;
+                    margin-right: $spacing-xs;
                 }
 
                 &:nth-last-of-type(2) {
                     width: 70%;
-                    word-wrap: break-word;
-                    hyphens: auto;
+                    @include text-break()
                 }
             } 
         }
@@ -43,7 +36,7 @@
         border: none;
         height: 35px;
         width: 80px;
-        margin-left: 10px;
+        margin-left: $spacing-xs;
     } 
     
     &__summary {
@@ -53,27 +46,23 @@
         position: absolute;
         bottom: 0;
         width: 100%;
-        border-top: 2px solid #eee;
+        border-top: $border-width solid $color-light-grey;
     }
     
     &__total, &__discount {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
+        @include flex-center(space-between);
     } 
 
     &__discount {
-        color: #9ACC91;
-        padding-bottom: 5px;
-        margin-bottom: 15px;
-        border-bottom: 1px solid #eee
+        color: $color-light-green;
+        padding-bottom: $spacing-xs;
+        margin-bottom: $spacing-xs;
+        border-bottom: 1px solid $color-light-grey
     }
     
     &__complete {
-        margin-top: 20px;
-        margin-bottom: 20px;
-        display: flex;
-        justify-content: center;
+        margin-top: $spacing-s;
+        margin-bottom: $spacing-s;
 
         .button {
             width: 100%;

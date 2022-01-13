@@ -1,0 +1,21 @@
+@mixin flex-center($justify: center, $direction: row) {
+    display: flex;
+    align-items: center;
+    justify-content: $justify;
+    flex-direction: $direction;
+}
+
+@mixin text-break() {
+    word-wrap: break-word;
+    hyphens: auto;
+}
+
+@mixin overlay($z-index: 10) {
+    position: absolute;
+    z-index: $z-index;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    margin: auto;
+}

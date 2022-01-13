@@ -1,0 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap');
+
+body {
+  position: absolute;
+  font-family: $font-poppins;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+
+  * {
+    font-family: $font-poppins;
+    color: $color-black;
+  }
+} 
+
+button, a, i {
+    cursor: pointer;
+    text-decoration: none;
+}
+
+ul {
+    list-style: none;
+    padding-inline-start: 0;
+} 
+
+.success {
+    color: $color-light-green;
+}
+
+.disabled {
+    pointer-events: none;
+    opacity: 0.4;
+}
