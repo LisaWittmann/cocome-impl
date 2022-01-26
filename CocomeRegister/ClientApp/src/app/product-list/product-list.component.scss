@@ -1,0 +1,33 @@
+@import "../../styles.scss";
+
+.product-list {
+    @include flex-center($direction: column);
+
+    &__items {
+        @include flex-center();
+        flex-wrap: wrap;
+    }
+
+    &__searchbar {
+        margin-top: $spacing-xs;
+    
+        input {
+            min-width: 400px;
+            width: 60%;
+            min-height: 40px;
+            border-radius: $border-radius-s;
+            margin: $spacing-s;
+            padding: 0 $spacing-s;
+            border: 1px solid $color-grey;
+            box-shadow: 5px 5px 0 0 rgba(0, 0, 0, 0.04);
+
+            &::placeholder {
+                opacity: 0.3;
+            }
+
+            &:focus::placeholder {
+                opacity: 0;
+            }
+        }
+    }
+}

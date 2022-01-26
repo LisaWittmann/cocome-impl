@@ -1,0 +1,71 @@
+@import "../../../styles.scss";
+
+.shopping-card {
+    @include flex-center(flex-start, column);
+    width: inherit;
+    height: 100%;
+    padding: $spacing-s;
+
+    &__items {
+        width: 100%;
+        cursor: pointer;
+
+        li {
+            width: 100%;
+            min-height: 35px;
+            @include flex-center(space-between);
+
+            & > span {
+                &:not(:last-of-type) {
+                    margin-right: $spacing-xs;
+                }
+
+                &:nth-last-of-type(2) {
+                    width: 70%;
+                    @include text-break()
+                }
+            } 
+        }
+    }
+    
+    &__remove-button {
+        color: white;
+        background-color: darkred; 
+        position: absolute;
+        right: 0;
+        border: none;
+        height: 35px;
+        width: 80px;
+        margin-left: $spacing-xs;
+    } 
+    
+    &__summary {
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        border-top: $border-width solid $color-light-grey;
+    }
+    
+    &__total, &__discount {
+        @include flex-center(space-between);
+    } 
+
+    &__discount {
+        color: $color-light-green;
+        padding-bottom: $spacing-xs;
+        margin-bottom: $spacing-xs;
+        border-bottom: 1px solid $color-light-grey
+    }
+    
+    &__complete {
+        margin-top: $spacing-s;
+        margin-bottom: $spacing-s;
+
+        .button {
+            width: 100%;
+        }
+    }
+}

@@ -1,0 +1,22 @@
+.button {
+  @include color-scheme-primary();
+  background-color: transparent;
+  border-radius: $border-radius-s;
+  border-width: $border-width;
+  border-style: solid;
+  padding: $spacing-xs $spacing-s;
+  
+  &:hover {
+    color: #9ACC91;
+    text-decoration: none
+  }
+}
+  
+.button--filled {
+  @include color-scheme-green();
+  
+  &:hover {
+    color: white;
+  }
+}
+

@@ -1,0 +1,19 @@
+<div class="checkout page-container">
+    <div class="checkout__products">
+        <div *ngIf="expressMode" class="checkout__express">
+            Express Modus - 50% Rabatt
+        </div>
+        <app-product-list 
+            [discount]="discount"
+            [products]="products"
+            (clickProductEvent)="addToCard($event)"
+        ></app-product-list>
+    </div>
+    <div class="checkout__shopping-card">
+        <app-cashdesk-shopping-card
+            [discount]="discount"
+            (addProductEvent)="addToCard($event)"
+            (removeProductEvent)="removeFromCard($event)"
+        ></app-cashdesk-shopping-card>
+    </div>
+</div>

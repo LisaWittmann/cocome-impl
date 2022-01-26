@@ -1,0 +1,14 @@
+<button class="navigation__button" (click)="toggle()">
+    <div class="bar bar-1" [class.bar-1--open]="opened"></div>
+    <div class="bar bar-2" [class.bar-2--open]="opened"></div>
+    <div class="bar bar-3" [class.bar-3--open]="opened"></div>
+</button>
+<div *ngIf="opened" class="navigation">
+    <nav class="navigation__content" (click)="toggle()">
+        <ul>
+            <li><a [routerLink]="'cashdesk'">Kasse</a></li>
+            <li><a [routerLink]="'store'">Store</a></li>
+            <li><a [routerLink]="'enterprise'">Enterprise</a></li>
+        </ul>
+    </nav>
+</div>

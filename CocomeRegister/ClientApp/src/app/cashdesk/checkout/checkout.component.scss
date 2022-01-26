@@ -1,0 +1,34 @@
+@import "../../../styles.scss";
+
+.checkout {
+    overflow: hidden;
+    flex-direction: row;
+    position: relative;
+
+    &__express {
+        position: relative;
+        @include flex-center();
+        @include color-scheme-green();
+        width: 100%;
+        padding: 25px;
+        font-size: $text-l;
+        font-weight: $poppins-medium;
+    }
+ 
+    &__products {
+        width: 70%;
+        @include color-scheme-grey();
+        overflow-y: auto;
+        @include flex-center(flex-start, column);
+    }
+    
+    &__shopping-card {
+        width: 30%;
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 100%;
+        margin: auto;
+        box-shadow: -2px -2px 0 0 rgba(0, 0, 0, 0.04);
+    }
+}
