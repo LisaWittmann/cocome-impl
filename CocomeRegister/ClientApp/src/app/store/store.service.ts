@@ -6,20 +6,20 @@ import { StateService } from "src/services/StateService";
 
 interface StoreState {
     inventory: Map<Product, number>,
-    currentOrder: Product[],
+    currentOrder: Map<Product, number>,
     orders: Order[],
 }
 
 const initialState: StoreState = {
     inventory: new Map<Product, number>(),
-    currentOrder: [],
+    currentOrder: new Map<Product, number>(),
     orders: [],
 }
 
 @Injectable({providedIn: 'root'})
 export class StoreStateService extends StateService<StoreState> {
     inventory$: Observable<Map<Product, number>> = this.select(state => state.inventory);
-    currentOrder$: Observable<Product[]> = this.select(state => state.currentOrder);
+    currentOrder$: Observable<Map<Product, number>> = this.select(state => state.currentOrder);
     orders$: Observable<Order[]> = this.select(state => state.orders);
 
     constructor() {
@@ -36,6 +36,35 @@ export class StoreStateService extends StateService<StoreState> {
 
     get availableProducts() {
         return [...this.state.inventory.keys()].filter(product => this.state.inventory.get(product) > 0);
+    }
+
+    get runningOutOfStock() {
+        return [...this.state.inventory.keys()].filter(product => this.state.inventory.get(product) < 10);
+    }
+
+    addToCard(product: Product) {
+        const currentOrder = this.state.currentOrder;
+        const cardProduct = [...currentOrder.keys()].find(p => p.id == product.id);
+        if (cardProduct) {
+            currentOrder.set(cardProduct, currentOrder.get(cardProduct) + 1);
+        } else {
+            currentOrder.set(product, 1);
+        }
+        this.setState({ currentOrder: currentOrder });
+    }
+
+    placeNewOrder() {
+        if (this.state.currentOrder.size == 0) return;
+        const orders = this.state.orders;
+        orders.push({
+            id: Math.floor(Math.random() * 5000),
+            products: this.state.currentOrder,
+            placingDate: new Date(Date.now()),
+            deliveringDate: undefined,
+            delivered: false,
+            closed: false,
+        })
+        this.setState({ orders: orders });
     }
 
     closeOrder(orderId: number) {

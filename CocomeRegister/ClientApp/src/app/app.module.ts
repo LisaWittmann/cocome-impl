@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { RouterModule, Routes } from '@angular/router';
+import { ExtraOptions, RouterModule, Routes } from '@angular/router';
 
 import { CashDeskModule } from './cashdesk/cashdesk.module';
 import { StoreModule } from './store/store.module';
@@ -11,6 +11,11 @@ import { EnterpriseModule } from './enterprise/enterprise.module';
 import { AppComponent } from './app.component';
 import { NavigationComponent } from './navigation/navigation.component';
 
+const routerOptions: ExtraOptions = {
+  scrollPositionRestoration: 'enabled',
+  anchorScrolling: 'enabled',
+  scrollOffset: [0, 64],
+};
 
 const appRoutes: Routes = [
   { path: '', redirectTo: '/cashdesk', pathMatch: 'full' },
@@ -26,7 +31,7 @@ const appRoutes: Routes = [
     StoreModule,
     EnterpriseModule,
     FormsModule,
-    RouterModule.forRoot(appRoutes)
+    RouterModule.forRoot(appRoutes, routerOptions)
   ],
   declarations: [
     AppComponent,

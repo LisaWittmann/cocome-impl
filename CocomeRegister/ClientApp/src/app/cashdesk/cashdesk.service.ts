@@ -16,6 +16,9 @@ const initialState: CashDeskState = {
     availableProducts: [],
 }
 
+const expressModeDiscount = 0.5;
+const expressModeMaxItems = 8;
+
 @Injectable({providedIn: 'root'})
 export class CashDeskStateService extends StateService<CashDeskState> {
     expressMode$: Observable<boolean> = this.select(state => state.expressMode);
@@ -35,7 +38,7 @@ export class CashDeskStateService extends StateService<CashDeskState> {
     }
 
     addProduct(product: Product) {
-        if (this.state.expressMode && this.state.shoppingCard.length > 8) return;
+        if (this.state.expressMode && this.state.shoppingCard.length > expressModeMaxItems) return;
         this.setState({ shoppingCard: [...this.state.shoppingCard, product] })
     }
 
@@ -51,7 +54,7 @@ export class CashDeskStateService extends StateService<CashDeskState> {
     }
 
     get discount() {
-        return this.state.expressMode ? 0.5 : 0;
+        return this.state.expressMode ? expressModeDiscount : 0;
     }
 
     get totalPrice() {

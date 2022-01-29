@@ -1,0 +1,17 @@
+<div
+    class="product-table-row"
+    [class.product-table-row--warn]="warn"
+    [id]="product.id"
+    (click)="select()"
+>
+    <div class="product-table-row__stock" *ngIf="amount != undefined">
+        <strong>{{ amount }}</strong>
+    </div>
+    <div class="product-table-row__info">
+        {{ product.name }}<br>
+        Artikelnummer: {{ product.id }}
+    </div>
+    <div class="product-table-row__price">
+        {{ product.price.toFixed(2) }} €
+    </div>
+</div>

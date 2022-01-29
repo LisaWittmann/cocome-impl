@@ -1,0 +1,32 @@
+@import "../../styles.scss";
+
+.product-table-row {
+    width: 100%;
+    @include flex-center($justify: space-between);
+    background-color: $color-light-grey;
+    margin: 5px 0;
+    padding: $spacing-s;
+    font-size: $text-xs;
+    cursor: pointer;
+
+    &__stock {
+        flex-basis: 20%;
+    }
+
+    &__info {
+        flex-basis: 60%;
+    }
+
+    &__price {
+        flex-basis: 20%;
+        text-align: right;
+    }
+
+    &--warn {
+        background-color: #495057;
+        
+         * {
+            color: $color-white;
+        }
+    }
+}

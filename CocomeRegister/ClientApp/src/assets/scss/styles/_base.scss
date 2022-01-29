@@ -1,4 +1,5 @@
 body {
+  @include color-scheme-primary();
   position: absolute;
   font-family: $font-poppins;
   overscroll-behavior-y: none;
@@ -22,7 +23,16 @@ button, a, i {
 ul {
     list-style: none;
     padding-inline-start: 0;
-} 
+}
+
+section {
+  margin-top: $spacing-s;
+  margin-bottom: $spacing-m;
+
+  &:last-of-type {
+    padding-bottom: $spacing-m;
+  }
+}
 
 .success {
     color: $color-light-green;

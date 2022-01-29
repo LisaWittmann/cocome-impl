@@ -6,10 +6,9 @@
 <div *ngIf="opened" class="navigation">
     <nav class="navigation__content" (click)="toggle()">
         <ul>
-            <li><a [routerLink]="'cashdesk'">Kasse</a></li>
-            <li><a [routerLink]="'store'">Store</a></li>
-            <li><a [routerLink]="'store/orders'">Bestellungen</a></li>
-            <li><a [routerLink]="'enterprise'">Enterprise</a></li>
+            <li><a [routerLink]="'/cashdesk'">Kasse</a></li>
+            <li><a [routerLink]="'/store/orders'">Store Bestellungen</a></li>
+            <li><a [routerLink]="'/store/inventory'">Store Lagerübersicht</a></li>
         </ul>
     </nav>
 </div>
