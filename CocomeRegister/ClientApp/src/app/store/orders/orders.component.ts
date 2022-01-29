@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Order } from 'src/services/Order';
 import { StoreStateService } from '../store.service';
 
@@ -6,22 +6,31 @@ import { StoreStateService } from '../store.service';
   selector: 'app-store-orders',
   templateUrl: './orders.component.html',
   styleUrls: ['./orders.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StoreOrdersComponent {
     orders: Order[];
 
-    openOrders: Order[];
-    closedOrders: Order[];
-    pendingOrders: Order[];
-
     constructor(private storeState: StoreStateService) {
         this.storeState.orders$.subscribe(orders => {
             this.orders = orders;
-            this.openOrders = this.storeState.openOrders;
-            this.closedOrders = this.storeState.closedOrders;
-            this.pendingOrders = this.storeState.pendingOrders;
         })
     }
 
-    closeOrder = (orderId: number) => this.storeState.closeOrder(orderId);
+    get closedOrders() {
+        return this.orders.filter(order => order.closed);
+    }
+
+    get pendingOrders() {
+        return this.orders.filter(order => (order.delivered && !order.closed));
+    }
+
+    get openOrders() {
+        return this.orders.filter(order => !order.delivered);
+    }
+
+    title = (order: Order) => {
+        return `Bestellung ${order.id} vom 
+                ${order.placingDate.toLocaleDateString('de-DE')}`;
+    }
 }

@@ -1,11 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap');
-
 body {
   position: absolute;
   font-family: $font-poppins;
+  overscroll-behavior-y: none;
+  overscroll-behavior-x: none;
   top: 0;
   bottom: 0;
   margin: auto;
+  min-width: 320px;
 
   * {
     font-family: $font-poppins;

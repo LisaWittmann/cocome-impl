@@ -1,11 +1,14 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common'; 
 import { RouterModule, Routes } from '@angular/router';
 
 import { StoreComponent } from './store.component';
 import { StoreHomeComponent } from './home/home.component';
 import { StoreInventoryComponent } from './inventory/inventory.component';
 import { StoreOrdersComponent } from './orders/orders.component';
+import { StoreOrderDetailComponent } from './order-detail/order-detail.component';
+import { AccordionComponent } from '../accordion/accordion.component';
 
 import { StoreStateService } from './store.service';
 
@@ -18,6 +21,7 @@ const storeRoutes: Routes = [
 @NgModule({
   imports: [
     FormsModule,
+    CommonModule,
     RouterModule.forChild(storeRoutes)
   ],
   declarations: [
@@ -25,6 +29,8 @@ const storeRoutes: Routes = [
     StoreHomeComponent,
     StoreInventoryComponent,
     StoreOrdersComponent,
+    StoreOrderDetailComponent,
+    AccordionComponent,
   ],
   exports: [StoreComponent],
   providers: [StoreStateService],

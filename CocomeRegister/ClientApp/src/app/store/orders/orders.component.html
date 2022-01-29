@@ -1,3 +1,51 @@
 <div class="orders page-container">
-    
+    <div class="orders__wrapper">
+        
+        <div class="orders__header">
+            <h1>Bestellungen</h1>
+        </div>
+        
+        <div
+            class="orders__section"
+            *ngIf="openOrders.length"
+        >
+            <h2>Offene Bestellungen</h2>
+            <app-accordion 
+                *ngFor="let order of openOrders"
+                [header]="title(order)"
+            >
+                <app-store-order-detail [order]="order">
+                </app-store-order-detail>
+            </app-accordion>
+        </div>
+
+        <div
+            class="orders__section"
+            *ngIf="pendingOrders.length"
+        >
+            <h2>Ausstehende Bestellungen</h2>
+            <app-accordion 
+                *ngFor="let order of pendingOrders"
+                [header]="title(order)"
+            >
+                <app-store-order-detail [order]="order">
+                </app-store-order-detail>
+            </app-accordion>
+        </div>
+        
+        <div
+            class="orders__section"
+            *ngIf="closedOrders.length"
+        >
+            <h2>Geschlossene Bestellungen</h2>
+            <app-accordion 
+                *ngFor="let order of closedOrders"
+                [header]="title(order)"
+            >
+                <app-store-order-detail [order]="order">
+                </app-store-order-detail>
+            </app-accordion>
+        </div>
+
+    </div>
 </div>

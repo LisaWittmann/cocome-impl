@@ -1,3 +1,33 @@
+@import "../../../styles.scss";
+
 .orders {
+    justify-content: center;
+    overflow-x: hidden;
+
+    &__header {
+        margin: $spacing-m auto;
+        width: 100%;
+    }
+    
+    &__wrapper {
+        display: flex;
+        flex-direction: column;
+        width: 80%;
+        max-width: 1200px;
+    }
+
+    &__section {
+        margin-top: $spacing-s;
+        margin-bottom: $spacing-m;
+
+        h2 {
+            margin-bottom: $spacing-s;
+            font-size: $text-l;
+        }
+
+        &:last-of-type {
+            padding-bottom: $spacing-m;
+        }
+    }
     
 }

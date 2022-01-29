@@ -29,64 +29,29 @@ export class StoreStateService extends StateService<StoreState> {
         for (const product of testProducts) {
             inventory.set(product, Math.round(Math.random() * 100));
         }
-        this.setState({ inventory: inventory });
-    }
-
-    get closedOrders() {
-        return this.state.orders.filter(order => order.closed);
-    }
-
-    get pendingOrders() {
-        return this.state.orders.filter(order => order.delivered && !order.closed);
-    }
-
-    get openOrders() {
-        return this.state.orders.filter(order => !order.delivered);
+        const orders = testOrders;
+        this.setState({ inventory: inventory, orders: orders });
+        console.log(orders)
     }
 
     get availableProducts() {
-        const availableProducts = [];
-        for (const [key, value] of this.state.inventory) {
-            if (value > 0) {
-                console.log("available", key.name);
-                availableProducts.push(key);
-            }
-        }
-        console.log(availableProducts)
-        return availableProducts;
+        return [...this.state.inventory.keys()].filter(product => this.state.inventory.get(product) > 0);
     }
 
     closeOrder(orderId: number) {
         const orders = this.state.orders;
-        for (const order of orders) {
-            if (order.id == orderId) order.closed = true;
-        }
-        const products = this.state.inventory;
-        for (const key of products.keys()) {
-            if (this.containsProduct(orderId, key.id)) {
-                const amount = products.get(key) + this.getAmount(orderId, key.id);
-                products.set(key, amount);
-            }
-        }
-        this.setState({ orders: orders, inventory: products })
-    }
+        const inventory = this.state.inventory;
 
-    private getAmount(productId: number, orderId: number) {
-        const order = this.state.orders.find(o => o.id == orderId);
-        return order.products.filter(product => product.id == productId).length;
-    }
-
-    private containsProduct(orderId: number, productId: number) {
-        const order = this.state.orders.find(o => o.id == orderId);
-        return order.products.some(product => product.id == productId);
-    }
-
-    changePrice(productId: number, price: number) {
-        const products = this.state.inventory;
-        for (const key of products.keys()) {
-            if (key.id == productId) key.price = price;
+        const order = orders.find(order => order.id == orderId);
+        order.closed = true;
+        console.log(order);
+        
+        for (const [product, amount] of order.products) {
+            inventory.set(product, inventory.get(product) + amount);
         }
-        this.setState({ inventory: products });
+        console.log(inventory);
+        this.setState({ orders: orders });
+        this.setState({ inventory: inventory })
     }
 
     removeProducts(products: Product[]) {
@@ -96,7 +61,6 @@ export class StoreStateService extends StateService<StoreState> {
             storeProducts.set(key, storeProducts.get(key) - productsToKey.length);
         }
         this.setState({ inventory: storeProducts });
-        console.log(this.state.inventory);
     }
 }
 
@@ -190,5 +154,65 @@ const testProducts = [
         name: "Schlagsahne",
         price: 0.29,
         description: ""
+    }
+];
+
+
+const testOrders = [
+    {
+        id: 139853,
+        products: new Map([
+            [testProducts[0], 100],
+            [testProducts[1], 13],
+            [testProducts[2], 200],
+            [testProducts[3], 57],
+            [testProducts[4], 40],
+        ]),
+        placingDate: new Date(2022, 1, 20),
+        deliveringDate: undefined,
+        delivered: false,
+        closed: false,
+    },
+    {
+        id: 12356,
+        products: new Map([
+            [testProducts[9], 100],
+            [testProducts[6], 130],
+            [testProducts[2], 300],
+            [testProducts[5], 30],
+            [testProducts[4], 55],
+        ]),
+        placingDate: new Date(2021, 6, 10),
+        deliveringDate: new Date(2021, 7, 1),
+        delivered: true,
+        closed: true,
+    },
+    {
+        id: 723645,
+        products: new Map([
+            [testProducts[9], 23],
+            [testProducts[7], 111],
+            [testProducts[2], 546],
+            [testProducts[5], 30],
+            [testProducts[3], 55],
+        ]),
+        placingDate: new Date(2022, 1, 10),
+        deliveringDate: new Date(2022, 1, 14),
+        delivered: true,
+        closed: false,
+    },
+    {
+        id: 523489,
+        products: new Map([
+            [testProducts[0], 100],
+            [testProducts[1], 13],
+            [testProducts[2], 200],
+            [testProducts[3], 57],
+            [testProducts[4], 40],
+        ]),
+        placingDate: new Date(2021, 11, 30),
+        deliveringDate: new Date(2022, 1, 14),
+        delivered: true,
+        closed: false,
     }
 ];
