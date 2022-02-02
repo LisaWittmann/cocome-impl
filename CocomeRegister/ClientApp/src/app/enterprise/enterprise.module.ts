@@ -8,7 +8,7 @@ import { EnterpriseHomeComponent } from './home/home.component';
 import { EnterpriseStateService } from './enterprise.service';
 
 const enterpriseRoutes: Routes = [
-  { path: 'enterprise', component: EnterpriseHomeComponent }
+  { path: '', component: EnterpriseHomeComponent }
 ]
 @NgModule({
   imports: [
@@ -17,11 +17,15 @@ const enterpriseRoutes: Routes = [
     RouterModule.forChild(enterpriseRoutes)
   ],
   declarations: [
-      EnterpriseComponent,
-      EnterpriseHomeComponent,
+    EnterpriseComponent,
+    EnterpriseHomeComponent,
   ],
   exports: [EnterpriseComponent],
   providers: [EnterpriseStateService],
   bootstrap: [EnterpriseComponent]
 })
 export class EnterpriseModule { }
+
+export function EnterpriseEntrypoint() {
+  return EnterpriseModule;
+}

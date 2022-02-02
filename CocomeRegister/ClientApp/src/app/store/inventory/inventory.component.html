@@ -1,33 +1,31 @@
 <div class="inventory page-container">
     <div class="container">
         <section>
-            <h1>Lagerübersicht</h1>
+            <h1>Produkte bestellen</h1>
         </section>
         <section *ngIf="runningOutOfStock.length">
             <h2>Geringer Bestand:</h2>
-            <app-product-table-row 
-                *ngFor="let product of runningOutOfStock"
-                [product]="product"
-                [amount]="inventory.get(product)"
-                [warn]="true"
-                (selectProductEvent)="redirectToShopping($event)"
-            >
-            </app-product-table-row>
-            <div class="inventory__order-button">
-                <a [routerLink]="'/store/shopping'" class="button">
-                    Jetzt bestellen
-                </a>
-            </div>
+            <ul>
+                <app-product-table-row 
+                    *ngFor="let product of runningOutOfStock"
+                    [product]="product"
+                    [amount]="inventory.get(product)"
+                    [warn]="true"
+                >
+                </app-product-table-row>
+            </ul>
         </section>
         <section>
-            <h2>Auf Lager:</h2>
-            <app-product-table-row 
-                *ngFor="let item of inventory | keyvalue"
-                [product]="item.key"
-                [amount]="item.value"
-                (selectProductEvent)="redirectToShopping($event)"
-            >
-            </app-product-table-row>
+            <h2>Alle Produkte:</h2>
+            <ul>
+                <app-product-table-row 
+                    *ngFor="let item of inventory | keyvalue"
+                    [product]="item.key"
+                    [amount]="item.value"
+                    (selectProductEvent)="redirectToShopping($event)"
+                >
+                </app-product-table-row>
+            </ul>
         </section>
     </div>
 </div>

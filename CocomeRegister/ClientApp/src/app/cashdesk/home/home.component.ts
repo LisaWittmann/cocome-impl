@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/
 import { CashDeskStateService } from '../cashdesk.service';
 
 @Component({
-  selector: 'app-cashdesk-home',
+  selector: 'cashdesk-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

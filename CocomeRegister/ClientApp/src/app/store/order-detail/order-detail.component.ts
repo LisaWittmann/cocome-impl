@@ -4,7 +4,7 @@ import { Product } from 'src/services/Product';
 import { StoreStateService } from '../store.service';
 
 @Component({
-  selector: 'app-store-order-detail',
+  selector: 'store-order-detail',
   templateUrl: './order-detail.component.html',
   styleUrls: ['./order-detail.component.scss'],
 })

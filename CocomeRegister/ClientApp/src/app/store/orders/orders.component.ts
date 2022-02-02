@@ -3,7 +3,7 @@ import { Order } from 'src/services/Order';
 import { StoreStateService } from '../store.service';
 
 @Component({
-  selector: 'app-store-orders',
+  selector: 'store-orders',
   templateUrl: './orders.component.html',
   styleUrls: ['./orders.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

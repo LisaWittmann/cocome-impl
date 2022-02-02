@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-cashdesk',
+  selector: 'cashdesk-root',
   templateUrl: './cashdesk.component.html'
 })
 export class CashDeskComponent {}

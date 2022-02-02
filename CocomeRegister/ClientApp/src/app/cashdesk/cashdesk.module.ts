@@ -13,10 +13,10 @@ import { ProductListComponent } from '../product-list/product-list.component';
 import { ProductCardComponent } from '../product-card/product-card.component';
 import { CashDeskStateService } from './cashdesk.service';
 
-const cashdeskRoutes: Routes = [
-  { path: 'cashdesk', component: CashDeskHomeComponent },
-  { path: 'cashdesk/checkout', component: CashDeskCheckoutComponent },
-  { path: 'cashdesk/payment', component: CashDeskPaymentComponent },
+export const cashdeskRoutes: Routes = [
+  { path: '', component: CashDeskHomeComponent },
+  { path: 'checkout', component: CashDeskCheckoutComponent },
+  { path: 'payment', component: CashDeskPaymentComponent },
 ];
 
 @NgModule({
@@ -38,3 +38,7 @@ const cashdeskRoutes: Routes = [
   bootstrap: [CashDeskComponent]
 })
 export class CashDeskModule { }
+
+export function CashDeskEntrypoint() {
+  return CashDeskModule;
+}
