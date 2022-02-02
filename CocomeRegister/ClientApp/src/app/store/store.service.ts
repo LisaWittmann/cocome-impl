@@ -53,6 +53,22 @@ export class StoreStateService extends StateService<StoreState> {
         this.setState({ currentOrder: currentOrder });
     }
 
+    removeFromCard(product: Product) {
+        const currentOrder = this.state.currentOrder;
+        const cardProduct = [...currentOrder.keys()].find(p => p.id == product.id);
+        if (cardProduct && currentOrder.get(cardProduct) > 1) {
+            currentOrder.set(cardProduct, currentOrder.get(cardProduct) - 1);
+        }
+        this.setState({ currentOrder: currentOrder });
+
+    }
+
+    removeAllFromCard(product: Product) {
+        const currentOrder = this.state.currentOrder;
+        currentOrder.delete(product);
+        this.setState({ currentOrder: currentOrder });
+    }
+
     placeNewOrder() {
         if (this.state.currentOrder.size == 0) return;
         const orders = this.state.orders;
@@ -64,6 +80,8 @@ export class StoreStateService extends StateService<StoreState> {
             delivered: false,
             closed: false,
         })
+        this.setState({ currentOrder: new Map<Product, number>() });
+        console.log(this.state.currentOrder)
         this.setState({ orders: orders });
     }
 

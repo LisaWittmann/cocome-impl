@@ -3,13 +3,18 @@
         <nav>
             <a [routerLink]="'/store'">Mein Store</a>
             <ul>
-                <li><a [routerLink]="'/store/inventory'">Produkte</a></li>
+                <li><a [routerLink]="'/store/products'">Produkte</a></li>
                 <li><a [routerLink]="'/store/orders'">Bestellungen</a></li>
                 <li>Reports</li>
+                <li>
+                    <button class="card__button" (click)="openShoppingCard()">
+                        <img src="assets/svg/shopping-basket-solid.svg">
+                        <span class="card__label" *ngIf="shoppingCardItems > 0">
+                            {{ shoppingCardItems }}
+                        </span>
+                    </button>
+                </li>
             </ul>
-            <button class="button__card">
-                <img src="/assets/img/svg/shopping-basket-solid.svg">
-            </button>
         </nav>
     </div>
 </div>

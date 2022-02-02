@@ -1,4 +1,4 @@
-<div class="inventory page-container">
+<div class="products page-container">
     <div class="container">
         <section>
             <h1>Produkte bestellen</h1>
@@ -11,6 +11,7 @@
                     [product]="product"
                     [amount]="inventory.get(product)"
                     [warn]="true"
+                    (selectProductEvent)="addToCard($event)"
                 >
                 </app-product-table-row>
             </ul>
@@ -22,7 +23,7 @@
                     *ngFor="let item of inventory | keyvalue"
                     [product]="item.key"
                     [amount]="item.value"
-                    (selectProductEvent)="redirectToShopping($event)"
+                    (selectProductEvent)="addToCard($event)"
                 >
                 </app-product-table-row>
             </ul>

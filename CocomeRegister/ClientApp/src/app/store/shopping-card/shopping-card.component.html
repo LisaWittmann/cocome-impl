@@ -1,0 +1,50 @@
+<div class="shopping-card page-container--fixed">
+    <div class="shopping-card__content">
+        <div class="shopping-card__header">
+            <img src="assets/svg/shopping-basket-solid.svg">
+            <span>Ihr Warenkorb</span>
+            <button (click)="close()">
+                <img src="assets/svg/times-solid.svg">
+            </button>
+        </div>
+        <div class="shopping-card__items">
+            <table>
+                <tr *ngFor="let item of shoppingCard | keyvalue">
+                    <td>
+                        <button (click)="removeAll(item.key)">
+                            <img src="assets/svg/times-solid.svg">
+                        </button>
+                    </td>
+                    <td>
+                        {{ item.key.name }}<br>
+                        Artikelnummer: {{ item.key.id }}
+                    </td>
+                    <td>
+                        {{ item.key.price.toFixed(2) }}
+                    </td>
+                    <td>
+                        <button (click)="removeInstance(item.key)">
+                            -
+                        </button>
+                        <span>{{ item.value }}</span>
+                        <button (click)="addInstance(item.key)">
+                            +
+                        </button>
+                    </td>
+                    <td>
+                        {{ (item.key.price * item.value).toFixed(2) }}
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="shopping-card__footer">
+            <button
+                class="button"
+                [class.disabled]="shoppingCard.size < 1"
+                (click)="confirm()"
+            >
+                Jetzt bestellen
+            </button>
+        </div>
+    </div>
+</div>
