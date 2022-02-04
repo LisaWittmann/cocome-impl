@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { CashDeskStateService } from '../cashdesk.service';
 
 @Component({
-  selector: 'app-cashdesk-payment',
+  selector: 'cashdesk-payment',
   templateUrl: './payment.component.html',
   styleUrls: ['./payment.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

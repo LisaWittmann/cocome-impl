@@ -1,7 +1,7 @@
-@import "../../styles.scss";
+@import "variables";
 
 .navigation {
-    @include overlay(20);
+    @include overlay(10);
     @include flex-center();
     @include color-scheme-primary();
 
@@ -24,8 +24,8 @@
 
     &__button {
         position: absolute;
-        background-color: white;
-        z-index: 21;
+        background-color: $color-white;
+        z-index: 11;
         top: 20px;
         left: 20px;
         width: 40px;

@@ -1,4 +1,4 @@
-@import "../../../styles.scss";
+@import "variables";
 
 .shopping-card {
     @include flex-center(flex-start, column);
@@ -29,7 +29,7 @@
     }
     
     &__remove-button {
-        color: white;
+        color: $color-white;
         background-color: darkred; 
         position: absolute;
         right: 0;

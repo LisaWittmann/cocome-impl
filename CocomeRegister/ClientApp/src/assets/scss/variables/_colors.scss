@@ -2,5 +2,21 @@ $color-white: #f8f7f5;
 $color-light-grey: #eee;
 $color-grey: #ddd;
 $color-black: #1a1e16;
-
 $color-light-green: #9ACC91;
+
+@mixin color-scheme-primary() {
+    color: $color-black;
+    background-color: $color-white;
+    border-color: $color-black;
+}
+
+@mixin color-scheme-green() { 
+    color: $color-black;
+    background-color: $color-light-green;
+    border-color: $color-light-green;
+}
+
+@mixin color-scheme-grey() {
+    color: $color-black;
+    background-color: $color-grey;
+}

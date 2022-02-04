@@ -1,0 +1,23 @@
+@import "variables";
+
+.products {
+    justify-content: center;
+    overflow-x: hidden;
+
+    h2 {
+        margin-bottom: $spacing-s;
+        font-size: $text-l;
+    }
+
+    &__order-button {
+        width: 100%;
+        @include flex-center();
+        margin: $spacing-s 0;
+
+        .button {
+            min-width: 200px;
+            display: flex;
+            justify-content: center;
+        }
+    }
+}

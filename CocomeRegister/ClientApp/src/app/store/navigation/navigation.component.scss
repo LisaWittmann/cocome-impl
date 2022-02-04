@@ -1,0 +1,60 @@
+@import "variables";
+
+.navigation {
+    position: sticky;
+    z-index: 12;
+    top: 0;
+    width: 100%;
+    background-color: $color-white;
+    box-shadow: 0 0 10px 6px rgba($color-black, 0.1);
+
+
+    nav {
+        @include flex-center($justify: space-between);
+        font-size: $text-m;
+        height: 65px;
+        
+        > * {
+            height: 100%;
+            margin: 0;
+            gap: 20px;
+            @include flex-center();
+        }
+
+        *:hover {
+            text-decoration: none;
+            user-select: none;
+        }
+
+        @media all and (max-width: 768px) {
+            > a {
+                display: none;
+            }
+        }
+    }
+
+    .card {
+        &__button {
+            position: relative;
+
+            img {
+                height: 20px;
+            }
+
+            @media all and (min-width: 768px) {
+                &::before {
+                    padding-right: 20px;
+                    content: "|";
+                }
+            }
+        }
+
+        &__label {
+            font-size: $text-xs;
+            position: absolute;
+            bottom: -10px;
+            right: -5px;
+            text-align: right;
+        }
+    }
+}

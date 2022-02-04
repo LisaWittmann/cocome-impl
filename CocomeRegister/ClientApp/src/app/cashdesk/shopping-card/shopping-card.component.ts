@@ -4,7 +4,7 @@ import { Product } from 'src/services/Product';
 import { CashDeskStateService } from '../cashdesk.service';
 
 @Component({
-  selector: 'app-cashdesk-shopping-card',
+  selector: 'cashdesk-shopping-card',
   templateUrl: './shopping-card.component.html',
   styleUrls: ['./shopping-card.component.scss']
 })

@@ -1,11 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap');
-
 body {
+  @include color-scheme-primary();
   position: absolute;
   font-family: $font-poppins;
+  overscroll-behavior-y: none;
+  overscroll-behavior-x: none;
   top: 0;
   bottom: 0;
   margin: auto;
+  min-width: 320px;
 
   * {
     font-family: $font-poppins;
@@ -21,7 +23,16 @@ button, a, i {
 ul {
     list-style: none;
     padding-inline-start: 0;
-} 
+}
+
+section {
+  margin-top: $spacing-s;
+  margin-bottom: $spacing-m;
+
+  &:last-of-type {
+    padding-bottom: $spacing-m;
+  }
+}
 
 .success {
     color: $color-light-green;

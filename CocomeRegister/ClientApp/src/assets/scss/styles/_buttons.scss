@@ -1,3 +1,9 @@
+button {
+  border: 0;
+  background-color: transparent;
+  user-select: none;
+}
+
 .button {
   @include color-scheme-primary();
   background-color: transparent;
@@ -16,7 +22,7 @@
   @include color-scheme-green();
   
   &:hover {
-    color: white;
+    color: $color-white;
   }
 }
 

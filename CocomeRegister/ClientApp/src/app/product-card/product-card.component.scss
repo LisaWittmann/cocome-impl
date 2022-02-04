@@ -1,4 +1,4 @@
-@import "../../styles.scss";
+@import "variables";
 
 .product-card {
     cursor: pointer;
@@ -7,7 +7,7 @@
     width: 200px;
     border-radius: $border-radius-s;
     border: 1px solid $color-grey;
-    background-color: white;
+    background-color: $color-white;
     margin: 8px;
     box-shadow: 5px 5px 0 0 rgba(0, 0, 0, 0.04);
 

@@ -1,0 +1,41 @@
+@import "variables";
+
+.accordion {
+    width: 100%;
+    margin-top: -$border-width;
+    border-top: $border-width solid $color-grey;
+    border-bottom: $border-width solid $color-grey;
+
+    &__button {
+        margin: $spacing-xs auto;
+        padding: 0;
+        border: none;
+        width: 100%;
+        max-width: none;
+        background-color: transparent;
+        font-size: $text-m;
+        font-family: $font-poppins;
+        text-align: left;
+        @include text-break();
+        @include flex-center($justify: space-between);        
+
+        &::after {
+            content: '\02795';
+        }
+    }
+
+    &__panel {
+        margin: $spacing-s auto;
+        @include flex-center($justify: flex-start);
+        display: none;
+
+        &--active {
+            display: block;
+            @include slideIn(0.5s);
+        }
+    }
+
+    &--active::after {        
+        content: '\2796';
+    }
+}

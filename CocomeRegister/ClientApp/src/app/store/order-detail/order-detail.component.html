@@ -1,0 +1,47 @@
+<div class="order-detail">
+    <table class="order-detail__overview">
+        <tr>
+            <td>Bestellnummer:</td>
+            <td>{{ order.id }}</td>
+        </tr>
+        <tr>
+            <td>Status:</td>
+            <td>{{ status }}</td>
+        </tr>
+    </table>
+    <table class="order-detail__products">
+        <thead>
+            <tr>
+                <td>Artikel</td>
+                <td>Anzahl</td>
+                <td>Einzelpreis</td>
+                <td>Gesamtpreis</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let product of order.products | keyvalue">
+                <td>
+                    {{ product.key.name }}<br>
+                    <span class="highlighted">Artikelnummer: {{ product.key.id }}</span>
+                </td>
+                <td>{{ product.value }}</td>
+                <td>EUR {{ product.key.price.toFixed(2) }}</td>
+                <td>EUR {{ getProductPrice(product.key).toFixed(2) }}</td>
+            </tr>
+            <tr>
+                <td colspan="2"></td>
+                <td class="order-detail__products-sum">Gesamtsumme</td>
+                <td class="order-detail__products-sum">EUR {{ totalPrice.toFixed(2) }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="order-detail__accept">
+        <button
+            class="button" 
+            *ngIf="order.delivered && !order.closed"
+            (click)="close()"
+        >
+            Warenbestand hinzufügen
+        </button>
+    </div>
+</div>

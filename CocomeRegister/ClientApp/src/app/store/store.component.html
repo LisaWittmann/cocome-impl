@@ -1,0 +1,10 @@
+<div [class.page-container--fixed]="shoppingCardOpen">
+    <store-navigation (openShoppingCardEvent)="toggleShoppingCard($event)"></store-navigation>
+    <store-shopping-card
+        *ngIf="shoppingCardOpen"
+        (closeShoppingCardEvent)="toggleShoppingCard($event)"
+    ></store-shopping-card>
+    <div class="store">
+        <router-outlet></router-outlet>
+    </div>
+</div>

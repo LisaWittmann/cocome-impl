@@ -4,7 +4,7 @@ import { Product } from 'src/services/Product';
 import { CashDeskStateService } from '../cashdesk.service';
 
 @Component({
-  selector: 'app-cashdesk-checkout',
+  selector: 'cashdesk-checkout',
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

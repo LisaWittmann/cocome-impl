@@ -1,4 +1,4 @@
-@import "../../styles.scss";
+@import "variables";
 
 .product-list {
     @include flex-center($direction: column);

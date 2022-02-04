@@ -1,0 +1,15 @@
+<div class="accordion">
+    <button 
+        class="accordion__button"
+        [class.accordion--active]="opened"
+        (click)="togglePanel()"
+    >
+        {{header}}
+    </button>
+    <div
+        class="accordion__panel"
+        [class.accordion__panel--active]="opened"
+    >
+        <ng-content></ng-content>
+    </div>
+</div>

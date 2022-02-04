@@ -1,3 +1,11 @@
+@import "variables";
+
 .orders {
-    
+    justify-content: center;
+    overflow-x: hidden;
+
+    h2 {
+        margin-bottom: $spacing-s;
+        font-size: $text-l;
+    }
 }
