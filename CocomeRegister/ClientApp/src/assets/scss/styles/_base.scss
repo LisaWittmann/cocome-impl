@@ -4,6 +4,7 @@ body {
   font-family: $font-poppins;
   overscroll-behavior-y: none;
   overscroll-behavior-x: none;
+  overflow-x: hidden;
   top: 0;
   bottom: 0;
   margin: auto;

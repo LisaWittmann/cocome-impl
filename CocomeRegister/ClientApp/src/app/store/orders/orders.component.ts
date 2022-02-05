@@ -3,7 +3,7 @@ import { Order } from 'src/services/Order';
 import { StoreStateService } from '../store.service';
 
 @Component({
-  selector: 'store-orders',
+  selector: 'app-store-orders',
   templateUrl: './orders.component.html',
   styleUrls: ['./orders.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -14,7 +14,7 @@ export class StoreOrdersComponent {
     constructor(private storeState: StoreStateService) {
         this.storeState.orders$.subscribe(orders => {
             this.orders = orders;
-        })
+        });
     }
 
     get closedOrders() {
@@ -30,7 +30,7 @@ export class StoreOrdersComponent {
     }
 
     title = (order: Order) => {
-        return `Bestellung ${order.id} vom 
+        return `Bestellung ${order.id} vom
                 ${order.placingDate.toLocaleDateString('de-DE')}`;
     }
 }

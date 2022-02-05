@@ -4,23 +4,23 @@ import { Product } from 'src/services/Product';
 import { StoreStateService } from '../store.service';
 
 @Component({
-  selector: 'store-navigation',
+  selector: 'app-store-navigation',
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.scss'],
 })
-export class StoreNavigationComponent { 
+export class StoreNavigationComponent {
   @Output() openShoppingCardEvent = new EventEmitter<Boolean>();
-  openShoppingCard = () => this.openShoppingCardEvent.emit(true);
-
   shoppingCard: Map<Product, Number>;
 
   constructor(private storeStateService: StoreStateService) {
     this.storeStateService.currentOrder$.subscribe(currentOrder => {
       this.shoppingCard = currentOrder;
-    })
+    });
   }
 
   get shoppingCardItems() {
-    return this.shoppingCard.size
+    return this.shoppingCard.size;
   }
+
+  openShoppingCard = () => this.openShoppingCardEvent.emit(true);
 }

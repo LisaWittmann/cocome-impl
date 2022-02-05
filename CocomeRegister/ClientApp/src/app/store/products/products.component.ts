@@ -3,7 +3,7 @@ import { Product } from 'src/services/Product';
 import { StoreStateService } from '../store.service';
 
 @Component({
-  selector: 'store-products',
+  selector: 'app-store-products',
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -16,7 +16,7 @@ export class StoreProductsComponent {
         this.storeStateService.inventory$.subscribe(inventory => {
             this.inventory = inventory;
             this.runningOutOfStock = this.storeStateService.runningOutOfStock;
-        })
+        });
     }
 
     addToCard(product: Product) {

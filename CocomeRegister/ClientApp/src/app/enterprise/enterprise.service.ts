@@ -1,15 +1,15 @@
-import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
-import { Product } from "src/services/Product";
-import { StateService } from "src/services/StateService";
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Product } from 'src/services/Product';
+import { StateService } from 'src/services/StateService';
 
 interface EnterpriseState {
-    order: Product[],
+    order: Product[];
 }
 
 const initialState: EnterpriseState = {
     order: [],
-}
+};
 
 @Injectable({providedIn: 'root'})
 export class EnterpriseStateService extends StateService<EnterpriseState> {
@@ -20,12 +20,12 @@ export class EnterpriseStateService extends StateService<EnterpriseState> {
     }
 
     addProduct(product: Product) {
-        this.setState({ order: [...this.state.order, product] })
+        this.setState({ order: [...this.state.order, product] });
     }
 
     removeProduct(product: Product) {
         this.setState({ order: [...this.state.order.filter(
-            cardItem => cardItem.id != product.id 
+            cardItem => cardItem.id !== product.id
         )]});
     }
 }

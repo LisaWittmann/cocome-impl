@@ -13,8 +13,7 @@ export class ProductCardComponent {
   getDiscountedPrice() {
     if (this.discount) {
       const percentage = 1 - this.discount;
-      return (percentage * this.product.price).toFixed(2)
-    } 
+      return (percentage * this.product.price).toFixed(2);
+    }
   }
 }
-    

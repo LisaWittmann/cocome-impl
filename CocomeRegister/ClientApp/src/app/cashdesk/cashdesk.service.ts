@@ -1,20 +1,20 @@
-import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
-import { Product } from "src/services/Product";
-import { StateService } from "src/services/StateService";
-import { StoreStateService } from "../store/store.service";
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Product } from 'src/services/Product';
+import { StateService } from 'src/services/StateService';
+import { StoreStateService } from '../store/store.service';
 
 interface CashDeskState {
-    availableProducts: Product[],
+    availableProducts: Product[];
     expressMode: boolean;
-    shoppingCard: Product[],
+    shoppingCard: Product[];
 }
 
 const initialState: CashDeskState = {
     expressMode: true,
     shoppingCard: [],
     availableProducts: [],
-}
+};
 
 const expressModeDiscount = 0.5;
 const expressModeMaxItems = 8;
@@ -27,9 +27,9 @@ export class CashDeskStateService extends StateService<CashDeskState> {
 
     constructor(private storeState: StoreStateService) {
         super(initialState);
-        this.storeState.inventory$.subscribe(() => { 
+        this.storeState.inventory$.subscribe(() => {
             // not working yet
-            this.setState({ availableProducts: this.storeState.availableProducts })
+            this.setState({ availableProducts: this.storeState.availableProducts });
         });
     }
 
@@ -38,13 +38,15 @@ export class CashDeskStateService extends StateService<CashDeskState> {
     }
 
     addProduct(product: Product) {
-        if (this.state.expressMode && this.state.shoppingCard.length > expressModeMaxItems) return;
-        this.setState({ shoppingCard: [...this.state.shoppingCard, product] })
+        if (this.state.expressMode && this.state.shoppingCard.length > expressModeMaxItems) {
+            return;
+        }
+        this.setState({ shoppingCard: [...this.state.shoppingCard, product] });
     }
 
     removeProduct(product: Product) {
         this.setState({ shoppingCard: [...this.state.shoppingCard.filter(
-            cardItem => cardItem.id != product.id 
+            cardItem => cardItem.id !== product.id
         )]});
     }
 

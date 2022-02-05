@@ -4,14 +4,14 @@ import { Product } from 'src/services/Product';
 import { StoreStateService } from '../store.service';
 
 @Component({
-  selector: 'store-order-detail',
+  selector: 'app-store-order-detail',
   templateUrl: './order-detail.component.html',
   styleUrls: ['./order-detail.component.scss'],
 })
 export class StoreOrderDetailComponent {
     @Input() order: Order;
 
-    constructor(private storeStateService: StoreStateService) {} 
+    constructor(private storeStateService: StoreStateService) {}
 
     close() {
         this.storeStateService.closeOrder(this.order.id);
@@ -22,8 +22,11 @@ export class StoreOrderDetailComponent {
     }
 
     get status() {
-        if (this.order.delivered) return `Geliefert am ${this.order.deliveringDate.toLocaleDateString('de-DE')}`;
-        else if (!this.order.closed) return 'In Bearbeitung';
+        if (this.order.delivered) {
+            return `Geliefert am ${this.order.deliveringDate.toLocaleDateString('de-DE')}`;
+        } else if (!this.order.closed) {
+            return 'In Bearbeitung';
+        }
     }
 
     get totalPrice() {

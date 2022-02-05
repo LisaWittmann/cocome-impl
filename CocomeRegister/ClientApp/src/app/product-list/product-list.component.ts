@@ -9,12 +9,12 @@ import { Product } from 'src/services/Product';
 export class ProductListComponent {
   @Input() discount: number;
   @Input() products: Product[];
-  @Output() clickProductEvent = new EventEmitter<Product>()
+  @Output() clickProductEvent = new EventEmitter<Product>();
 
   filter: string;
 
   clickProductCard(product: Product) {
-    this.clickProductEvent.emit(product)
+    this.clickProductEvent.emit(product);
   }
 
   setFilter(filter: string) {
@@ -22,8 +22,9 @@ export class ProductListComponent {
   }
 
   get displayedProducts() {
-    if (!this.filter) return this.products;
+    if (!this.filter) {
+      return this.products;
+    }
     return this.products.filter(p => p.id.toString().includes(this.filter) || p.name.includes(this.filter));
   }
-
 }

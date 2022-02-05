@@ -26,7 +26,7 @@ const appRoutes: Routes = [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
-    RouterModule.forRoot(appRoutes)
+    RouterModule.forRoot(appRoutes,  { scrollPositionRestoration: 'top' })
   ],
   declarations: [
     AppComponent,

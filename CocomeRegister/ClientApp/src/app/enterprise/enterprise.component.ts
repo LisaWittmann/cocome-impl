@@ -1,9 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'enterprise-root',
+  selector: 'app-enterprise-root',
   templateUrl: './enterprise.component.html'
 })
-export class EnterpriseComponent {
-    
-}
+export class EnterpriseComponent { }
