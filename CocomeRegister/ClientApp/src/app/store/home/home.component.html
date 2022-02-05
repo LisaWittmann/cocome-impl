@@ -1,7 +1,8 @@
 <div class="store page-container">
     <div class="container">
         <section>
-            <h1>Mein Store</h1>
+            <h2>Jahresumsatz</h2>
+            <canvas id="salesChart">{{ salesChart }}</canvas>
         </section>
         <section *ngIf="runningOutOfStock.length">
             <h2>Geringer Bestand:</h2>
@@ -21,8 +22,8 @@
                 *ngFor="let order of pendingOrders"
                 [header]="title(order)"
             >
-                <store-order-detail [order]="order">
-                </store-order-detail>
+                <app-store-order-detail [order]="order">
+                </app-store-order-detail>
             </app-accordion>
             <a [routerLink]="'/store/orders'">Alle Bestellungen</a>
         </section>

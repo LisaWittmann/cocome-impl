@@ -1,209 +1,103 @@
-import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
-import { Order } from "src/services/Order";
-import { Product } from "src/services/Product";
-import { StateService } from "src/services/StateService";
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Month } from 'src/services/Month';
+import { Order } from 'src/services/Order';
+import { Product } from 'src/services/Product';
+import { StateService } from 'src/services/StateService';
 
-interface StoreState {
-    inventory: Map<Product, number>,
-    currentOrder: Map<Product, number>,
-    orders: Order[],
-}
-
-const initialState: StoreState = {
-    inventory: new Map<Product, number>(),
-    currentOrder: new Map<Product, number>(),
-    orders: [],
-}
-
-@Injectable({providedIn: 'root'})
-export class StoreStateService extends StateService<StoreState> {
-    inventory$: Observable<Map<Product, number>> = this.select(state => state.inventory);
-    currentOrder$: Observable<Map<Product, number>> = this.select(state => state.currentOrder);
-    orders$: Observable<Order[]> = this.select(state => state.orders);
-
-    constructor() {
-        super(initialState);
-        // test data
-        const inventory = new Map<Product, number>();
-        for (const product of testProducts) {
-            inventory.set(product, Math.round(Math.random() * 100));
-        }
-        const orders = testOrders;
-        this.setState({ inventory: inventory, orders: orders });
-        console.log(orders)
-    }
-
-    get availableProducts() {
-        return [...this.state.inventory.keys()].filter(product => this.state.inventory.get(product) > 0);
-    }
-
-    get runningOutOfStock() {
-        return [...this.state.inventory.keys()].filter(product => this.state.inventory.get(product) < 10);
-    }
-
-    addToCard(product: Product, amount = 1) {
-        const currentOrder = this.state.currentOrder;
-        const cardProduct = [...currentOrder.keys()].find(p => p.id == product.id);
-        if (cardProduct) {
-            currentOrder.set(cardProduct, currentOrder.get(cardProduct) + amount);
-        } else {
-            currentOrder.set(product, amount);
-        }
-        this.setState({ currentOrder: currentOrder });
-    }
-
-    removeFromCard(product: Product) {
-        const currentOrder = this.state.currentOrder;
-        const cardProduct = [...currentOrder.keys()].find(p => p.id == product.id);
-        if (cardProduct && currentOrder.get(cardProduct) > 1) {
-            currentOrder.set(cardProduct, currentOrder.get(cardProduct) - 1);
-        }
-        this.setState({ currentOrder: currentOrder });
-
-    }
-
-    removeAllFromCard(product: Product) {
-        const currentOrder = this.state.currentOrder;
-        currentOrder.delete(product);
-        this.setState({ currentOrder: currentOrder });
-    }
-
-    placeNewOrder() {
-        if (this.state.currentOrder.size == 0) return;
-        const orders = this.state.orders;
-        orders.push({
-            id: Math.floor(Math.random() * 5000),
-            products: this.state.currentOrder,
-            placingDate: new Date(Date.now()),
-            deliveringDate: undefined,
-            delivered: false,
-            closed: false,
-        })
-        this.setState({ currentOrder: new Map<Product, number>() });
-        console.log(this.state.currentOrder)
-        this.setState({ orders: orders });
-    }
-
-    closeOrder(orderId: number) {
-        const orders = this.state.orders;
-        const inventory = this.state.inventory;
-
-        const order = orders.find(order => order.id == orderId);
-        order.closed = true;
-        console.log(order);
-        
-        for (const [product, amount] of order.products) {
-            inventory.set(product, inventory.get(product) + amount);
-        }
-        console.log(inventory);
-        this.setState({ orders: orders });
-        this.setState({ inventory: inventory })
-    }
-
-    removeProducts(products: Product[]) {
-        const storeProducts = this.state.inventory;
-        for (const key of storeProducts.keys()) {
-            const productsToKey = products.filter(product => product.id == key.id); 
-            storeProducts.set(key, storeProducts.get(key) - productsToKey.length);
-        }
-        this.setState({ inventory: storeProducts });
-    }
-}
-
+/** test data */
 const testProducts = [
     {
         id: 12345,
-        name: "Salatgurke",
+        name: 'Salatgurke',
         price: 0.59,
-        description: ""
+        description: ''
     },
     {
         id: 35656,
-        name: "Endiviensalat",
+        name: 'Endiviensalat',
         price: 0.99,
-        description: ""
+        description: ''
     },
     {
         id: 7263,
-        name: "Kräuterbaguette",
+        name: 'Kräuterbaguette',
         price: 0.99,
-        description: ""
+        description: ''
     },
     {
         id: 8843,
-        name: "Schokoriegel",
+        name: 'Schokoriegel',
         price: 1.99,
-        description: ""
+        description: ''
     },
     {
         id: 8443,
-        name: "Bircher Müsli",
+        name: 'Bircher Müsli',
         price: 1.99,
-        description: ""
+        description: ''
     },
     {
         id: 91233,
-        name: "Papaya",
+        name: 'Papaya',
         price: 1.19,
-        description: ""
+        description: ''
     },
     {
         id: 75236,
-        name: "Capri Sonne Orange",
+        name: 'Capri Sonne Orange',
         price: 0.79,
-        description: ""
+        description: ''
     },
     {
         id: 75231,
-        name: "Kartoffeln",
+        name: 'Kartoffeln',
         price: 1.39,
-        description: ""
+        description: ''
     },
     {
         id: 23484,
-        name: "Kirschtomaten 500g",
+        name: 'Kirschtomaten 500g',
         price: 1.69,
-        description: ""
+        description: ''
     },
     {
         id: 23484,
-        name: "Eistee Pfirsich",
+        name: 'Eistee Pfirsich',
         price: 0.69,
-        description: ""
+        description: ''
     },
     {
         id: 23484,
-        name: "Eistee Zitrone",
+        name: 'Eistee Zitrone',
         price: 0.69,
-        description: ""
+        description: ''
     },
     {
         id: 26782,
-        name: "Erdbeeren",
+        name: 'Erdbeeren',
         price: 3.69,
-        description: ""
+        description: ''
     },
     {
         id: 82921,
-        name: "Laugenbrezel",
+        name: 'Laugenbrezel',
         price: 0.49,
-        description: ""
+        description: ''
     },
     {
         id: 72361,
-        name: "Katzenstreu",
+        name: 'Katzenstreu',
         price: 2.79,
-        description: ""
+        description: ''
     },
     {
         id: 32170,
-        name: "Schlagsahne",
+        name: 'Schlagsahne',
         price: 0.29,
-        description: ""
+        description: ''
     }
 ];
-
 
 const testOrders = [
     {
@@ -263,3 +157,146 @@ const testOrders = [
         closed: false,
     }
 ];
+
+const testSales = new Map<number, Map<Month, number>>([
+    [
+        2021,
+        new Map<Month, number>([
+            [Month.JANUARY, 116],
+            [Month.FEBRUARY, 165],
+            [Month.MARCH, 187],
+            [Month.APRIL, 139],
+            [Month.MAY, 199],
+            [Month.JUNE, 165],
+            [Month.JULY, 244],
+            [Month.AUGUST, 155],
+            [Month.SEPTEMBER, 160],
+            [Month.OCTOBER, 143],
+            [Month.NOVEMBER, 177],
+            [Month.DECEMBER, 321]
+        ])
+    ],
+    [
+        2022,
+        new Map<Month, number>([
+            [Month.JANUARY, 210],
+            [Month.FEBRUARY, 233]
+        ])
+    ]
+]);
+
+
+interface StoreState {
+    inventory: Map<Product, number>;
+    currentOrder: Map<Product, number>;
+    orders: Order[];
+    sales: Map<number, Map<Month, number>>;
+}
+
+const initialState: StoreState = {
+    inventory: new Map<Product, number>(),
+    currentOrder: new Map<Product, number>(),
+    orders: [],
+    sales: new Map<number, Map<Month, number>>(),
+};
+
+@Injectable({providedIn: 'root'})
+export class StoreStateService extends StateService<StoreState> {
+    inventory$: Observable<Map<Product, number>> = this.select(state => state.inventory);
+    currentOrder$: Observable<Map<Product, number>> = this.select(state => state.currentOrder);
+    orders$: Observable<Order[]> = this.select(state => state.orders);
+    sales$: Observable<Map<number, Map<Month, number>>> = this.select(state => state.sales);
+
+    constructor() {
+        super(initialState);
+        // test data
+        const inventory = new Map<Product, number>();
+        for (const product of testProducts) {
+            inventory.set(product, Math.round(Math.random() * 100));
+        }
+        this.setState({ inventory: inventory, orders: testOrders, sales: testSales });
+    }
+
+    get availableProducts() {
+        return [...this.state.inventory.keys()].filter(product => this.state.inventory.get(product) > 0);
+    }
+
+    get runningOutOfStock() {
+        return [...this.state.inventory.keys()].filter(product => this.state.inventory.get(product) < 10);
+    }
+
+    get salesDataset() {
+        const dataset = [];
+        for (const [year, sales] of this.state.sales) {
+            dataset.push({ label: year, data: [...sales.values()]});
+        }
+        return dataset;
+    }
+
+    addToCard(product: Product, amount = 1) {
+        const currentOrder = this.state.currentOrder;
+        const cardProduct = [...currentOrder.keys()].find(p => p.id === product.id);
+        if (cardProduct) {
+            currentOrder.set(cardProduct, currentOrder.get(cardProduct) + amount);
+        } else {
+            currentOrder.set(product, amount);
+        }
+        this.setState({ currentOrder: currentOrder });
+    }
+
+    removeFromCard(product: Product) {
+        const currentOrder = this.state.currentOrder;
+        const cardProduct = [...currentOrder.keys()].find(p => p.id === product.id);
+        if (cardProduct && currentOrder.get(cardProduct) > 1) {
+            currentOrder.set(cardProduct, currentOrder.get(cardProduct) - 1);
+        }
+        this.setState({ currentOrder: currentOrder });
+
+    }
+
+    removeAllFromCard(product: Product) {
+        const currentOrder = this.state.currentOrder;
+        currentOrder.delete(product);
+        this.setState({ currentOrder: currentOrder });
+    }
+
+    placeNewOrder() {
+        if (this.state.currentOrder.size === 0) {
+            return;
+        }
+        const orders = this.state.orders;
+        orders.push({
+            id: Math.floor(Math.random() * 5000),
+            products: this.state.currentOrder,
+            placingDate: new Date(Date.now()),
+            deliveringDate: undefined,
+            delivered: false,
+            closed: false,
+        });
+        this.setState({ currentOrder: new Map<Product, number>() });
+        console.log(this.state.currentOrder);
+        this.setState({ orders: orders });
+    }
+
+    closeOrder(orderId: number) {
+        const orders = this.state.orders;
+        const inventory = this.state.inventory;
+
+        const foundOrder = orders.find(order => order.id === orderId);
+        foundOrder.closed = true;
+        for (const [product, amount] of foundOrder.products) {
+            inventory.set(product, inventory.get(product) + amount);
+        }
+        this.setState({ orders: orders });
+        this.setState({ inventory: inventory });
+    }
+
+    removeProducts(products: Product[]) {
+        const storeProducts = this.state.inventory;
+        for (const key of storeProducts.keys()) {
+            const productsToKey = products.filter(product => product.id === key.id);
+            storeProducts.set(key, storeProducts.get(key) - productsToKey.length);
+        }
+        this.setState({ inventory: storeProducts });
+    }
+}

@@ -1,7 +1,6 @@
 @import "variables";
 
 .store {
-
     h2 {
         margin-bottom: $spacing-s;
     }
@@ -20,5 +19,9 @@
             content: "\2192";
             margin-left: $spacing-xs;
         }
+    }
+
+    #salesChart {
+        margin-bottom: $spacing-s;
     }
 }
