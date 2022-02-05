@@ -12,12 +12,20 @@ import { StoreStateService } from '../store.service';
 })
 export class StoreShoppingCardComponent {
   @Output() closeShoppingCardEvent = new EventEmitter<Boolean>();
-  shoppingCard: Map<Product, Number>;
+  shoppingCard: Map<Product, number>;
 
   constructor(private storeStateService: StoreStateService, private router: Router) {
     this.storeStateService.currentOrder$.subscribe(currentOrder => {
       this.shoppingCard = currentOrder;
     });
+  }
+
+  get totalPrice() {
+    let sum = 0;
+    for (const [product, amount] of this.shoppingCard) {
+      sum += amount * product.price;
+    }
+    return sum;
   }
 
   close = () => this.closeShoppingCardEvent.emit(false);
@@ -26,8 +34,9 @@ export class StoreShoppingCardComponent {
     this.storeStateService.addToCard(product);
   }
 
-  updateInstance(product: Product, amount: number) {
-    this.storeStateService.addToCard(product, amount);
+  updateInstance(product: Product, amount: number, replace = false) {
+    console.log(amount);
+    this.storeStateService.addToCard(product, amount, replace);
   }
 
   removeInstance(product: Product) {

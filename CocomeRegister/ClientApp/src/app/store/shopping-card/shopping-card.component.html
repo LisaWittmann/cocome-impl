@@ -37,9 +37,11 @@
                             [class.disabled]="item.value == 1"
                         >-</button>
                         <input
+                            #item.key.id
                             type="number"
                             min=1
-                            [(ngModel)]="item.value"
+                            [ngModel]="item.value"
+                            (change)="updateInstance(item.key, $event.target.value, true)"
                         >
                         <button
                             (click)="addInstance(item.key)"
@@ -48,6 +50,11 @@
                     <td>
                         {{ (item.key.price * item.value).toFixed(2) }}
                     </td>
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td colspan="2">Gesamtpreis</td>
+                    <td>{{ totalPrice.toFixed(2) }}</td>
                 </tr>
             </table>
             <div class="shopping-card__empty" *ngIf="shoppingCard.size < 1">

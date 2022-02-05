@@ -233,11 +233,12 @@ export class StoreStateService extends StateService<StoreState> {
         return dataset;
     }
 
-    addToCard(product: Product, amount = 1) {
+    addToCard(product: Product, amount = 1, replace = false) {
         const currentOrder = this.state.currentOrder;
         const cardProduct = [...currentOrder.keys()].find(p => p.id === product.id);
         if (cardProduct) {
-            currentOrder.set(cardProduct, currentOrder.get(cardProduct) + amount);
+            const productAmount = replace ? amount : currentOrder.get(cardProduct) + amount;
+            currentOrder.set(cardProduct, productAmount);
         } else {
             currentOrder.set(product, amount);
         }
@@ -274,7 +275,6 @@ export class StoreStateService extends StateService<StoreState> {
             closed: false,
         });
         this.setState({ currentOrder: new Map<Product, number>() });
-        console.log(this.state.currentOrder);
         this.setState({ orders: orders });
     }
 

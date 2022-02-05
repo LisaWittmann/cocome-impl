@@ -40,7 +40,7 @@
     }
 
     &__items {
-        overflow-y: scroll;
+        overflow-y: auto;
         height: 75%;
 
         table {
