@@ -26,6 +26,10 @@ export class StoreShoppingCardComponent {
     this.storeStateService.addToCard(product);
   }
 
+  updateInstance(product: Product, amount: number) {
+    this.storeStateService.addToCard(product, amount);
+  }
+
   removeInstance(product: Product) {
     this.storeStateService.removeFromCard(product);
   }

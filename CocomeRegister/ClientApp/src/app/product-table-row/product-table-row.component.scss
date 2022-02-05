@@ -9,6 +9,10 @@
     font-size: $text-xs;
     cursor: pointer;
 
+    &:hover {
+        background-color: $color-grey;
+    }
+
     &__stock {
         flex-basis: 20%;
     }
@@ -27,6 +31,10 @@
         
          * {
             color: $color-white;
+        }
+
+        &:hover {
+            background-color: darkslategrey;
         }
     }
 }

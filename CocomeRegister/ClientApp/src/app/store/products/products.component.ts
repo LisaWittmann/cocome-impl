@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Product } from 'src/services/Product';
 import { StoreStateService } from '../store.service';
 
@@ -6,6 +6,7 @@ import { StoreStateService } from '../store.service';
   selector: 'store-products',
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StoreProductsComponent {
     inventory: Map<Product, number>;
@@ -20,5 +21,11 @@ export class StoreProductsComponent {
 
     addToCard(product: Product) {
         this.storeStateService.addToCard(product);
+    }
+
+    addAllToCard(products: Product[]) {
+        for (const product of products) {
+            this.storeStateService.addToCard(product);
+        }
     }
 }

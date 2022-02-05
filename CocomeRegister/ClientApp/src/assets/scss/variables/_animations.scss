@@ -36,3 +36,19 @@
         transform: translateY(-20px);
     }
 }
+
+@mixin slideLeft($width: 200px,$duration: 1s) {
+    animation: slideLeft $duration;
+    
+
+    @keyframes slideLeft {
+        0% {
+            transform: translateX($width);
+            opacity: 0;
+        }
+        100% {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+}

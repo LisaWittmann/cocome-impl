@@ -42,13 +42,13 @@ export class StoreStateService extends StateService<StoreState> {
         return [...this.state.inventory.keys()].filter(product => this.state.inventory.get(product) < 10);
     }
 
-    addToCard(product: Product) {
+    addToCard(product: Product, amount = 1) {
         const currentOrder = this.state.currentOrder;
         const cardProduct = [...currentOrder.keys()].find(p => p.id == product.id);
         if (cardProduct) {
-            currentOrder.set(cardProduct, currentOrder.get(cardProduct) + 1);
+            currentOrder.set(cardProduct, currentOrder.get(cardProduct) + amount);
         } else {
-            currentOrder.set(product, 1);
+            currentOrder.set(product, amount);
         }
         this.setState({ currentOrder: currentOrder });
     }
