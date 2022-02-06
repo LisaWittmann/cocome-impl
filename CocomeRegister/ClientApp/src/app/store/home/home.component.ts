@@ -12,12 +12,16 @@ import { StoreStateService } from '../store.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StoreHomeComponent implements OnInit {
+  storeId: number;
   runningOutOfStock: Product[];
   orders: Order[];
   chart: HTMLCanvasElement;
   salesChart: Chart;
 
   constructor(private storeStateService: StoreStateService) {
+    this.storeStateService.storeId$.subscribe(storeId => {
+      this.storeId = storeId;
+    });
     this.storeStateService.inventory$.subscribe(() => {
       this.runningOutOfStock = this.storeStateService.runningOutOfStock;
     });

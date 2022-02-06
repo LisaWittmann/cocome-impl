@@ -227,6 +227,7 @@ const testSales = new Map<number, Map<Month, number>>([
 ]);
 
 interface StoreState {
+    storeId: number;
     inventory: Map<Product, number>;
     currentOrder: Map<Product, number>;
     orders: Order[];
@@ -234,6 +235,7 @@ interface StoreState {
 }
 
 const initialState: StoreState = {
+    storeId: Math.round(Math.random() * 1000),
     inventory: new Map<Product, number>(),
     currentOrder: new Map<Product, number>(),
     orders: [],
@@ -242,6 +244,7 @@ const initialState: StoreState = {
 
 @Injectable({providedIn: 'root'})
 export class StoreStateService extends StateService<StoreState> {
+    storeId$: Observable<number> = this.select(state => state.storeId);
     inventory$: Observable<Map<Product, number>> = this.select(state => state.inventory);
     currentOrder$: Observable<Map<Product, number>> = this.select(state => state.currentOrder);
     orders$: Observable<Order[]> = this.select(state => state.orders);
@@ -355,9 +358,7 @@ export class StoreStateService extends StateService<StoreState> {
         this.setState({ inventory: storeProducts });
     }
 
-    updateProduct(product: Product) {
-        let foundProduct = this.getProduct(product.id);
-        foundProduct = product;
+    updateinventory() {
         this.setState({ inventory: this.state.inventory });
     }
 }

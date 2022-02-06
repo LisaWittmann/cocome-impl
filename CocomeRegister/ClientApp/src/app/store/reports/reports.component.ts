@@ -64,27 +64,41 @@ export class StoreReportsComponent implements OnInit {
     });
   }
 
-  generatePDF() {
-    const saleReport = document.getElementById('store-reports-sales');
-    const inventoryReport = document.getElementById('store-reports-inventory');
-    const pdf = new jsPDF('p', 'pt', 'a4');
-    const fileWidth = 500;
-    let fileHeight = fileWidth;
-    const posY = 20;
-    const posX = fileWidth / 10;
+  private generatePDFSection(elementId: string, pdf: jsPDF) {
+    const section = document.getElementById(elementId);
+    const pageHeight = 295;
+    const pageWidth = 210;
+    const pageMargin = 10;
 
-    html2canvas(saleReport).then((page1Canvas) => {
-        const page1Image = page1Canvas.toDataURL('image/png');
-        fileHeight = page1Canvas.height * fileWidth / page1Canvas.width;
-        pdf.addImage(page1Image, 'JPEG', posX, posY, fileWidth, fileHeight);
+    let imgData: string;
+    let imgHeight: number;
+    const imgWidth = pageWidth * 0.8;
 
-        html2canvas(inventoryReport).then((page2Canvas) => {
-            const page2Image = page2Canvas.toDataURL('image/png');
-            fileHeight = page2Canvas.height * fileWidth / page2Canvas.width;
-            pdf.addPage('a4', 'p');
-            pdf.addImage(page2Image, 'JPEG', posX, posY, fileWidth, fileHeight);
-            pdf.save(`Report-${this.date}.pdf`);
-        });
+    const posX = (pageWidth - imgWidth) / 2;
+    let posY = pageMargin;
+
+    return html2canvas(section).then(canvas => {
+      imgData = canvas.toDataURL('image/png');
+      imgHeight = canvas.height * imgWidth / canvas.width;
+      let heightLeft = imgHeight;
+
+      pdf.addImage(imgData, 'PNG', posX, posY, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+
+      while (heightLeft >= 0) {
+        posY += heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, 'PNG', posX, posY, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
     });
+  }
+
+  async generatePDF() {
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    await this.generatePDFSection('store-reports-sales', pdf);
+    pdf.addPage();
+    await this.generatePDFSection('store-reports-inventory', pdf);
+    pdf.save(`Report-${this.date}.pdf`);
   }
 }
