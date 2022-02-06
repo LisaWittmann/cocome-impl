@@ -11,5 +11,7 @@ namespace CocomeStore.Models
         public string Name { get; set; }
 
         public string Stadt { get; set; }
+
+        public long Postleitzahl { get; set; }
     }
 }

@@ -7,4 +7,10 @@ export interface Order {
     deliveringDate: Date | undefined;
     delivered: boolean;
     closed: boolean;
+    provider: Provider;
+}
+
+export interface Provider {
+    id: number;
+    name: string;
 }

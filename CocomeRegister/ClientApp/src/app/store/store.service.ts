@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Outlet } from 'src/services/Outlet';
 import { interpolateColors, toRGBA } from 'src/services/ColorGenerator';
 import { Month } from 'src/services/Month';
 import { Order } from 'src/services/Order';
@@ -130,6 +131,11 @@ const testProducts = [
     }
 ];
 
+const testProvider = {
+    id: Math.round(Math.random() * 1000),
+    name: 'Testinger Spedition',
+};
+
 const testOrders = [
     {
         id: 139853,
@@ -144,6 +150,7 @@ const testOrders = [
         deliveringDate: undefined,
         delivered: false,
         closed: false,
+        provider: testProvider,
     },
     {
         id: 12356,
@@ -158,6 +165,7 @@ const testOrders = [
         deliveringDate: new Date(2021, 7, 1),
         delivered: true,
         closed: true,
+        provider: testProvider,
     },
     {
         id: 723645,
@@ -172,6 +180,7 @@ const testOrders = [
         deliveringDate: new Date(2022, 1, 14),
         delivered: true,
         closed: false,
+        provider: testProvider,
     },
     {
         id: 523489,
@@ -186,6 +195,7 @@ const testOrders = [
         deliveringDate: new Date(2022, 1, 14),
         delivered: true,
         closed: false,
+        provider: testProvider,
     }
 ];
 
@@ -226,8 +236,14 @@ const testSales = new Map<number, Map<Month, number>>([
     ],
 ]);
 
+const testOutlet = {
+    id: Math.round(Math.random() * 1000),
+    name: 'Filiale Testinger',
+    city: 'Musterstadt',
+    postalcode: 11111,
+};
 interface StoreState {
-    storeId: number;
+    outlet: Outlet;
     inventory: Map<Product, number>;
     currentOrder: Map<Product, number>;
     orders: Order[];
@@ -235,7 +251,7 @@ interface StoreState {
 }
 
 const initialState: StoreState = {
-    storeId: Math.round(Math.random() * 1000),
+    outlet: testOutlet,
     inventory: new Map<Product, number>(),
     currentOrder: new Map<Product, number>(),
     orders: [],
@@ -244,7 +260,7 @@ const initialState: StoreState = {
 
 @Injectable({providedIn: 'root'})
 export class StoreStateService extends StateService<StoreState> {
-    storeId$: Observable<number> = this.select(state => state.storeId);
+    outlet$: Observable<Outlet> = this.select(state => state.outlet);
     inventory$: Observable<Map<Product, number>> = this.select(state => state.inventory);
     currentOrder$: Observable<Map<Product, number>> = this.select(state => state.currentOrder);
     orders$: Observable<Order[]> = this.select(state => state.orders);
@@ -331,6 +347,7 @@ export class StoreStateService extends StateService<StoreState> {
             deliveringDate: undefined,
             delivered: false,
             closed: false,
+            provider: testProvider,
         });
         this.setState({ currentOrder: new Map<Product, number>() });
         this.setState({ orders: orders });

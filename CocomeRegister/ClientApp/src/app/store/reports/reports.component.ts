@@ -6,6 +6,7 @@ import { Month, monthOrdinals, monthValues } from 'src/services/Month';
 import { Product } from 'src/services/Product';
 import { StoreStateService } from '../store.service';
 import html2canvas from 'html2canvas';
+import { Outlet } from 'src/services/Outlet';
 
 @Component({
   selector: 'app-store-reports',
@@ -14,7 +15,7 @@ import html2canvas from 'html2canvas';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StoreReportsComponent implements OnInit {
-
+  outlet: Outlet;
   sales: Map<number, Map<Month, number>>;
   inventory: Map<Product, number>;
 
@@ -25,6 +26,9 @@ export class StoreReportsComponent implements OnInit {
   salesLegend = monthOrdinals;
 
   constructor(private storeStateService: StoreStateService) {
+    this.storeStateService.outlet$.subscribe(outlet => {
+      this.outlet = outlet;
+    });
     this.storeStateService.sales$.subscribe(sales => {
         this.sales = sales;
     });

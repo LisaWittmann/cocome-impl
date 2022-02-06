@@ -13,7 +13,12 @@ namespace CocomeStore.Models
         public string Beschreibung { get; set; }
 
         [Required]
+        public float Verkaufspreis { get; set; }
+
+        [Required]
         public float Preis { get; set; }
+
+        public string ImageUrl { get; set; }
 
         //public ProduktGruppe gruppe { get; set; }
     }

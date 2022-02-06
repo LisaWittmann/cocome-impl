@@ -22,9 +22,14 @@ namespace CocomeStore.Models
         public Lieferant Lieferant { get; set; }
 
         [Required]
-        public DateTime Zeitpunkt { get; set; }
+        public DateTime BestellZeitpunkt { get; set; }
+
+        public DateTime LieferZeitpunkt { get; set; }
 
         [Required]
         public bool Geliefert { get; set; }
+
+        [Required]
+        public bool Geschlossen { get; set; }
     }
 }

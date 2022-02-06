@@ -1,7 +1,11 @@
 <div class="store page-container">
     <div class="container">
         <section>
-            <h1>Geschäftstelle {{ storeId }}</h1>
+            <h1>{{ outlet.name }}</h1>
+            <p>
+                Geschäftstelle {{ outlet.id }}<br>
+                {{ outlet.postalcode }} {{ outlet.city }}
+            </p>
         </section>
         <section>
             <h2>Jahresumsatz</h2>

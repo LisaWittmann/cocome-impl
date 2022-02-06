@@ -6,6 +6,13 @@
                     <h1>Bericht vom {{ date }}</h1>
                 </section>
                 <section>
+                    <h2>{{ outlet.name }}</h2>
+                    <p>
+                        Geschäftstelle {{ outlet.id }}<br>
+                        {{ outlet.postalcode }} {{ outlet.city }}
+                    </p>
+                </section>
+                <section>
                     <h2>Jahresumsatz</h2>
                     <canvas id="salesChart">{{ salesChart }}</canvas>
                     <table>

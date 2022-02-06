@@ -11,7 +11,7 @@ namespace CocomeStore.Models
         public Produkt Produkt { get; set; }
 
         [Required]
-        public float Hohe { get; set; }
+        public float Hoehe { get; set; }
 
         //public Filiale Filiale { get; set; }
     }
