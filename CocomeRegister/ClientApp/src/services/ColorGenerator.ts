@@ -1,4 +1,4 @@
-import { interpolateInferno } from "d3";
+import { interpolateInferno } from 'd3';
 
 export interface ColorRange {
     colorStart: number;
@@ -20,7 +20,7 @@ export function interpolateColors(dataLength: number, colorRange: ColorRange) {
     const intervalSize = (colorRange.colorEnd - colorRange.colorStart) / dataLength;
     const colorArray = [];
     let colorPoint: number;
-  
+
     for (let i = 0; i < dataLength; i++) {
       colorPoint = calculatePoint(i, intervalSize, colorRange);
       colorArray.push(interpolateInferno(colorPoint));

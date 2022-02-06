@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Chart } from 'chart.js';
-import { Month } from 'src/services/Month';
+import { monthValues } from 'src/services/Month';
 import { Order } from 'src/services/Order';
 import { Product } from 'src/services/Product';
 import { StoreStateService } from '../store.service';
@@ -41,13 +41,9 @@ export class StoreHomeComponent implements OnInit {
       type: 'line',
       data: {
         datasets: this.storeStateService.salesDataset,
-        labels: Object.keys(Month)
-                .filter(m => isNaN(Number(m)))
-                .map(m => m.charAt(0).toUpperCase() + m.slice(1).toLowerCase()),
+        labels: monthValues,
       },
-      options: {
-        responsive: true,
-      }
+      options: { responsive: true }
     });
   }
 }

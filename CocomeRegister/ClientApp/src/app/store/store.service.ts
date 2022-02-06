@@ -240,7 +240,7 @@ export class StoreStateService extends StateService<StoreState> {
         const colors = interpolateColors(this.state.sales.size, colorRange);
         const dataset = [];
         for (const [year, sales] of this.state.sales) {
-            dataset.push({ 
+            dataset.push({
                 label: year,
                 data: [...sales.values()],
                 borderColor: colors[dataset.length],

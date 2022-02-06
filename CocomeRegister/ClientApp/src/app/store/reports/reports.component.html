@@ -1,51 +1,62 @@
-<div class="reports page-container" id="store-reports">
+<div class="reports page-container">
     <div class="container">
-        <section>
-            <h1>Bericht vom {{ date }}</h1>
-        </section>
-        <section>
-            <h2>Jahresumsatz</h2>
-            <canvas id="salesChart">{{ salesChart }}</canvas>
-            <table>
-                <thead>
-                    <tr>
-                        <td></td>
-                        <td *ngFor="let item of salesLegend">
-                            {{ item }}
-                        </td>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let dataset of salesData">
-                        <td class="thead">{{ dataset.label }}</td>
-                        <td *ngFor="let entry of dataset.data">
-                            {{ entry }}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
-        <section>
-            <h2>Lagerbestand</h2>
-            <canvas id="inventoryChart">{{ inventoryChart }}</canvas>
-            <table>
-                <thead>
-                    <tr>
-                        <td>Artikelnummer</td>
-                        <td>Produktname</td>
-                        <td>Preis</td>
-                        <td>Lagerbestand</td>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let item of inventory | keyvalue">
-                        <td>{{ item.key.id }}</td>
-                        <td>{{ item.key.name }}</td>
-                        <td>{{ item.key.price }}€</td>
-                        <td>{{ item.value }}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
+        <div id="store-reports">
+            <div id="store-reports-sales">
+                <section>
+                    <h1>Bericht vom {{ date }}</h1>
+                </section>
+                <section>
+                    <h2>Jahresumsatz</h2>
+                    <canvas id="salesChart">{{ salesChart }}</canvas>
+                    <table>
+                        <thead>
+                            <tr>
+                                <td></td>
+                                <td *ngFor="let item of salesLegend">
+                                    {{ item }}
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let dataset of salesData">
+                                <td class="thead">{{ dataset.label }}</td>
+                                <td *ngFor="let entry of dataset.data">
+                                    {{ entry }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+            <div id="store-reports-inventory">
+                <section>
+                    <h2>Lagerbestand</h2>
+                    <canvas id="inventoryChart">{{ inventoryChart }}</canvas>
+                    <table>
+                        <thead>
+                            <tr>
+                                <td>Artikelnummer</td>
+                                <td>Produktname</td>
+                                <td>Preis</td>
+                                <td>Lagerbestand</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of inventory | keyvalue">
+                                <td>{{ item.key.id }}</td>
+                                <td>{{ item.key.name }}</td>
+                                <td>{{ item.key.price }} €</td>
+                                <td>{{ item.value }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+            <section>
+                <button class="button" (click)="generatePDF()">
+                    Bericht herunterladen
+                </button>
+            </section>
+        </div>
     </div>
 </div>

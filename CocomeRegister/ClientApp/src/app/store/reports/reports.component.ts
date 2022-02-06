@@ -1,9 +1,11 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Chart } from 'chart.js';
+import { jsPDF } from 'jspdf';
 import { ColorRange, interpolateColors } from 'src/services/ColorGenerator';
-import { Month } from 'src/services/Month';
+import { Month, monthOrdinals, monthValues } from 'src/services/Month';
 import { Product } from 'src/services/Product';
 import { StoreStateService } from '../store.service';
+import html2canvas from 'html2canvas';
 
 @Component({
   selector: 'app-store-reports',
@@ -12,20 +14,15 @@ import { StoreStateService } from '../store.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StoreReportsComponent implements OnInit {
-  
+
   sales: Map<number, Map<Month, number>>;
   inventory: Map<Product, number>;
 
-  salesCanvas: HTMLCanvasElement;
   salesChart: Chart;
-
-  inventoryCanvas: HTMLCanvasElement;
   inventoryChart: Chart;
 
   salesData = this.storeStateService.salesDataset;
-  salesLegend = Object.keys(Month)
-                .filter(m => isNaN(Number(m)))
-                .map(m => m.charAt(0).toUpperCase() + m.slice(1).toLowerCase());
+  salesLegend = monthOrdinals;
 
   constructor(private storeStateService: StoreStateService) {
     this.storeStateService.sales$.subscribe(sales => {
@@ -41,41 +38,53 @@ export class StoreReportsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.salesCanvas = (document.getElementById('salesChart') as HTMLCanvasElement);
-    this.salesChart = new Chart(this.salesCanvas.getContext('2d'), {
+    const salesContext = (document.getElementById('salesChart') as HTMLCanvasElement).getContext('2d');
+    this.salesChart = new Chart(salesContext, {
       type: 'line',
       data: {
         datasets: this.salesData,
-        labels: this.salesLegend,
+        labels: monthValues,
       },
       options: { responsive: true }
     });
 
     const colorRange: ColorRange = { colorStart: 0.2, colorEnd: 1 };
-    const pieColors = interpolateColors(this.inventory.size, colorRange);
-    this.inventoryCanvas = (document.getElementById('inventoryChart') as HTMLCanvasElement);
-    this.inventoryChart = new Chart(this.inventoryCanvas.getContext('2d'), {
+    const chartColors = interpolateColors(this.inventory.size, colorRange);
+    const inventoryContext = (document.getElementById('inventoryChart') as HTMLCanvasElement).getContext('2d');
+    this.inventoryChart = new Chart(inventoryContext, {
         type: 'pie',
         data: {
             labels: [...this.inventory.keys()].map(p => p.name),
-            datasets: [
-                {
-                    backgroundColor: pieColors,
-                    data: [...this.inventory.values()] 
-                }
-            ]
+            datasets: [{
+                backgroundColor: chartColors,
+                data: [...this.inventory.values()]
+            }]
         },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                    align: 'start',
-                }
-            } 
-        }
-    })
+        options: { responsive: true }
+    });
   }
 
+  generatePDF() {
+    const saleReport = document.getElementById('store-reports-sales');
+    const inventoryReport = document.getElementById('store-reports-inventory');
+    const pdf = new jsPDF('p', 'pt', 'a4');
+    const fileWidth = 500;
+    let fileHeight = fileWidth;
+    const posY = 20;
+    const posX = fileWidth / 10;
 
+    html2canvas(saleReport).then((page1Canvas) => {
+        const page1Image = page1Canvas.toDataURL('image/png');
+        fileHeight = page1Canvas.height * fileWidth / page1Canvas.width;
+        pdf.addImage(page1Image, 'JPEG', posX, posY, fileWidth, fileHeight);
+
+        html2canvas(inventoryReport).then((page2Canvas) => {
+            const page2Image = page2Canvas.toDataURL('image/png');
+            fileHeight = page2Canvas.height * fileWidth / page2Canvas.width;
+            pdf.addPage('a4', 'p');
+            pdf.addImage(page2Image, 'JPEG', posX, posY, fileWidth, fileHeight);
+            pdf.save(`Report-${this.date}.pdf`);
+        });
+    });
+  }
 }
