@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { interpolateColors, toRGBA } from 'src/services/ColorGenerator';
 import { Month } from 'src/services/Month';
 import { Order } from 'src/services/Order';
 import { Product } from 'src/services/Product';
@@ -57,7 +58,7 @@ const testProducts = [
     },
     {
         id: 23484,
-        name: 'Kirschtomaten 500g',
+        name: 'Kirschtomaten',
         price: 1.69,
         description: ''
     },
@@ -160,6 +161,23 @@ const testOrders = [
 
 const testSales = new Map<number, Map<Month, number>>([
     [
+        2022,
+        new Map<Month, number>([
+            [Month.JANUARY, 210],
+            [Month.FEBRUARY, 233],
+            [Month.MARCH, null],
+            [Month.APRIL, null],
+            [Month.MAY, null],
+            [Month.JUNE, null],
+            [Month.JULY, null],
+            [Month.AUGUST, null],
+            [Month.SEPTEMBER, null],
+            [Month.OCTOBER, null],
+            [Month.NOVEMBER, null],
+            [Month.DECEMBER, null]
+        ])
+    ],
+    [
         2021,
         new Map<Month, number>([
             [Month.JANUARY, 116],
@@ -176,15 +194,7 @@ const testSales = new Map<number, Map<Month, number>>([
             [Month.DECEMBER, 321]
         ])
     ],
-    [
-        2022,
-        new Map<Month, number>([
-            [Month.JANUARY, 210],
-            [Month.FEBRUARY, 233]
-        ])
-    ]
 ]);
-
 
 interface StoreState {
     inventory: Map<Product, number>;
@@ -226,9 +236,16 @@ export class StoreStateService extends StateService<StoreState> {
     }
 
     get salesDataset() {
+        const colorRange = { colorStart: 0.6, colorEnd: 0.8 };
+        const colors = interpolateColors(this.state.sales.size, colorRange);
         const dataset = [];
         for (const [year, sales] of this.state.sales) {
-            dataset.push({ label: year, data: [...sales.values()]});
+            dataset.push({ 
+                label: year,
+                data: [...sales.values()],
+                borderColor: colors[dataset.length],
+                backgroundColor: toRGBA(colors[dataset.length], 0.5)
+            });
         }
         return dataset;
     }
