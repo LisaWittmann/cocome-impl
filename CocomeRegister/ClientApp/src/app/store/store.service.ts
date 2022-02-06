@@ -11,91 +11,106 @@ const testProducts = [
     {
         id: 12345,
         name: 'Salatgurke',
-        price: 0.59,
+        price: 0.20,
+        salePrice: 0.59,
         description: ''
     },
     {
         id: 35656,
         name: 'Endiviensalat',
-        price: 0.99,
+        price: 0.20,
+        salePrice: 0.99,
         description: ''
     },
     {
         id: 7263,
         name: 'Kräuterbaguette',
-        price: 0.99,
+        price: 0.20,
+        salePrice: 0.99,
         description: ''
     },
     {
         id: 8843,
         name: 'Schokoriegel',
-        price: 1.99,
+        price: 0.20,
+        salePrice: 1.99,
         description: ''
     },
     {
         id: 8443,
         name: 'Bircher Müsli',
-        price: 1.99,
+        price: 0.20,
+        salePrice: 1.99,
         description: ''
     },
     {
         id: 91233,
         name: 'Papaya',
-        price: 1.19,
+        price: 0.20,
+        salePrice: 1.19,
         description: ''
     },
     {
         id: 75236,
         name: 'Capri Sonne Orange',
-        price: 0.79,
+        price: 0.20,
+        salePrice: 0.79,
         description: ''
     },
     {
         id: 75231,
         name: 'Kartoffeln',
-        price: 1.39,
+        price: 0.20,
+        salePrice: 1.39,
         description: ''
     },
     {
         id: 23484,
         name: 'Kirschtomaten',
-        price: 1.69,
+        price: 0.20,
+        salePrice: 1.69,
         description: ''
     },
     {
         id: 23484,
         name: 'Eistee Pfirsich',
-        price: 0.69,
+        price: 0.20,
+        salePrice: 0.69,
         description: ''
     },
     {
         id: 23484,
         name: 'Eistee Zitrone',
-        price: 0.69,
+        price: 0.20,
+        salePrice: 0.69,
         description: ''
     },
     {
         id: 26782,
         name: 'Erdbeeren',
-        price: 3.69,
+        price: 0.20,
+        salePrice: 3.69,
         description: ''
     },
     {
         id: 82921,
         name: 'Laugenbrezel',
-        price: 0.49,
+        price: 0.20,
+        salePrice: 0.49,
         description: ''
     },
     {
         id: 72361,
         name: 'Katzenstreu',
-        price: 2.79,
+        price: 0.20,
+        salePrice: 2.79,
         description: ''
     },
     {
         id: 32170,
         name: 'Schlagsahne',
-        price: 0.29,
+        price: 0.20,
+        salePrice: 0.29,
         description: ''
     }
 ];
@@ -237,17 +252,25 @@ export class StoreStateService extends StateService<StoreState> {
 
     get salesDataset() {
         const colorRange = { colorStart: 0.6, colorEnd: 0.8 };
-        const colors = interpolateColors(this.state.sales.size, colorRange);
+        const chartColors = interpolateColors(this.state.sales.size, colorRange);
         const dataset = [];
         for (const [year, sales] of this.state.sales) {
             dataset.push({
                 label: year,
                 data: [...sales.values()],
-                borderColor: colors[dataset.length],
-                backgroundColor: toRGBA(colors[dataset.length], 0.5)
+                borderColor: chartColors[dataset.length],
+                backgroundColor: toRGBA(chartColors[dataset.length], 0.5)
             });
         }
         return dataset;
+    }
+
+    private getProduct(id: number) {
+        return [...this.state.inventory.keys()].find(p => p.id === id);
+    }
+
+    private getOrder(id: number) {
+        return this.state.orders.find(order => order.id === id);
     }
 
     addToCard(product: Product, amount = 1, replace = false) {
@@ -264,7 +287,7 @@ export class StoreStateService extends StateService<StoreState> {
 
     removeFromCard(product: Product) {
         const currentOrder = this.state.currentOrder;
-        const cardProduct = [...currentOrder.keys()].find(p => p.id === product.id);
+        const cardProduct = this.getProduct(product.id);
         if (cardProduct && currentOrder.get(cardProduct) > 1) {
             currentOrder.set(cardProduct, currentOrder.get(cardProduct) - 1);
         }
@@ -299,7 +322,7 @@ export class StoreStateService extends StateService<StoreState> {
         const orders = this.state.orders;
         const inventory = this.state.inventory;
 
-        const foundOrder = orders.find(order => order.id === orderId);
+        const foundOrder = this.getOrder(orderId);
         foundOrder.closed = true;
         for (const [product, amount] of foundOrder.products) {
             inventory.set(product, inventory.get(product) + amount);
@@ -315,5 +338,11 @@ export class StoreStateService extends StateService<StoreState> {
             storeProducts.set(key, storeProducts.get(key) - productsToKey.length);
         }
         this.setState({ inventory: storeProducts });
+    }
+
+    updateSalePrice(product: Product) {
+        const foundProduct = this.getProduct(product.id);
+        foundProduct.salePrice = product.salePrice;
+        this.setState({ inventory: this.state.inventory });
     }
 }

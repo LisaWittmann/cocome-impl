@@ -5,7 +5,7 @@
     <div class="product-card__attributes">
         <strong>{{ product.name }}</strong>
         <div>
-            <span [class.discounted]="discount">{{ product.price }} €</span>
+            <span [class.discounted]="discount">{{ product.salePrice }} €</span>
             <span *ngIf="discount" class="discount">{{ getDiscountedPrice() }} €</span>
         </div>
     </div>

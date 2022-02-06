@@ -6,7 +6,7 @@
         >
             <span>{{ getAmount(product) }}</span>
             <span>{{ product.name }}</span>
-            <span>{{ product.price.toFixed(2) }} €</span>
+            <span>{{ product.salePrice.toFixed(2) }} €</span>
             <button 
                 *ngIf="isSelected(product)" 
                 class="shopping-card__remove-button"

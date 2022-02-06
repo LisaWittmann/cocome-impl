@@ -66,7 +66,7 @@ export class CashDeskStateService extends StateService<CashDeskState> {
     get shoppingCardSum(): number {
         let sum = 0;
         for (const product of this.state.shoppingCard) {
-            sum += product.price;
+            sum += product.salePrice;
         }
         return sum;
     }

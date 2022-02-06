@@ -31,7 +31,9 @@
                     *ngFor="let item of inventory | keyvalue"
                     [product]="item.key"
                     [amount]="item.value"
+                    [editable]="true"
                     (selectProductEvent)="addToCard($event)"
+                    (changePriceEvent)="updateSalePrice($event)"
                 >
                 </app-product-table-row>
             </ul>

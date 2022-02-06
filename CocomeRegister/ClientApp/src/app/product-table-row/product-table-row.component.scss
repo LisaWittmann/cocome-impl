@@ -11,19 +11,32 @@
 
     &:hover {
         background-color: $color-grey;
+        input {
+            background-color: $color-light-grey;
+        }
     }
 
     &__stock {
-        flex-basis: 20%;
+        flex-basis: 15%;
     }
 
     &__info {
-        flex-basis: 60%;
+        flex-basis: 55%;
     }
 
     &__price {
-        flex-basis: 20%;
+        flex-basis: 15%;
         text-align: right;
+    }
+
+    &__sale-price {
+        flex-basis: 15%;
+        input {
+            max-width: 75px;
+            border: 0;
+            background-color: $color-grey;
+            text-align: center;
+        }
     }
 
     &--warn {
@@ -33,8 +46,15 @@
             color: $color-white;
         }
 
+        input {
+            background-color: darkslategray;
+        }
+
         &:hover {
             background-color: darkslategrey;
+            input {
+                background-color: #495057;
+            }
         }
     }
 }

@@ -6,6 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./navigation.component.scss']
 })
 export class NavigationComponent {
-    opened = false;
-    toggle = () => this.opened = !this.opened;
+  opened = false;
+  toggle = () => this.opened = !this.opened;
 }

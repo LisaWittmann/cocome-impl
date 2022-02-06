@@ -11,6 +11,16 @@
         {{ product.name }}<br>
         Artikelnummer: {{ product.id }}
     </div>
+    <div class="product-table-row__sale-price">
+        <input
+            *ngIf="editable" 
+            type="number"
+            [min]="product.price"
+            step="0.01"
+            [(ngModel)]="product.salePrice"
+            (change)="updatePrice()"
+        >
+    </div>
     <div class="product-table-row__price">
         {{ product.price.toFixed(2) }} €
     </div>

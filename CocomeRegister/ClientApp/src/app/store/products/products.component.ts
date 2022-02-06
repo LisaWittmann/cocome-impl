@@ -28,4 +28,8 @@ export class StoreProductsComponent {
             this.storeStateService.addToCard(product);
         }
     }
+
+    updateSalePrice(product: Product) {
+        this.storeStateService.updateSalePrice(product);
+    }
 }
