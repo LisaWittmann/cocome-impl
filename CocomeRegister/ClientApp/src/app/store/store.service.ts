@@ -13,105 +13,120 @@ const testProducts = [
         name: 'Salatgurke',
         price: 0.20,
         salePrice: 0.59,
-        description: ''
+        description: '',
+        imageUrl: '',
     },
     {
         id: 35656,
         name: 'Endiviensalat',
         price: 0.20,
         salePrice: 0.99,
-        description: ''
+        description: '',
+        imageUrl: '',
     },
     {
         id: 7263,
         name: 'Kräuterbaguette',
         price: 0.20,
         salePrice: 0.99,
-        description: ''
+        description: '',
+        imageUrl: '',
     },
     {
         id: 8843,
         name: 'Schokoriegel',
         price: 0.20,
         salePrice: 1.99,
-        description: ''
+        description: '',
+        imageUrl: '',
     },
     {
         id: 8443,
         name: 'Bircher Müsli',
         price: 0.20,
         salePrice: 1.99,
-        description: ''
+        description: '',
+        imageUrl: '',
     },
     {
         id: 91233,
         name: 'Papaya',
         price: 0.20,
         salePrice: 1.19,
-        description: ''
+        description: '',
+        imageUrl: '',
     },
     {
         id: 75236,
         name: 'Capri Sonne Orange',
         price: 0.20,
         salePrice: 0.79,
-        description: ''
+        description: '',
+        imageUrl: '',
     },
     {
         id: 75231,
         name: 'Kartoffeln',
         price: 0.20,
         salePrice: 1.39,
-        description: ''
+        description: '',
+        imageUrl: '',
     },
     {
         id: 23484,
         name: 'Kirschtomaten',
         price: 0.20,
         salePrice: 1.69,
-        description: ''
+        description: '',
+        imageUrl: '',
     },
     {
         id: 23484,
         name: 'Eistee Pfirsich',
         price: 0.20,
         salePrice: 0.69,
-        description: ''
+        description: '',
+        imageUrl: '',
     },
     {
         id: 23484,
         name: 'Eistee Zitrone',
         price: 0.20,
         salePrice: 0.69,
-        description: ''
+        description: '',
+        imageUrl: '',
     },
     {
         id: 26782,
         name: 'Erdbeeren',
         price: 0.20,
         salePrice: 3.69,
-        description: ''
+        description: '',
+        imageUrl: '',
     },
     {
         id: 82921,
         name: 'Laugenbrezel',
         price: 0.20,
         salePrice: 0.49,
-        description: ''
+        description: '',
+        imageUrl: '',
     },
     {
         id: 72361,
         name: 'Katzenstreu',
         price: 0.20,
         salePrice: 2.79,
-        description: ''
+        description: '',
+        imageUrl: '',
     },
     {
         id: 32170,
         name: 'Schlagsahne',
         price: 0.20,
         salePrice: 0.29,
-        description: ''
+        description: '',
+        imageUrl: '',
     }
 ];
 
@@ -340,9 +355,9 @@ export class StoreStateService extends StateService<StoreState> {
         this.setState({ inventory: storeProducts });
     }
 
-    updateSalePrice(product: Product) {
-        const foundProduct = this.getProduct(product.id);
-        foundProduct.salePrice = product.salePrice;
+    updateProduct(product: Product) {
+        let foundProduct = this.getProduct(product.id);
+        foundProduct = product;
         this.setState({ inventory: this.state.inventory });
     }
 }

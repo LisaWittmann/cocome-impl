@@ -13,6 +13,7 @@ import { StoreOrderDetailComponent } from './order-detail/order-detail.component
 import { StoreReportsComponent } from './reports/reports.component';
 
 import { AccordionComponent } from '../accordion/accordion.component';
+import { ProductDetailComponent } from './product-detail/product-detail.component';
 import { ProductTableRowComponent } from '../product-table-row/product-table-row.component';
 
 import { StoreStateService } from './store.service';
@@ -21,7 +22,8 @@ const storeRoutes: Routes = [
   { path: '', component: StoreHomeComponent },
   { path: 'products', component: StoreProductsComponent },
   { path: 'orders', component: StoreOrdersComponent },
-  { path: 'reports', component: StoreReportsComponent }
+  { path: 'reports', component: StoreReportsComponent },
+  { path: 'product/:id', component: ProductDetailComponent },
 ];
 
 @NgModule({
@@ -41,6 +43,7 @@ const storeRoutes: Routes = [
     StoreOrderDetailComponent,
     AccordionComponent,
     ProductTableRowComponent,
+    ProductDetailComponent,
   ],
   providers: [StoreStateService],
   bootstrap: [StoreComponent]

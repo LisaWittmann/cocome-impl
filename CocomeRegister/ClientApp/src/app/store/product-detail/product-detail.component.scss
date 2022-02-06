@@ -1,0 +1,72 @@
+@import "variables";
+
+.product-detail {
+    &__data {
+        @include flex-center($justify: space-between);
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+
+    &__image {
+        flex-basis: 50%;
+        aspect-ratio: 1/1;
+        background-color: $color-light-grey;
+
+        input[type="file"] {
+            display: none;
+        }
+
+        label:hover {
+            cursor: pointer;
+        }
+
+        @media all and (max-width: 1000px) {
+            flex-basis: 100%;
+        }
+    }
+
+    &__attributes {
+        flex-basis: 50%;
+        @include flex-center($direction: column);
+
+        @media all and (max-width: 1000px) {
+            flex-basis: 100%;
+        }
+
+        > * {
+            text-align: center;
+            width: 70%;
+            padding: $spacing-s;
+            
+            &:not(:last-of-type) {
+                border-bottom: 1px solid $color-grey;
+            }
+
+            p:first-of-type {
+                font-weight: $poppins-medium;
+                font-size: $text-m;
+                margin-bottom: 0;
+            }
+
+            input, textarea {
+                text-align: center;
+                border: 0;
+                background-color: transparent;
+                width: fit-content;
+
+                &[type="number"] {
+                    max-width: 80px;
+                }
+            }
+            
+            textarea {
+                width: 100%;
+                font-size: $text-xs;
+            }
+        }
+    }
+
+    &__card-button {
+        margin-top: $spacing-m;
+    }
+}

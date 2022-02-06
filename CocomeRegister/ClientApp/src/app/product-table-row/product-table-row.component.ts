@@ -11,15 +11,9 @@ export class ProductTableRowComponent {
     @Input() product: Product;
     @Input() amount: number | undefined;
     @Input() warn: boolean;
-    @Input() editable: boolean;
     @Output() selectProductEvent = new EventEmitter<Product>();
-    @Output() priceChangeEvent = new EventEmitter<Product>();
 
     select() {
       this.selectProductEvent.emit(this.product);
-    }
-
-    updatePrice() {
-      this.priceChangeEvent.emit(this.product);
     }
 }

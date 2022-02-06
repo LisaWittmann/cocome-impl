@@ -19,7 +19,7 @@
                     [product]="product"
                     [amount]="inventory.get(product)"
                     [warn]="true"
-                    (selectProductEvent)="addToCard($event)"
+                    (selectProductEvent)="navigateToDetail($event)"
                 >
                 </app-product-table-row>
             </ul>
@@ -31,9 +31,7 @@
                     *ngFor="let item of inventory | keyvalue"
                     [product]="item.key"
                     [amount]="item.value"
-                    [editable]="true"
-                    (selectProductEvent)="addToCard($event)"
-                    (changePriceEvent)="updateSalePrice($event)"
+                    (selectProductEvent)="navigateToDetail($event)"
                 >
                 </app-product-table-row>
             </ul>
