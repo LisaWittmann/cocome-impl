@@ -1,6 +1,10 @@
 <div class="product-card">
     <div class="product-card__image">
-        <img>
+        <img
+            *ngIf="product.imageUrl"
+            [src]="product.imageUrl"
+            [alt]="product.name"
+        >
     </div>
     <div class="product-card__attributes">
         <strong>{{ product.name }}</strong>

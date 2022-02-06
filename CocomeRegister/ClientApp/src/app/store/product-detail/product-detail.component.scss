@@ -11,6 +11,9 @@
         flex-basis: 50%;
         aspect-ratio: 1/1;
         background-color: $color-light-grey;
+        background-image: url('src/assets/img/default-image.jpg');
+        background-size: 100% 100%;
+        background-position: 50% 60%;
 
         input[type="file"] {
             display: none;
