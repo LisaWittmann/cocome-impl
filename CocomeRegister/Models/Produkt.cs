@@ -5,7 +5,7 @@ namespace CocomeStore.Models
     public class Produkt
     {
         [Required]
-        public int Id { get; }
+        public int Id { get; set; }
 
         [Required]
         public string Name { get; set; }
