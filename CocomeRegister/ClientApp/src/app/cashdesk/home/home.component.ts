@@ -17,6 +17,6 @@ export class CashDeskHomeComponent {
   }
 
   deactivateExpressMode() {
-     this.cashdeskState.setExpressMode(false);
+    this.cashdeskState.resetExpressMode();
   }
 }

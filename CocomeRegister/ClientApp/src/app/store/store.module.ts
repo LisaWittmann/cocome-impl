@@ -20,10 +20,10 @@ import { StoreStateService } from './store.service';
 
 const storeRoutes: Routes = [
   { path: '', component: StoreHomeComponent },
-  { path: 'products', component: StoreProductsComponent },
-  { path: 'orders', component: StoreOrdersComponent },
-  { path: 'reports', component: StoreReportsComponent },
-  { path: 'product/:id', component: StoreProductDetailComponent },
+  { path: 'produkte', component: StoreProductsComponent },
+  { path: 'bestellungen', component: StoreOrdersComponent },
+  { path: 'berichte', component: StoreReportsComponent },
+  { path: 'produkt/:id', component: StoreProductDetailComponent },
 ];
 
 @NgModule({

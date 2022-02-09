@@ -2,17 +2,17 @@
 
 namespace CocomeStore.Models
 {
-    public class VerkaufsElement
+    public class Discount
     {
         [Required]
         public int Id { get; set; }
 
         [Required]
-        public Produkt Produkt { get; set; }
+        public Product Product { get; set; }
 
         [Required]
-        public int Anzahl { get; set; }
+        public float Percentage { get; set; }
 
-        public Rabatt Rabatt { get; set; }
+        //public Filiale Filiale { get; set; }
     }
 }

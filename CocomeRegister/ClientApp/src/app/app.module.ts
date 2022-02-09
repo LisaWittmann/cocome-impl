@@ -15,10 +15,10 @@ import { EnterpriseEntrypoint } from './enterprise/enterprise.module';
 import { CashDeskEntrypoint } from './cashdesk/cashdesk.module';
 
 const appRoutes: Routes = [
-  { path: '', redirectTo: '/cashdesk', pathMatch: 'full' },
-  { path: 'cashdesk', component: CashDeskComponent, loadChildren: CashDeskEntrypoint },
-  { path: 'store', component: StoreComponent, loadChildren: StoreEntrypoint },
-  { path: 'enterprise', component: EnterpriseComponent, loadChildren: EnterpriseEntrypoint},
+  { path: '', redirectTo: 'kasse', pathMatch: 'full' },
+  { path: 'kasse', component: CashDeskComponent, loadChildren: CashDeskEntrypoint },
+  { path: 'filiale', component: StoreComponent, loadChildren: StoreEntrypoint },
+  { path: 'admin', component: EnterpriseComponent, loadChildren: EnterpriseEntrypoint},
 ];
 
 @NgModule({
@@ -26,7 +26,7 @@ const appRoutes: Routes = [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
-    RouterModule.forRoot(appRoutes,  { scrollPositionRestoration: 'top' })
+    RouterModule.forRoot(appRoutes,  { scrollPositionRestoration: 'top' } )
   ],
   declarations: [
     AppComponent,

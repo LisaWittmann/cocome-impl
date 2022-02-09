@@ -3,10 +3,11 @@ import { Chart } from 'chart.js';
 import { jsPDF } from 'jspdf';
 import { ColorRange, interpolateColors } from 'src/services/ColorGenerator';
 import { Month, monthOrdinals, monthValues } from 'src/services/Month';
-import { Product } from 'src/services/Product';
+import { Product, StockItem } from 'src/services/Product';
+import { Store } from 'src/services/Store';
 import { StoreStateService } from '../store.service';
 import html2canvas from 'html2canvas';
-import { Outlet } from 'src/services/Outlet';
+
 
 @Component({
   selector: 'app-store-reports',
@@ -15,9 +16,9 @@ import { Outlet } from 'src/services/Outlet';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StoreReportsComponent implements OnInit {
-  outlet: Outlet;
+  store: Store;
   sales: Map<number, Map<Month, number>>;
-  inventory: Map<Product, number>;
+  inventory: StockItem[];
 
   salesChart: Chart;
   inventoryChart: Chart;
@@ -26,8 +27,8 @@ export class StoreReportsComponent implements OnInit {
   salesLegend = monthOrdinals;
 
   constructor(private storeStateService: StoreStateService) {
-    this.storeStateService.outlet$.subscribe(outlet => {
-      this.outlet = outlet;
+    this.storeStateService.store$.subscribe(store => {
+      this.store = store;
     });
     this.storeStateService.sales$.subscribe(sales => {
         this.sales = sales;
@@ -53,15 +54,15 @@ export class StoreReportsComponent implements OnInit {
     });
 
     const colorRange: ColorRange = { colorStart: 0.2, colorEnd: 1 };
-    const chartColors = interpolateColors(this.inventory.size, colorRange);
+    const chartColors = interpolateColors(this.inventory.length, colorRange);
     const inventoryContext = (document.getElementById('inventoryChart') as HTMLCanvasElement).getContext('2d');
     this.inventoryChart = new Chart(inventoryContext, {
         type: 'pie',
         data: {
-            labels: [...this.inventory.keys()].map(p => p.name),
+            labels: this.inventory.map(item => item.product.name),
             datasets: [{
                 backgroundColor: chartColors,
-                data: [...this.inventory.values()]
+                data: this.inventory.map(item => item.stock)
             }]
         },
         options: { responsive: true }

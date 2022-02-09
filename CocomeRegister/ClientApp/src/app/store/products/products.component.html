@@ -15,9 +15,9 @@
             </div>
             <ul>
                 <app-product-table-row 
-                    *ngFor="let product of runningOutOfStock"
-                    [product]="product"
-                    [amount]="inventory.get(product)"
+                    *ngFor="let item of runningOutOfStock"
+                    [product]="item.product"
+                    [amount]="item.stock"
                     [warn]="true"
                     (selectProductEvent)="navigateToDetail($event)"
                 >
@@ -28,9 +28,9 @@
             <h2>Alle Produkte:</h2>
             <ul>
                 <app-product-table-row 
-                    *ngFor="let item of inventory | keyvalue"
-                    [product]="item.key"
-                    [amount]="item.value"
+                    *ngFor="let item of inventory"
+                    [product]="item.product"
+                    [amount]="item.stock"
                     (selectProductEvent)="navigateToDetail($event)"
                 >
                 </app-product-table-row>

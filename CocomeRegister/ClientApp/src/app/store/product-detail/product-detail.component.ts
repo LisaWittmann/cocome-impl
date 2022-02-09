@@ -19,7 +19,7 @@ export class StoreProductDetailComponent {
   ) {
     const productId = Number(router.url.split('/').pop());
     this.storeStateService.inventory$.subscribe(inventory => {
-      this.product = [...inventory.keys()].find(p => p.id === productId);
+      this.product = inventory.find(item => item.product.id === productId).product;
     });
     if (!this.product) {
       this.location.back();
@@ -32,7 +32,7 @@ export class StoreProductDetailComponent {
   }
 
   updateProduct() {
-    this.storeStateService.updateinventory();
+    this.storeStateService.updateInventory();
   }
 
   addToCard() {

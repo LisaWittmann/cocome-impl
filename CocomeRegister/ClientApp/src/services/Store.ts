@@ -1,6 +1,6 @@
-export interface Outlet {
+export interface Store {
     id: number;
     name: string;
     city: string | undefined;
-    postalcode: number | undefined;
+    postalCode: number | undefined;
 }

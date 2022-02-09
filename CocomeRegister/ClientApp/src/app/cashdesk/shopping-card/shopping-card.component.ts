@@ -59,6 +59,6 @@ export class CashDeskShoppingCardComponent {
     }
 
     completeCheckout() {
-        this.router.navigate(['cashdesk/payment']);
+        this.router.navigate(['kasse/payment']);
     }
 }

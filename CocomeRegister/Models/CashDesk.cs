@@ -2,13 +2,12 @@
 
 namespace CocomeStore.Models
 {
-    public class Lieferant
+    public class CashDesk
     {
-
         [Required]
         public int Id { get; set; }
 
         [Required]
-        public string Name { get; set; }
+        public Store Store { get; set; }
     }
 }

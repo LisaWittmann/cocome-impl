@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { Product } from 'src/services/Product';
+import { Product, StockItem } from 'src/services/Product';
 import { StoreStateService } from '../store.service';
 
 @Component({
@@ -10,8 +10,8 @@ import { StoreStateService } from '../store.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StoreProductsComponent {
-    inventory: Map<Product, number>;
-    runningOutOfStock: Product[];
+    inventory: StockItem[];
+    runningOutOfStock: StockItem[];
 
     constructor(private storeStateService: StoreStateService, private router: Router) {
         this.storeStateService.inventory$.subscribe(inventory => {
@@ -24,13 +24,13 @@ export class StoreProductsComponent {
         this.storeStateService.addToCard(product);
     }
 
-    addAllToCard(products: Product[]) {
-        for (const product of products) {
-            this.storeStateService.addToCard(product);
+    addAllToCard(items: StockItem[]) {
+        for (const item of items) {
+            this.storeStateService.addToCard(item.product);
         }
     }
 
     navigateToDetail(product: Product) {
-        this.router.navigate(['/store/product', product.id]);
+        this.router.navigate(['/filiale/produkt', product.id]);
     }
 }

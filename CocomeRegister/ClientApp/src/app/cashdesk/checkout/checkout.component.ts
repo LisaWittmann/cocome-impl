@@ -22,9 +22,6 @@ export class CashDeskCheckoutComponent {
         this.expressMode = mode;
         this.discount = this.cashdeskState.discount;
       });
-      /*this.cashdeskState.availableProducts$.subscribe(products => {
-        this.products = products;
-      })*/
       this.storeState.inventory$.subscribe(() => {
         this.products = this.storeState.availableProducts;
       });

@@ -5,7 +5,7 @@
             class="button"
         >Neuen Vorgang starten</a>
         <button 
-            *ngIf="expressMode" 
+            *ngIf="expressMode == true" 
             class="button button--filled"
             (click)="deactivateExpressMode()"
         >Express Modus beenden</button>

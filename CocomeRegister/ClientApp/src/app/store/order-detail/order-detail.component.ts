@@ -17,9 +17,9 @@ export class StoreOrderDetailComponent {
         this.storeStateService.closeOrder(this.order.id);
     }
 
-    getProductPrice(product: Product) {
+    /*getProductPrice(product: Product) {
         return this.order.products.get(product) * product.price;
-    }
+    }*/
 
     get status() {
         if (this.order.delivered) {
@@ -30,10 +30,10 @@ export class StoreOrderDetailComponent {
     }
 
     get totalPrice() {
-        let sum = 0;
+        /*let sum = 0;
         for (const [product, amount] of this.order.products) {
             sum += amount * product.price;
-        }
-        return sum;
+        }*/
+        return this.order.product.price * this.order.amount;
     }
 }

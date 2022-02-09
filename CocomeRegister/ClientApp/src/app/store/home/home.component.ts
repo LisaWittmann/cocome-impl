@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Chart } from 'chart.js';
-import { Outlet } from 'src/services/Outlet';
+import { Store } from 'src/services/Store';
 import { monthValues } from 'src/services/Month';
 import { Order } from 'src/services/Order';
-import { Product } from 'src/services/Product';
+import { Product, StockItem } from 'src/services/Product';
 import { StoreStateService } from '../store.service';
 
 @Component({
@@ -13,15 +13,15 @@ import { StoreStateService } from '../store.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StoreHomeComponent implements OnInit {
-  outlet: Outlet;
-  runningOutOfStock: Product[];
+  store: Store;
+  runningOutOfStock: StockItem[];
   orders: Order[];
   chart: HTMLCanvasElement;
   salesChart: Chart;
 
   constructor(private storeStateService: StoreStateService) {
-    this.storeStateService.outlet$.subscribe(outlet => {
-      this.outlet = outlet;
+    this.storeStateService.store$.subscribe(store => {
+      this.store = store;
     });
     this.storeStateService.inventory$.subscribe(() => {
       this.runningOutOfStock = this.storeStateService.runningOutOfStock;

@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using CocomeStore.Models;
-using CocomeStore.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace CocomeStore.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class CashDeskController : ControllerBase
     {
         private readonly ILogger<CashDeskController> _logger;
-        private readonly ICashDeskService _cashDeskService;
+
+        // testData
+        private bool inExpressMode = true;
 
         public CashDeskController(ILogger<CashDeskController> logger)
         {
@@ -20,16 +20,28 @@ namespace CocomeStore.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Vorrat> GetInventory()
+        [Route("express/{id}")]
+        public bool GetExpressMode(int id)
         {
-            _logger.LogInformation("requesting inventory");
-            return null;
+            _logger.LogInformation("requesting expressMode of cashdesk {}", id);
+            return inExpressMode;
         }
 
         [HttpPost]
-        public void ConfirmCheckout()
+        [Route("update-express/{id}")]
+        public bool EndExpressMode(int id, bool expressMode)
+        {
+            _logger.LogInformation("updating expressMode of cashdesk {} to {}", id, expressMode);
+            inExpressMode = expressMode;
+            return inExpressMode;
+        }
+
+        [HttpPost]
+        [Route("checkout/{id}")]
+        public void ConfirmCheckout(IEnumerable<Product> products)
         {
             _logger.LogInformation("confirm checkout");
         }
+
     }
 }

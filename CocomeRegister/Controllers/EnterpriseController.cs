@@ -1,12 +1,10 @@
-﻿using System;
-
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace CocomeStore.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class EnterpriseController : ControllerBase
     {
         private readonly ILogger<EnterpriseController> _logger;
@@ -14,6 +12,13 @@ namespace CocomeStore.Controllers
         public EnterpriseController(ILogger<EnterpriseController> logger)
         {
             _logger = logger;
+        }
+
+        [HttpGet]
+        [Route("test")]
+        public int GetTestNumber()
+        {
+            return 12;
         }
     }
 }
