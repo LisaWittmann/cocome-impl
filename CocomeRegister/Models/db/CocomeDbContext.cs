@@ -4,21 +4,21 @@ namespace CocomeStore.Models
 {
     public class CocomeDbContext : DbContext
     {
-        public DbSet<Order> Order { get; set; }
+        public DbSet<Store> Stores { get; set; }
 
-        public DbSet<Store> Store { get; set; }
+        public DbSet<Provider> Providers { get; set; }
 
-        public DbSet<Provider> Provider { get; set; }
+        public DbSet<Product> Products { get; set; }
 
-        public DbSet<Product> Product { get; set; }
+        public DbSet<Order> Orders { get; set; }
 
-        public DbSet<Discount> Discount { get; set; }
+        public DbSet<Discount> Discounts { get; set; }
 
-        public DbSet<SaleElement> SaleElement { get; set; }
+        public DbSet<SaleElement> SaleElements { get; set; }
 
-        public DbSet<Sale> Sale { get; set; }
+        public DbSet<Sale> Sales { get; set; }
 
-        public DbSet<StockItem> StockItem { get; set; }
+        public DbSet<StockItem> StockItems { get; set; }
 
 
         //public AuthDbContext(DbContextOptions<AuthDbContext> options) : base(options)

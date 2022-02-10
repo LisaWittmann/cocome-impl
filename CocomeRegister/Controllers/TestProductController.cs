@@ -1,30 +1,38 @@
 ﻿using CocomeStore.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace CocomeStore.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
-    public class TestProductController : Controller
+    [Route("api/[controller]")]
+    public class TestProductController : ControllerBase
     {
-        [HttpGet]
-        public ActionResult<Product> Get()
+        private CocomeDbContext _context;
+        private readonly ILogger<TestProductController> _logger;
+
+        public TestProductController(ILogger<TestProductController> logger, CocomeDbContext context)
         {
-            using(CocomeDbContext context = new CocomeDbContext())
-            {
-                Product result = context.Product.Find(1);
-                return result;
-            }
-            return null;
+            _logger = logger;
+            _context = context;
+        }
+
+        [HttpGet]
+        [Route("{id}")]
+        public Product GetProduct(int id)
+        {
+            _logger.LogInformation("requesting product from database with id {}", id);
+            Product result = _context.Products.Find(id);
+            return result;
         }
 
         // GET api/Test/5
-        [HttpGet("{id}")]
+        /*[HttpGet]
+        [Route("{id}")]
         public ActionResult<string> Get(int id)
         {
             return "Your ID is " + id;
-        }
+        }*/
 
         /*// GET: TestController
         public ActionResult Index()
