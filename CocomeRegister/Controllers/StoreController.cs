@@ -14,7 +14,7 @@ namespace CocomeStore.Controllers
         private static Random random = new Random();
 
         private static Store testStore = new Store { Id = random.Next(250), Name = "Filiale Lisa", City = "Bacharach", PostalCode = 55422 };
-        private static IEnumerable<StockItem> testInventory = new []
+        private static IList<StockItem> testInventory = new List<StockItem>()
         {
             new StockItem { Id = random.Next(), Product = (new Product { Id = random.Next(), Name = "Salatgurke", SalePrice = 0.59F, Price = 0.10F}), Stock = random.Next(100), Store = testStore },
             new StockItem { Id = random.Next(), Product = (new Product { Id = random.Next(), Name = "Endiviensalat", SalePrice = 0.99F, Price = 0.17F}), Stock = random.Next(100), Store = testStore },
@@ -40,6 +40,21 @@ namespace CocomeStore.Controllers
         }
 
         [HttpGet]
+        [Route("{id}/product/{productId}")]
+        public Product GetProduct(int id, int productId)
+        {
+            Product product = null;
+            foreach (StockItem item in testInventory)
+            {
+                if (item.Product.Id == productId)
+                {
+                    product = item.Product;
+                }
+            }
+            return product;
+        }
+
+        [HttpGet]
         [Route("inventory/{id}")]
         public IEnumerable<StockItem> GetInventory(int id)
         {
@@ -54,6 +69,16 @@ namespace CocomeStore.Controllers
             _logger.LogInformation("requesting orders of store {}", id);
             IEnumerable<Order> storeOrders = new List<Order>();
             return storeOrders;
+        }
+
+        [HttpPost]
+        [Route("create-product/{id}")]
+        public IEnumerable<StockItem> CreateProduct(int id, Product product)
+        {
+            _logger.LogInformation("adding new product to store {}", id);
+            testInventory.Add(new StockItem { Id = random.Next(), Product = product, Stock = 0, Store = testStore });
+            return testInventory;
+
         }
 
         [HttpPost]
@@ -76,7 +101,7 @@ namespace CocomeStore.Controllers
 
         [HttpPost]
         [Route("update-inventory/{id}")]
-        public IEnumerable<StockItem> UpdateInventory(int id, IEnumerable<StockItem> inventory)
+        public IEnumerable<StockItem> UpdateInventory(int id, IList<StockItem> inventory)
         {
             _logger.LogInformation("update inventory for store {}", id);
             testInventory = inventory;

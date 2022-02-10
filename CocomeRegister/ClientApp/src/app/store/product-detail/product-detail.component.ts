@@ -11,6 +11,7 @@ import { StoreStateService } from '../store.service';
 })
 export class StoreProductDetailComponent {
   product: Product;
+  create: boolean;
 
   constructor(
     private storeStateService: StoreStateService,
@@ -20,9 +21,11 @@ export class StoreProductDetailComponent {
     const productId = Number(router.url.split('/').pop());
     this.storeStateService.inventory$.subscribe(inventory => {
       this.product = inventory.find(item => item.product.id === productId).product;
+      console.log(this.product);
     });
     if (!this.product) {
-      this.location.back();
+      this.product = {} as Product;
+      this.create = true;
     }
   }
 
@@ -32,10 +35,17 @@ export class StoreProductDetailComponent {
   }
 
   updateProduct() {
+    if (this.create) {
+      return;
+    }
     this.storeStateService.updateInventory();
   }
 
   addToCard() {
     this.storeStateService.addToCard(this.product);
+  }
+
+  createProduct() {
+    this.storeStateService.createProduct(this.product);
   }
 }

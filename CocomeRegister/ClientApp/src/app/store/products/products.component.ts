@@ -33,4 +33,8 @@ export class StoreProductsComponent {
     navigateToDetail(product: Product) {
         this.router.navigate(['/filiale/produkt', product.id]);
     }
+
+    createNewProduct() {
+        this.router.navigate(['/filiale/erstellen']);
+    }
 }

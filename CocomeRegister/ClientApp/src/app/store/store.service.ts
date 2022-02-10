@@ -152,4 +152,13 @@ export class StoreStateService extends StateService<StoreState> {
             this.setState({ inventory: result });
         }, error => console.error(error));
     }
+
+    createProduct(product: Product) {
+        this.http.post<StockItem[]>(
+            `${this.api}/create-product/${this.state.store.id}`,
+            product
+        ).subscribe(result => {
+            this.setState({ inventory: result });
+        }, error => console.error(error));
+    }
 }

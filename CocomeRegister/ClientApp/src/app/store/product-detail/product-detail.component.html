@@ -1,7 +1,8 @@
 <div class="product-detail page-container">
     <div class="container">
         <section>
-            <h1>{{ product.name }}</h1>
+            <h1 *ngIf="!create">{{ product.name }}</h1>
+            <h1 *ngIf="create">Neues Produkt erstellen</h1>
         </section>
         <section>
             <div class="product-detail__data">
@@ -28,21 +29,38 @@
                     </div>
                     <div>
                         <p>Artikelnummer</p>
-                        <p>{{ product.id }}</p>
+                        <p *ngIf="!create">{{ product.id }}</p>
+                        <input *ngIf="create"
+                            type="number"
+                            [min]="1"
+                            step="1"
+                            [(ngModel)]="product.id"
+                            (change)="updateProduct()"
+                        >
                     </div>
                     <div>
                         <p>Preis</p>
-                        <p>{{ product.price.toFixed(2) }} €</p>
+                        <p *ngIf="!create">{{ product.price.toFixed(2) }} €</p>
+                        <p *ngIf="create">
+                            <input
+                                type="number"
+                                [min]="0"
+                                step="0.01"
+                                [(ngModel)]="product.price"
+                                (change)="updateProduct()"
+                            > €
+                        </p>
                     </div>
                     <div>
                         <p>Verkaufspreis</p>
-                        <p><input
-                            type="number"
-                            [min]="product.price"
-                            step="0.01"
-                            [(ngModel)]="product.salePrice"
-                            (change)="updateProduct()"
-                        > €
+                        <p>
+                            <input
+                                type="number"
+                                [min]="product.price"
+                                step="0.01"
+                                [(ngModel)]="product.salePrice"
+                                (change)="updateProduct()"
+                            > €
                         </p>
                     </div>
                     <div>
@@ -54,9 +72,13 @@
                     </div>
                     <div class="product-detail__card-button">
                         <button
+                            *ngIf="!create"
                             class="button"
                             (click)="addToCard()"
                         >In den Warenkorb</button>
+                        <button *ngIf="create" class="button" (click)="createProduct()">
+                            Produkt speichern
+                        </button>
                     </div>
                 </div>
             </div>

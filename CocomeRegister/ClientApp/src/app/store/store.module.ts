@@ -24,6 +24,7 @@ const storeRoutes: Routes = [
   { path: 'bestellungen', component: StoreOrdersComponent },
   { path: 'berichte', component: StoreReportsComponent },
   { path: 'produkt/:id', component: StoreProductDetailComponent },
+  { path: 'erstellen', component: StoreProductDetailComponent },
 ];
 
 @NgModule({
