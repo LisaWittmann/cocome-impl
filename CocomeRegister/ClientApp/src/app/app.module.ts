@@ -16,9 +16,9 @@ import { CashDeskEntrypoint } from './cashdesk/cashdesk.module';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: 'kasse', pathMatch: 'full' },
-  { path: 'kasse', component: CashDeskComponent, loadChildren: CashDeskEntrypoint },
-  { path: 'filiale', component: StoreComponent, loadChildren: StoreEntrypoint },
-  { path: 'admin', component: EnterpriseComponent, loadChildren: EnterpriseEntrypoint},
+  { path: 'kasse', component: CashDeskComponent, loadChildren: () => import('./cashdesk/cashdesk.module').then(m => m.CashDeskModule) },
+  { path: 'filiale', component: StoreComponent, loadChildren: () => import('./store/store.module').then(m => m.StoreModule) },
+  { path: 'admin', component: EnterpriseComponent, loadChildren: () => import('./enterprise/enterprise.module').then(m => m.EnterpriseModule)},
 ];
 
 @NgModule({
