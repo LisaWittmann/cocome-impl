@@ -47,5 +47,6 @@ export class StoreProductDetailComponent {
 
   createProduct() {
     this.storeStateService.createProduct(this.product);
+    this.router.navigate(['/filiale/produkte'])
   }
 }

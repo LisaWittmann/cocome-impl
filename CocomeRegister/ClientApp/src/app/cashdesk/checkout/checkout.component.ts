@@ -7,7 +7,6 @@ import { CashDeskStateService } from '../cashdesk.service';
   selector: 'app-cashdesk-checkout',
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CashDeskCheckoutComponent {
     expressMode: boolean;

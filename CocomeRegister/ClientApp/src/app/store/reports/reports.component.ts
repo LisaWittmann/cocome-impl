@@ -13,7 +13,6 @@ import html2canvas from 'html2canvas';
   selector: 'app-store-reports',
   templateUrl: './reports.component.html',
   styleUrls: ['./reports.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StoreReportsComponent implements OnInit {
   store: Store;

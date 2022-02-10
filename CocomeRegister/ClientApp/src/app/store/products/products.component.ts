@@ -7,7 +7,6 @@ import { StoreStateService } from '../store.service';
   selector: 'app-store-products',
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StoreProductsComponent {
     inventory: StockItem[];

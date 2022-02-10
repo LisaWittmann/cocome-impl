@@ -10,7 +10,6 @@ enum PaymentMethod {
   selector: 'app-cashdesk-payment',
   templateUrl: './payment.component.html',
   styleUrls: ['./payment.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CashDeskPaymentComponent {
   expressMode: boolean;

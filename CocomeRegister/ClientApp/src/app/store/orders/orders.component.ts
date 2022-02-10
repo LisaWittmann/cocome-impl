@@ -6,7 +6,6 @@ import { StoreStateService } from '../store.service';
   selector: 'app-store-orders',
   templateUrl: './orders.component.html',
   styleUrls: ['./orders.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StoreOrdersComponent {
     orders: Order[];

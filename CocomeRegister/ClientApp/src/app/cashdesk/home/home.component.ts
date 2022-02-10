@@ -5,7 +5,6 @@ import { CashDeskStateService } from '../cashdesk.service';
   selector: 'app-cashdesk-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CashDeskHomeComponent {
   expressMode: boolean;

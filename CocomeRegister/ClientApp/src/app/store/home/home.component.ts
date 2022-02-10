@@ -10,7 +10,6 @@ import { StoreStateService } from '../store.service';
   selector: 'app-store-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StoreHomeComponent implements OnInit {
   store: Store;

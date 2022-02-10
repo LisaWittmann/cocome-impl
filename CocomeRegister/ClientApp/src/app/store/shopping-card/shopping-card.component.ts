@@ -8,7 +8,6 @@ import { StoreStateService } from '../store.service';
   selector: 'app-store-shopping-card',
   templateUrl: './shopping-card.component.html',
   styleUrls: ['./shopping-card.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StoreShoppingCardComponent {
   @Output() closeShoppingCardEvent = new EventEmitter<Boolean>();
