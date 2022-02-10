@@ -34,6 +34,7 @@ export const cashdeskRoutes: Routes = [
     ProductListComponent,
     ProductCardComponent,
   ],
+  exports: [CashDeskComponent],
   providers: [CashDeskStateService],
   bootstrap: [CashDeskComponent]
 })

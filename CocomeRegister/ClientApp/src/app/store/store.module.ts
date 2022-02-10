@@ -45,8 +45,9 @@ const storeRoutes: Routes = [
     AccordionComponent,
     ProductTableRowComponent,
   ],
+  exports: [StoreComponent],
   providers: [StoreStateService],
-  bootstrap: [StoreComponent]
+  bootstrap: [StoreComponent],
 })
 export class StoreModule { }
 
