@@ -1,4 +1,5 @@
-﻿using CocomeStore.Models;
+﻿using System.Collections.Generic;
+using CocomeStore.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -24,6 +25,13 @@ namespace CocomeStore.Controllers
             _logger.LogInformation("requesting product from database with id {}", id);
             Product result = _context.Products.Find(id);
             return result;
+        }
+
+        [HttpGet]
+        [Route("all")]
+        public IEnumerable<Product> GetAllProducts()
+        {
+            return _context.Products;
         }
 
         // GET api/Test/5
