@@ -4,14 +4,22 @@
             <h1>Produkte bestellen</h1>
         </section>
         <section *ngIf="runningOutOfStock.length">
-            <h2>Geringer Bestand:</h2>
+            <div class="products__low-stock">
+                <h2>Geringer Bestand:</h2>
+                <button (click)="addAllToCard(runningOutOfStock)">
+                    <img 
+                        src="assets/svg/shopping-basket-solid.svg"
+                        alt="In den Warenkorb"
+                    >
+                </button>
+            </div>
             <ul>
                 <app-product-table-row 
-                    *ngFor="let product of runningOutOfStock"
-                    [product]="product"
-                    [amount]="inventory.get(product)"
+                    *ngFor="let item of runningOutOfStock"
+                    [product]="item.product"
+                    [amount]="item.stock"
                     [warn]="true"
-                    (selectProductEvent)="addToCard($event)"
+                    (selectProductEvent)="navigateToDetail($event)"
                 >
                 </app-product-table-row>
             </ul>
@@ -20,13 +28,16 @@
             <h2>Alle Produkte:</h2>
             <ul>
                 <app-product-table-row 
-                    *ngFor="let item of inventory | keyvalue"
-                    [product]="item.key"
-                    [amount]="item.value"
-                    (selectProductEvent)="addToCard($event)"
+                    *ngFor="let item of inventory"
+                    [product]="item.product"
+                    [amount]="item.stock"
+                    (selectProductEvent)="navigateToDetail($event)"
                 >
                 </app-product-table-row>
             </ul>
+        </section>
+        <section>
+            <button class="button" (click)="createNewProduct()">Produkt hinzufügen</button>
         </section>
     </div>
 </div>

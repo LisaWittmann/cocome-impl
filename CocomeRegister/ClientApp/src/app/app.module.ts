@@ -10,15 +10,15 @@ import { StoreComponent } from './store/store.component';
 import { CashDeskComponent } from './cashdesk/cashdesk.component';
 import { EnterpriseComponent } from './enterprise/enterprise.component';
 
-import { StoreEntrypoint } from './store/store.module';
-import { EnterpriseEntrypoint } from './enterprise/enterprise.module';
-import { CashDeskEntrypoint } from './cashdesk/cashdesk.module';
+import { StoreModule } from './store/store.module';
+import { EnterpriseModule } from './enterprise/enterprise.module';
+import { CashDeskModule } from './cashdesk/cashdesk.module';
 
 const appRoutes: Routes = [
-  { path: '', redirectTo: '/cashdesk', pathMatch: 'full' },
-  { path: 'cashdesk', component: CashDeskComponent, loadChildren: CashDeskEntrypoint },
-  { path: 'store', component: StoreComponent, loadChildren: StoreEntrypoint },
-  { path: 'enterprise', component: EnterpriseComponent, loadChildren: EnterpriseEntrypoint},
+  { path: '', redirectTo: 'kasse', pathMatch: 'full' },
+  { path: 'kasse', component: CashDeskComponent, loadChildren: () => import('./cashdesk/cashdesk.module').then(m => m.CashDeskModule) },
+  { path: 'filiale', component: StoreComponent, loadChildren: () => import('./store/store.module').then(m => m.StoreModule) },
+  { path: 'admin', component: EnterpriseComponent, loadChildren: () => import('./enterprise/enterprise.module').then(m => m.EnterpriseModule)},
 ];
 
 @NgModule({
@@ -26,7 +26,10 @@ const appRoutes: Routes = [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
-    RouterModule.forRoot(appRoutes)
+    StoreModule,
+    CashDeskModule,
+    EnterpriseModule,
+    RouterModule.forRoot(appRoutes,  { scrollPositionRestoration: 'top' } )
   ],
   declarations: [
     AppComponent,

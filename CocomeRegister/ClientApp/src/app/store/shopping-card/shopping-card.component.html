@@ -1,18 +1,27 @@
 <div class="shopping-card page-container--fixed">
     <div class="shopping-card__content">
         <div class="shopping-card__header">
-            <img src="assets/svg/shopping-basket-solid.svg">
+            <img 
+                src="assets/svg/shopping-basket-solid.svg"
+                alt="Warenkorb Symbol"
+            >
             <span>Ihr Warenkorb</span>
             <button (click)="close()">
-                <img src="assets/svg/times-solid.svg">
+                <img
+                    src="assets/svg/times-solid.svg"
+                    alt="Warenkorb schließen"
+                >
             </button>
         </div>
         <div class="shopping-card__items">
-            <table>
+            <table *ngIf="shoppingCard.size > 0">
                 <tr *ngFor="let item of shoppingCard | keyvalue">
                     <td>
                         <button (click)="removeAll(item.key)">
-                            <img src="assets/svg/times-solid.svg">
+                            <img
+                                src="assets/svg/times-solid.svg"
+                                alt="Produkt entfernen"
+                            >
                         </button>
                     </td>
                     <td>
@@ -23,24 +32,44 @@
                         {{ item.key.price.toFixed(2) }}
                     </td>
                     <td>
-                        <button (click)="removeInstance(item.key)">
-                            -
-                        </button>
-                        <span>{{ item.value }}</span>
-                        <button (click)="addInstance(item.key)">
-                            +
-                        </button>
+                        <button
+                            (click)="removeInstance(item.key)"
+                            [class.disabled]="item.value == 1"
+                        >-</button>
+                        <input
+                            #item.key.id
+                            type="number"
+                            min=1
+                            [ngModel]="item.value"
+                            (change)="updateInstance(item.key, $event.target.value, true)"
+                        >
+                        <button
+                            (click)="addInstance(item.key)"
+                        >+</button>
                     </td>
                     <td>
                         {{ (item.key.price * item.value).toFixed(2) }}
                     </td>
                 </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td colspan="2">Gesamtpreis</td>
+                    <td>{{ totalPrice.toFixed(2) }}</td>
+                </tr>
             </table>
+            <div class="shopping-card__empty" *ngIf="shoppingCard.size < 1">
+                <p>Ihr Warenkorb ist leer</p>
+                <button
+                    class="button"
+                    (click)="close()"
+                >
+                    Weiter einkaufen
+                </button>
+            </div>
         </div>
-        <div class="shopping-card__footer">
+        <div class="shopping-card__footer" *ngIf="shoppingCard.size > 0">
             <button
                 class="button"
-                [class.disabled]="shoppingCard.size < 1"
                 (click)="confirm()"
             >
                 Jetzt bestellen

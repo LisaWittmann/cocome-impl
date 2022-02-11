@@ -1,3 +1,4 @@
+using CocomeStore.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
@@ -12,6 +13,10 @@ namespace CocomeRegister
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            using (var client = new CocomeDbContext())
+            {
+                client.Database.EnsureCreated();
+            }
         }
 
         public IConfiguration Configuration { get; }
@@ -25,6 +30,7 @@ namespace CocomeRegister
             {
                 configuration.RootPath = "ClientApp/dist";
             });
+            services.AddEntityFrameworkSqlite().AddDbContext<CocomeDbContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -51,14 +57,11 @@ namespace CocomeRegister
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller}/{action=Index}/{id?}");
+                    pattern: "api/{controller}/{action=Index}/{id?}");
             });
 
             app.UseSpa(spa =>
             {
-                // To learn more about options for serving an Angular SPA from ASP.NET Core,
-                // see https://go.microsoft.com/fwlink/?linkid=864501
-
                 spa.Options.SourcePath = "ClientApp";
 
                 if (env.IsDevelopment())

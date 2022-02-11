@@ -9,16 +9,20 @@
     font-size: $text-xs;
     cursor: pointer;
 
+    &:hover {
+        background-color: $color-grey;
+    }
+
     &__stock {
-        flex-basis: 20%;
+        flex-basis: 15%;
     }
 
     &__info {
-        flex-basis: 60%;
+        flex-basis: 55%;
     }
 
     &__price {
-        flex-basis: 20%;
+        flex-basis: 15%;
         text-align: right;
     }
 
@@ -27,6 +31,10 @@
         
          * {
             color: $color-white;
+        }
+
+        &:hover {
+            background-color: darkslategrey;
         }
     }
 }

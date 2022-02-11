@@ -8,6 +8,10 @@
             <td>Status:</td>
             <td>{{ status }}</td>
         </tr>
+        <tr>
+            <td>Lieferant:</td>
+            <td>{{ order.provider.name }}</td>
+        </tr>
     </table>
     <table class="order-detail__products">
         <thead>
@@ -19,14 +23,14 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let product of order.products | keyvalue">
+            <tr>
                 <td>
-                    {{ product.key.name }}<br>
-                    <span class="highlighted">Artikelnummer: {{ product.key.id }}</span>
+                    {{ order.product.name }}<br>
+                    <span class="highlighted">Artikelnummer: {{ order.product.id }}</span>
                 </td>
-                <td>{{ product.value }}</td>
-                <td>EUR {{ product.key.price.toFixed(2) }}</td>
-                <td>EUR {{ getProductPrice(product.key).toFixed(2) }}</td>
+                <td>{{ order.amount }}</td>
+                <td>EUR {{ order.product.price.toFixed(2) }}</td>
+                <td>EUR {{ totalPrice.toFixed(2) }}</td>
             </tr>
             <tr>
                 <td colspan="2"></td>

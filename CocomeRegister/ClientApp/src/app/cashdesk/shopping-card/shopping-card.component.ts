@@ -4,7 +4,7 @@ import { Product } from 'src/services/Product';
 import { CashDeskStateService } from '../cashdesk.service';
 
 @Component({
-  selector: 'cashdesk-shopping-card',
+  selector: 'app-cashdesk-shopping-card',
   templateUrl: './shopping-card.component.html',
   styleUrls: ['./shopping-card.component.scss']
 })
@@ -29,7 +29,7 @@ export class CashDeskShoppingCardComponent {
             this.shoppingCardSum = this.cashDeskState.shoppingCardSum;
             this.totalDiscount = this.cashDeskState.totalDiscount;
             this.totalPrice = this.cashDeskState.totalPrice;
-        })
+        });
     }
 
     get productSet() {
@@ -37,7 +37,7 @@ export class CashDeskShoppingCardComponent {
     }
 
     getAmount(product: Product): number {
-        return this.shoppingCard.filter(p => p.id == product.id).length;
+        return this.shoppingCard.filter(p => p.id === product.id).length;
     }
 
     addProduct(product: Product): void {
@@ -52,13 +52,13 @@ export class CashDeskShoppingCardComponent {
 
     select(product: Product): void {
         this.selectedProduct = product;
-    } 
+    }
 
     isSelected(product: Product): boolean {
-        return this.selectedProduct == product;
+        return this.selectedProduct === product;
     }
 
     completeCheckout() {
-        this.router.navigate(['cashdesk/payment'])
+        this.router.navigate(['kasse/payment']);
     }
- } 
+}

@@ -1,4 +1,27 @@
+@import "variables";
+
 .store {
-    justify-content: center;
-    align-items: center;
+    h2 {
+        margin-bottom: $spacing-s;
+    }
+
+    a {
+        margin-top: $spacing-s;
+        float: right;
+        font-weight: $poppins-medium;
+
+        &:hover {
+            text-decoration: none;
+            color: $color-light-green;
+        }
+
+        &::after {
+            content: "\2192";
+            margin-left: $spacing-xs;
+        }
+    }
+
+    #salesChart {
+        margin-bottom: $spacing-s;
+    }
 }

@@ -4,10 +4,9 @@ import { Product } from 'src/services/Product';
 import { CashDeskStateService } from '../cashdesk.service';
 
 @Component({
-  selector: 'cashdesk-checkout',
+  selector: 'app-cashdesk-checkout',
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CashDeskCheckoutComponent {
     expressMode: boolean;
@@ -21,14 +20,11 @@ export class CashDeskCheckoutComponent {
       this.cashdeskState.expressMode$.subscribe(mode => {
         this.expressMode = mode;
         this.discount = this.cashdeskState.discount;
-      })
-      /*this.cashdeskState.availableProducts$.subscribe(products => {
-        this.products = products;
-      })*/
+      });
       this.storeState.inventory$.subscribe(() => {
         this.products = this.storeState.availableProducts;
-      })
-    } 
+      });
+    }
 
     addToCard(product: Product) {
       this.cashdeskState.addProduct(product);
