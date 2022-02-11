@@ -13,7 +13,9 @@ namespace CocomeStore.Controllers
         private readonly ILogger<StoreController> _logger;
         private static Random random = new Random();
 
-        private static Store testStore = new Store { Id = random.Next(250), Name = "Filiale Lisa", City = "Bacharach", PostalCode = 55422 };
+        CocomeDbContext _context;
+
+        private static Store testStore = new Store { Id = random.Next(), Name = "TestFiliale Lisa", City = "Bacharach", PostalCode = 55422 };
         private static IList<StockItem> testInventory = new List<StockItem>()
         {
             new StockItem { Id = random.Next(), Product = (new Product { Id = random.Next(), Name = "Salatgurke", SalePrice = 0.59F, Price = 0.10F}), Stock = random.Next(100), Store = testStore },
@@ -26,9 +28,10 @@ namespace CocomeStore.Controllers
             new StockItem { Id = random.Next(), Product = (new Product { Id = random.Next(), Name = "Schlagsahne", SalePrice = 0.29F, Price = 0.15F}), Stock = random.Next(100), Store = testStore },
         };
 
-        public StoreController(ILogger<StoreController> logger)
+        public StoreController(ILogger<StoreController> logger, CocomeDbContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
         [HttpGet]
@@ -36,22 +39,39 @@ namespace CocomeStore.Controllers
         public Store GetStore(int id)
         {
             _logger.LogInformation("requesting store by id {}", id);
-            return testStore;
+            try
+            {
+                Store store = _context.Find<Store>(id);
+                _logger.LogInformation("Found store: {}", store);
+                return store;
+            } catch (Exception ex)
+            {
+                _logger.LogError("Could not find Store with id {}. Returning testData.", id);
+                return testStore;
+            }
+            
         }
 
         [HttpGet]
         [Route("{id}/product/{productId}")]
         public Product GetProduct(int id, int productId)
         {
-            Product product = null;
-            foreach (StockItem item in testInventory)
+            try
             {
-                if (item.Product.Id == productId)
+                return _context.Find<Product>(productId);
+            } catch 
+            {
+                Product product = null;
+                foreach (StockItem item in testInventory)
                 {
-                    product = item.Product;
+                    if (item.Product.Id == productId)
+                    {
+                        product = item.Product;
+                    }
                 }
+                return product;
             }
-            return product;
+            
         }
 
         [HttpGet]
@@ -73,11 +93,20 @@ namespace CocomeStore.Controllers
 
         [HttpPost]
         [Route("create-product/{id}")]
-        public IEnumerable<StockItem> CreateProduct(int id, Product product)
+        public StockItem CreateProduct(int id, Product product)
         {
             _logger.LogInformation("adding new product to store {}", id);
-            testInventory.Add(new StockItem { Id = random.Next(), Product = product, Stock = 0, Store = testStore });
-            return testInventory;
+            StockItem item = new StockItem { Id = random.Next(), Product = product, Stock = 0, Store = testStore };
+            try
+            {
+                _context.Add(item);
+                _context.SaveChanges();
+            } catch (Exception ex)
+            {
+                testInventory.Add(item);
+            }
+            
+            return item;
 
         }
 
