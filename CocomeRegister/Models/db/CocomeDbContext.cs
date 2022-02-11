@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace CocomeStore.Models
 {
@@ -50,6 +51,7 @@ namespace CocomeStore.Models
 
             });
         }*/
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlite("Filename=MyDatabase.db");

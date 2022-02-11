@@ -17,7 +17,7 @@ interface StoreState {
 }
 
 const initialState: StoreState = {
-    store: { id: 1, name: "Test", city: undefined, postalCode: undefined } as Store,
+    store: {} as Store,
     inventory: new Array<StockItem>(),
     currentOrder: new Map<Product, number>(),
     orders: new Array<Order>(),
@@ -38,26 +38,17 @@ export class StoreStateService extends StateService<StoreState> {
     ) {
         super(initialState);
         this.api = baseUrl + "api/store";
-        this.fetchStore();
-        this.fetchInventory();
-        this.fetchOrders();
     }
 
-    private fetchStore() {
-        this.http.get<Store>(`${this.api}/${this.state.store.id}`).subscribe(result => {
-            this.setState({ store: result });
-        }, error => console.error(error));
-    }
-
-    private fetchInventory() {
-        this.http.get<StockItem[]>(`${this.api}/inventory/${this.state.store.id}`).subscribe(result => {
+    private async fetchInventory() {
+        return this.http.get<StockItem[]>(`${this.api}/inventory/${this.state.store.id}`).subscribe(result => {
             console.log(result);
             this.setState({ inventory: result });
         }, error => console.error(error));
     }
 
-    private fetchOrders() {
-        this.http.get<Order[]>(`${this.api}/orders/${this.state.store.id}`).subscribe(result => {
+    private async fetchOrders() {
+        return this.http.get<Order[]>(`${this.api}/orders/${this.state.store.id}`).subscribe(result => {
             console.log(result);
             this.setState({ orders: result });
         }, error => console.error(error));
@@ -84,6 +75,14 @@ export class StoreStateService extends StateService<StoreState> {
             });
         }
         return dataset;
+    }
+
+    async setStore(store: Store) {
+        console.log(store);
+        this.setState({ store: store });
+        await this.fetchInventory();
+        await this.fetchOrders();
+        console.log(this.state);
     }
 
     addToCard(product: Product, amount = 1, replace = false) {

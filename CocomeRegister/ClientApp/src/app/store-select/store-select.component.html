@@ -1,0 +1,11 @@
+<div class="store-select page-container">
+    <div class="column-wrapper">
+        <h1>Store Auswählen</h1>
+        <select [(ngModel)]="selectedStore">
+            <option *ngFor="let store of stores" [ngValue]="store">{{ store.name }}</option>
+        </select>
+        <button class="button" [class.disabled]="!selectedStore" (click)="selectStore()">
+            Weiter zum Store
+        </button>
+    </div>
+</div>
