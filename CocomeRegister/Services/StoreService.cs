@@ -33,7 +33,7 @@ namespace CocomeStore.Services
 
         public IEnumerable<Store> GetAllStores()
         {
-            return _context.Stores.ToArray();
+            return _context.Stores;
         }
 
         public IEnumerable<Order> GetOrders(int storeId)
@@ -41,8 +41,7 @@ namespace CocomeStore.Services
             return _context.Orders
                     .Where(order => order.Store.Id == storeId)
                     .Include(order => order.Store)
-                    .Include(order => order.Provider)
-                    .ToArray();
+                    .Include(order => order.Provider);
         }
 
         public void CloseOrder(int storeId, int orderId)
@@ -106,6 +105,16 @@ namespace CocomeStore.Services
             _context.SaveChanges();
         }
 
+        public void UpdateProduct(int storeId, Product product)
+        {
+            Product savedProduct = _context.Products.Find(product.Id);
+            savedProduct.Name = product.Name;
+            savedProduct.Price = product.Price;
+            savedProduct.SalePrice = product.SalePrice;
+            savedProduct.ImageUrl = product.ImageUrl;
+            _context.SaveChanges();
+        }
+
         public void UpdateStock(int storeId, int productId, int stock)
         {
             StockItem item = _context.StockItems
@@ -118,6 +127,35 @@ namespace CocomeStore.Services
             }
             item.Stock = stock;
             _context.SaveChanges();
+        }
+
+        public float GetProfitOfMonth(int storeId, int month, int year)
+        {
+            Store store = GetStore(storeId);
+            var sales = _context.Sales
+                .Where(sale =>
+                    sale.Store.Id == storeId &&
+                    sale.TimeStamp.Year == year &&
+                    sale.TimeStamp.Month == month
+                );
+
+            float profit = 0;
+            foreach (var sale in sales)
+            {
+                var profits = sale.SaleElements.Select(element => element.Product.SalePrice - element.Product.Price);
+                profit += profits.Aggregate((x, y) => (x + y));
+            }
+            return profit;
+        }
+
+        public IEnumerable<float> GetProfitOfYear(int storeId, int year)
+        {
+            var profits = new List<float>();
+            for (int month = 1; month <= 12; month++)
+            {
+                profits.Add(GetProfitOfMonth(storeId, month, year));
+            }
+            return profits;
         }
     }
 }
