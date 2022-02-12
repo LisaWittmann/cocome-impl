@@ -5,6 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { StoreComponent } from './store.component';
 import { StoreHomeComponent } from './home/home.component';
+import { StoreDashboardComponent } from './dashboard/dashboard.component';
 import { StoreNavigationComponent } from './navigation/navigation.component';
 import { StoreProductsComponent } from './products/products.component';
 import { StoreProductDetailComponent } from './product-detail/product-detail.component';
@@ -20,6 +21,7 @@ import { StoreStateService } from './store.service';
 
 const storeRoutes: Routes = [
   { path: '', component: StoreHomeComponent },
+  { path: 'dashboard', component: StoreDashboardComponent },
   { path: 'produkte', component: StoreProductsComponent },
   { path: 'bestellungen', component: StoreOrdersComponent },
   { path: 'berichte', component: StoreReportsComponent },
@@ -35,8 +37,9 @@ const storeRoutes: Routes = [
   ],
   declarations: [
     StoreComponent,
-    StoreReportsComponent,
     StoreHomeComponent,
+    StoreReportsComponent,
+    StoreDashboardComponent,
     StoreNavigationComponent,
     StoreProductsComponent,
     StoreProductDetailComponent,

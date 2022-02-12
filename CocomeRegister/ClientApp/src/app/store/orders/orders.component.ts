@@ -30,6 +30,6 @@ export class StoreOrdersComponent {
 
     title = (order: Order) => {
         return `Bestellung ${order.id} vom
-                ${order.placingDate.toLocaleDateString('de-DE')}`;
+                ${new Date(order.placingDate).toLocaleDateString('de-DE')}`;
     }
 }

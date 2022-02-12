@@ -5,6 +5,8 @@ using CocomeStore.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
+using CocomeStore.Services;
+using CocomeStore.Exceptions;
 
 namespace CocomeStore.Controllers
 {
@@ -14,9 +16,16 @@ namespace CocomeStore.Controllers
     {
         private readonly ILogger<StoreController> _logger;
         private CocomeDbContext _context;
+        private IStoreService _service;
+        private Random random = new Random();
 
-        public StoreController(ILogger<StoreController> logger, CocomeDbContext context)
+        public StoreController(
+            ILogger<StoreController> logger,
+            IStoreService service,
+            CocomeDbContext context
+        )
         {
+            _service = service;
             _logger = logger;
             _context = context;
         }
@@ -24,29 +33,24 @@ namespace CocomeStore.Controllers
         [HttpGet]
         public IEnumerable<Store> GetAllStores()
         {
-            return _context.Stores;
+            return _context.Stores.ToArray();
         }
 
         [HttpGet]
         [Route("{id}")]
         public Store GetStore(int id)
         {
-            _logger.LogInformation("requesting store by id {}", id);
-            Store store = _context.Stores.Find(id);
-            if (store == null)
+            try
             {
+                _logger.LogInformation("requesting store by id {}", id);
+                return _service.GetStore(id);
+            }
+            catch(EntityNotFoundException ex)
+            {
+                _logger.LogError(ex.Message);
                 NotFound();
             }
-            return store;
-        }
-
-        [HttpGet]
-        [Route("inventory")]
-        public IEnumerable<StockItem> GetAllStockItems()
-        {
-            return _context.StockItems
-                    .Include(item => item.Product)
-                    .Include(item => item.Store);
+            return null;
         }
 
         [HttpGet]
@@ -54,18 +58,8 @@ namespace CocomeStore.Controllers
         public IEnumerable<StockItem> GetInventory(int id)
         {
             _logger.LogInformation("requesting inventory of store {}", id);
-            return _context.StockItems.Where(item => item.Store.Id == id)
-                    .Include(item => item.Product)
-                    .Include(item => item.Store);
-        }
-
-        [HttpGet]
-        [Route("orders")]
-        public IEnumerable<Order> GetAllOrders()
-        {
-            return _context.Orders
-                    .Include(order => order.Product)
-                    .Include(order => order.Store); ;
+            return _service.GetInventory(id);
+            
         }
 
         [HttpGet]
@@ -73,33 +67,24 @@ namespace CocomeStore.Controllers
         public IEnumerable<Order> GetOrders(int id)
         {
             _logger.LogInformation("requesting orders of store {}", id);
-            return _context.Orders.Where(order => order.Store.Id == id)
-                    .Include(order => order.Product)
-                    .Include(order => order.Store);
+            return _service.GetOrders(id);
         }
 
         [HttpPost]
         [Route("create-order/{id}")]
-        public IEnumerable<Order> PlaceOrder(int id, IDictionary<Product, int> products)
+        public IEnumerable<Order> PlaceOrder(int id, IEnumerable<OrderElement> elements)
         {
             _logger.LogInformation("place new order for store {}", id);
-            DateTime dateTime = DateTime.Now;
-            Store store = GetStore(id);
             try
             {
-               foreach(var item in products)
-                {
-                    _context.Orders.Add(new Order { Product = item.Key, Amount = item.Value, Store = store, Closed = false, Delivered = false, PlacingDate = dateTime });
-                }
-                _context.SaveChanges();
-            } catch (Exception ex)
+                _service.PlaceOrder(id, elements);
+            }
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 BadRequest();
             }
-            return _context.Orders.Where(item => item.Store.Id == id)
-                    .Include(order => order.Product)
-                    .Include(order => order.Store);
+            return _service.GetOrders(id);
         }
 
         [HttpPost]
@@ -107,39 +92,15 @@ namespace CocomeStore.Controllers
         public IEnumerable<Order> CloseOrder(int id, int orderId)
         {
             _logger.LogInformation("close order with id {} for store {}", orderId, id);
-            Order order = _context.Orders.Find(orderId);
-            if (order == null)
-            {
-                NotFound();
-            }
 
             try
             {
-                order.Closed = true;
-                _context.SaveChanges();
-            } catch (Exception ex)
+                _service.CloseOrder(id, orderId);
+            }
+            catch (EntityNotFoundException ex)
             {
                 _logger.LogError(ex.Message);
-                BadRequest();
-            }
-            return _context.Orders.Where(order => order.Store.Id == id)
-                    .Include(order => order.Product)
-                    .Include(order => order.Store);
-        }
-
-
-        [HttpPost]
-        [Route("create-product/{id}")]
-        public StockItem CreateProduct(int id, Product product)
-        {
-            _logger.LogInformation("adding new product to store {}", id);
-            Store store = GetStore(id);
-            StockItem item = new StockItem { Product = product, Stock = 0, Store = store };
-            try
-            {
-                _context.Products.Add(product);
-                _context.StockItems.Add(item);
-                _context.SaveChanges();
+                NotFound();
             }
             catch (Exception ex)
             {
@@ -147,18 +108,32 @@ namespace CocomeStore.Controllers
                 BadRequest();
             }
 
-            return item;
+            return _service.GetOrders(id);
         }
 
+
         [HttpPost]
-        [Route("update-inventory/{id}")]
-        public IEnumerable<StockItem> UpdateInventory(int id, IList<StockItem> inventory)
+        [Route("create-product/{id}")]
+        public IEnumerable<StockItem> CreateProduct(int id, Product product)
         {
-            _logger.LogInformation("update inventory for store {}", id);
-            // TODO: Update Inventory
-            return _context.StockItems.Where(item => item.Store.Id == id)
-                    .Include(item => item.Product)
-                    .Include(item => item.Store);
+            _logger.LogInformation("adding new product to store {}", id);
+ 
+            try
+            {
+                _service.CreateProduct(id, product);
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _logger.LogError(ex.Message);
+                NotFound();
+            } 
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                BadRequest();
+            }
+
+            return _service.GetInventory(id); ;
         }
     }
 }

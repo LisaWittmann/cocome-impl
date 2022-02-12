@@ -12,5 +12,8 @@ namespace CocomeStore.Models
 
         [Required]
         public string Name { get; set; }
+
+        [Required]
+        public Product[] Products { get; set; }
     }
 }

@@ -7,9 +7,11 @@ namespace CocomeStore.Models
     {
         public DbSet<Store> Stores { get; set; }
 
+        public DbSet<Product> Products { get; set; }
+
         public DbSet<Provider> Providers { get; set; }
 
-        public DbSet<Product> Products { get; set; }
+        public DbSet<OrderElement> OrderElements { get; set; } 
 
         public DbSet<Order> Orders { get; set; }
 
@@ -54,7 +56,7 @@ namespace CocomeStore.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite("Filename=MyDatabase.db");
+            optionsBuilder.UseSqlite("Filename=Cocome.db");
         }
     }
 }

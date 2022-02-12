@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { StoreStateService } from 'src/app/store/store.service';
 import { Product } from 'src/services/Product';
 import { CashDeskStateService } from '../cashdesk.service';

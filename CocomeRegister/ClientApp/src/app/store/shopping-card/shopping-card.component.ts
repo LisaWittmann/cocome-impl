@@ -48,7 +48,7 @@ export class StoreShoppingCardComponent {
 
   confirm() {
     this.storeStateService.placeNewOrder();
-    this.router.navigate(['store/orders']);
+    this.router.navigate(['/filiale/bestellungen']);
     this.closeShoppingCardEvent.emit(false);
   }
 }

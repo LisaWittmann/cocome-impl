@@ -23,7 +23,7 @@ export class StoreOrderDetailComponent {
 
     get status() {
         if (this.order.delivered) {
-            return `Geliefert am ${this.order.deliveringDate.toLocaleDateString('de-DE')}`;
+            return `Geliefert am ${new Date(this.order.deliveringDate).toLocaleDateString('de-DE')}`;
         } else if (!this.order.closed) {
             return 'In Bearbeitung';
         }
