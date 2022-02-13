@@ -23,10 +23,9 @@ const storeRoutes: Routes = [
   { path: '', component: StoreHomeComponent },
   { path: 'dashboard', component: StoreDashboardComponent },
   { path: 'produkte', component: StoreProductsComponent },
+  { path: 'produkt/:id', component: StoreProductDetailComponent },
   { path: 'bestellungen', component: StoreOrdersComponent },
   { path: 'berichte', component: StoreReportsComponent },
-  { path: 'produkt/:id', component: StoreProductDetailComponent },
-  { path: 'erstellen', component: StoreProductDetailComponent },
 ];
 
 @NgModule({
@@ -54,7 +53,3 @@ const storeRoutes: Routes = [
   bootstrap: [StoreComponent],
 })
 export class StoreModule { }
-
-export function StoreEntrypoint() {
-  return StoreModule;
-}

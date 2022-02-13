@@ -92,6 +92,7 @@ export class StoreStateService extends StateService<StoreState> {
   }
 
   addToCard(product: Product, amount = 1, replace = false) {
+    console.log(product);
     const currentOrder = this.state.currentOrder;
     const cardProduct = currentOrder.find(element => element.product.id === product.id);
     if (cardProduct) {
@@ -142,6 +143,10 @@ export class StoreStateService extends StateService<StoreState> {
     ).subscribe(result => {
       this.setState({ inventory: result });
     }, error => console.error(error));
+  }
+
+  getProduct(id: number) {
+    return this.http.get<Product>(`${this.api}/${this.state.store.id}/product/${id}`);
   }
 
   createProduct(product: Product) {

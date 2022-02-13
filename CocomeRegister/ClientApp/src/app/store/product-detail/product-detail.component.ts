@@ -16,17 +16,15 @@ export class StoreProductDetailComponent {
   constructor(
     private storeStateService: StoreStateService,
     private router: Router,
-    private location: Location
+    private location: Location,
   ) {
     const productId = Number(router.url.split('/').pop());
-    this.storeStateService.inventory$.subscribe(inventory => {
-      this.product = inventory.find(item => item.product.id === productId).product;
-      console.log(this.product);
+    this.storeStateService.getProduct(productId).subscribe(result => {
+      this.product = result
+    }, error => {
+      console.error(error);
+      this.location.back()
     });
-    if (!this.product) {
-      this.product = {} as Product;
-      this.create = true;
-    }
   }
 
   uploadImage(files: FileList) {
@@ -35,18 +33,10 @@ export class StoreProductDetailComponent {
   }
 
   updateProduct() {
-    if (this.create) {
-      return;
-    }
     this.storeStateService.updateInventory();
   }
 
   addToCard() {
     this.storeStateService.addToCard(this.product);
-  }
-
-  createProduct() {
-    this.storeStateService.createProduct(this.product);
-    this.router.navigate(['/filiale/produkte'])
   }
 }
