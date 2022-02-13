@@ -2,23 +2,24 @@
 using System.Linq;
 using System.Collections.Generic;
 using CocomeStore.Models;
-using Microsoft.Extensions.Logging;
 using CocomeStore.Exceptions;
 using Microsoft.EntityFrameworkCore;
+using CocomeStore.Models.Transfer;
 
 namespace CocomeStore.Services
 {
     public class StoreService : IStoreService
     {
-        private readonly ILogger<StoreService> _logger;
-        private CocomeDbContext _context;
-        private Random _random;
+        private readonly CocomeDbContext _context;
+        private readonly IModelMapper _mapper;
 
-        public StoreService(ILogger<StoreService> logger, CocomeDbContext context)
+        public StoreService(
+            CocomeDbContext context,
+            IModelMapper mapper
+        )
         {
-            _logger = logger;
+            _mapper = mapper;
             _context = context;
-            _random = new Random();
         }
 
         public Store GetStore(int storeId)
@@ -36,12 +37,18 @@ namespace CocomeStore.Services
             return _context.Stores;
         }
 
-        public IEnumerable<Order> GetOrders(int storeId)
+        public IEnumerable<OrderTO> GetOrders(int storeId)
         {
             return _context.Orders
-                    .Where(order => order.Store.Id == storeId)
+                    .Where(order => order.StoreId == storeId)
                     .Include(order => order.Store)
-                    .Include(order => order.Provider);
+                    .Include(order => order.Provider)
+                    .AsEnumerable()
+                    .GroupJoin(_context.OrderElements
+                        .Include(element => element.Product),
+                        order => order.Id,
+                        element => element.OrderId,
+                        (order, elements) => _mapper.CreateOrderTO(order, elements.AsEnumerable()));
         }
 
         public void CloseOrder(int storeId, int orderId)
@@ -62,56 +69,60 @@ namespace CocomeStore.Services
             _context.SaveChanges();
         }
 
-        public void PlaceOrder(int storeId, IEnumerable<OrderElement> elements)
-        {
-            DateTime dateTime = DateTime.Now;
-            Store store = GetStore(storeId);
-            Provider provider = _context.Providers.First();
 
-            foreach (OrderElement element in elements)
+        public void PlaceOrder(int storeId, IEnumerable<OrderElementTO> elements)
+        {
+  
+            Store store = _context.Stores.Find(storeId);
+            if (store == null)
             {
-                _context.Orders.Add(new Order
-                {
-                    Id = _random.Next(),
-                    orderElements = new[] {
-                        new OrderElement { Product = element.Product, Amount = element.Amount }
-                    },
-                    Store = store,
-                    Provider = provider,
-                    PlacingDate = dateTime,
-                    DeliveringDate = dateTime,
-                    Closed = false,
-                    Delivered = false,
-                });
+                throw new EntityNotFoundException("store with id " + storeId + " could not be found");
+            }
+
+            // TODO: get provider by products
+            Provider provider = _context.Providers.First();
+            DateTime dateTime = DateTime.Now;
+
+            Order order = new Order {
+                StoreId = store.Id,
+                ProviderId = provider.Id,
+                PlacingDate = dateTime,
+                Closed = false,
+                Delivered = false
+            };
+            _context.Orders.Add(order);
+
+            foreach (var element in elements)
+            {
+                _context.OrderElements.Add(_mapper.CreateOrderElement(order, element));
             }
             _context.SaveChanges();
         }
+
 
         public IEnumerable<StockItem> GetInventory(int storeId)
         {
             return _context.StockItems
                     .Where(item => item.Store.Id == storeId)
+                    .Include(item => item.Store)
                     .Include(item => item.Product)
-                    .Include(item => item.Store);
+                    .ThenInclude(product => product.Provider);
         }
 
-        public void CreateProduct(int storeId, Product product)
+
+        public void CreateProduct(int storeId, ProductTO productTO)
         {
-            Store store = GetStore(storeId);
-            StockItem item = new StockItem { Product = product, Stock = 0, Store = store };
-     
-            _context.Products.Add(product);
+            Product product = _mapper.CreateProduct(productTO);
+            StockItem item = new StockItem { Product = product, Stock = 0, StoreId = storeId };
+  
             _context.StockItems.Add(item);
             _context.SaveChanges();
         }
 
-        public void UpdateProduct(int storeId, Product product)
+        public void UpdateProduct(int storeId, ProductTO productTO)
         {
-            Product savedProduct = _context.Products.Find(product.Id);
-            savedProduct.Name = product.Name;
-            savedProduct.Price = product.Price;
-            savedProduct.SalePrice = product.SalePrice;
-            savedProduct.ImageUrl = product.ImageUrl;
+            Product product = _context.Products.Find(productTO.Id);
+            _mapper.UpdateProduct(product, productTO);
             _context.SaveChanges();
         }
 
@@ -119,7 +130,7 @@ namespace CocomeStore.Services
         {
             StockItem item = _context.StockItems
                                 .Where(item => item.Store.Id == storeId && item.Product.Id == productId)
-                                .First();
+                                .SingleOrDefault();
             if (item == null)
             {
                 throw new EntityNotFoundException(
@@ -128,6 +139,7 @@ namespace CocomeStore.Services
             item.Stock = stock;
             _context.SaveChanges();
         }
+
 
         public float GetProfitOfMonth(int storeId, int month, int year)
         {
@@ -142,20 +154,12 @@ namespace CocomeStore.Services
             float profit = 0;
             foreach (var sale in sales)
             {
-                var profits = sale.SaleElements.Select(element => element.Product.SalePrice - element.Product.Price);
+                var profits = _context.SaleElements
+                    .Where(element => element.Sale.Id == sale.Id)
+                    .Select(element => element.Product.SalePrice - element.Product.Price);
                 profit += profits.Aggregate((x, y) => (x + y));
             }
             return profit;
-        }
-
-        public IEnumerable<float> GetProfitOfYear(int storeId, int year)
-        {
-            var profits = new List<float>();
-            for (int month = 1; month <= 12; month++)
-            {
-                profits.Add(GetProfitOfMonth(storeId, month, year));
-            }
-            return profits;
         }
     }
 }

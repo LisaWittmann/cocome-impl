@@ -1,16 +1,16 @@
 <div class="shopping-card">
     <ul class="shopping-card__items">
         <li 
-            *ngFor="let product of productSet" 
-            (click)="select(product)"
+            *ngFor="let item of shoppingCard"
+            (click)="select(item.product)"
         >
-            <span>{{ getAmount(product) }}</span>
-            <span>{{ product.name }}</span>
-            <span>{{ product.salePrice.toFixed(2) }} €</span>
+            <span>{{ item.amount }}</span>
+            <span>{{ item.product.name }}</span>
+            <span>{{ item.product.salePrice.toFixed(2) }} €</span>
             <button 
-                *ngIf="isSelected(product)" 
+                *ngIf="isSelected(item.product)" 
                 class="shopping-card__remove-button"
-                (click)="removeProduct(product)"
+                (click)="removeProduct(item.product)"
             >x</button>
         </li>
     </ul>

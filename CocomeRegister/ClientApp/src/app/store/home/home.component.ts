@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { Store } from 'src/services/Store';
+import { Store } from 'src/services/Models';
 import { StoreStateService } from '../store.service';
 
 @Component({

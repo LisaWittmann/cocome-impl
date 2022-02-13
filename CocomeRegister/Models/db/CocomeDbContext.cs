@@ -23,6 +23,15 @@ namespace CocomeStore.Models
 
         public DbSet<StockItem> StockItems { get; set; }
 
+        public CocomeDbContext(DbContextOptions<CocomeDbContext> options)
+            : base(options)
+        {
+        }
+
+        public CocomeDbContext()
+        {
+        }
+
 
         //public AuthDbContext(DbContextOptions<AuthDbContext> options) : base(options)
         //{

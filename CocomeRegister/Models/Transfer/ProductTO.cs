@@ -1,17 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CocomeStore.Models
+namespace CocomeStore.Models.Transfer
 {
-    public class Product
+    public class ProductTO
     {
-        [ScaffoldColumn(false)]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Required]
         public int Id { get; set; }
 
         [Required]
         public string Name { get; set; }
-        
+
         [Required]
         public float Price { get; set; }
 
@@ -23,8 +21,6 @@ namespace CocomeStore.Models
         public string ImageUrl { get; set; }
 
         [Required]
-        public int ProviderId { get; set; }
-
         public Provider Provider { get; set; }
     }
 }

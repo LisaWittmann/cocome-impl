@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Product } from 'src/services/Product';
+import { Product } from 'src/services/Models';
 import { StateService } from 'src/services/StateService';
 
 interface EnterpriseState {

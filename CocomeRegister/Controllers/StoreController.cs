@@ -6,12 +6,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using CocomeStore.Services;
 using CocomeStore.Exceptions;
+using CocomeStore.Models.Transfer;
 
 namespace CocomeStore.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class StoreController : ControllerBase
+    public class StoreController : Controller
     {
         private readonly ILogger<StoreController> _logger;
         private readonly IStoreService _service;
@@ -26,7 +27,7 @@ namespace CocomeStore.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Store>> GetAllStores()
+        public IEnumerable<Store> GetAllStores()
         {
             return _service.GetAllStores().ToArray();
         }
@@ -58,7 +59,7 @@ namespace CocomeStore.Controllers
 
         [HttpGet]
         [Route("orders/{id}")]
-        public ActionResult<IEnumerable<Order>> GetOrders(int id)
+        public ActionResult<IEnumerable<OrderTO>> GetOrders(int id)
         {
             _logger.LogInformation("requesting orders of store {}", id);
             return _service.GetOrders(id).ToArray();
@@ -66,7 +67,7 @@ namespace CocomeStore.Controllers
 
         [HttpPost]
         [Route("create-order/{id}")]
-        public ActionResult<IEnumerable<Order>> PlaceOrder(int id, IEnumerable<OrderElement> elements)
+        public ActionResult<IEnumerable<OrderTO>> PlaceOrder(int id, IEnumerable<OrderElementTO> elements)
         {
             _logger.LogInformation("place new order for store {}", id);
             try
@@ -84,7 +85,7 @@ namespace CocomeStore.Controllers
 
         [HttpPost]
         [Route("close-order/{id}")]
-        public ActionResult<IEnumerable<Order>> CloseOrder(int id, int orderId)
+        public ActionResult<IEnumerable<OrderTO>> CloseOrder(int id, int orderId)
         {
             try
             {
@@ -107,7 +108,7 @@ namespace CocomeStore.Controllers
 
         [HttpPost]
         [Route("create-product/{id}")]
-        public ActionResult<IEnumerable<StockItem>> CreateProduct(int id, Product product)
+        public ActionResult<IEnumerable<StockItem>> CreateProduct(int id, ProductTO product)
         {
             try
             {

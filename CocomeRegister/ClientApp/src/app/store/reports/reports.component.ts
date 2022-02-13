@@ -3,8 +3,7 @@ import { Chart } from 'chart.js';
 import { jsPDF } from 'jspdf';
 import { ColorRange, interpolateColors } from 'src/services/ColorGenerator';
 import { Month, monthOrdinals, monthValues } from 'src/services/Month';
-import { Product, StockItem } from 'src/services/Product';
-import { Store } from 'src/services/Store';
+import { Store, StockItem } from 'src/services/Models';
 import { StoreStateService } from '../store.service';
 import html2canvas from 'html2canvas';
 

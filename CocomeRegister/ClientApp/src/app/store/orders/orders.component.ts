@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { Order } from 'src/services/Order';
+import { Component } from '@angular/core';
+import { Order } from 'src/services/Models';
 import { StoreStateService } from '../store.service';
 
 @Component({

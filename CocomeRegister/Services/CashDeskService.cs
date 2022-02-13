@@ -3,49 +3,45 @@ using System.Collections.Generic;
 using System.Linq;
 using CocomeStore.Exceptions;
 using CocomeStore.Models;
+using CocomeStore.Models.Transfer;
 
 namespace CocomeStore.Services
 {
     public class CashDeskService : ICashDeskService
     {
-        private CocomeDbContext _context;
-        private IStoreService _storeService;
+        private readonly CocomeDbContext _context;
+        private readonly IModelMapper _mapper;
 
-        public CashDeskService(CocomeDbContext context, IStoreService storeService)
+
+        public CashDeskService(
+            CocomeDbContext context,
+            IModelMapper mapper
+        )
         {
             _context = context;
-            _storeService = storeService;
+            _mapper = mapper;
         }
 
-        public void CreateSale(int storeId, IEnumerable<SaleElement> elements)
+        public void CreateSale(int storeId, IEnumerable<SaleElementTO> elements)
         {
-            Store store = _storeService.GetStore(storeId);
-            DateTime timeStamp = DateTime.Now;
+            Sale sale = new() { StoreId = storeId, TimeStamp = DateTime.Now };
 
-            Sale sale = new Sale { Store = store, SaleElements = elements.ToArray(), TimeStamp = timeStamp };
-            _context.Sales.Add(sale);
-            _context.SaveChanges();
-
-            foreach(var element in elements)
+            foreach (var element in elements)
             {
                 StockItem item = _context.StockItems
-                    .Where(item => item.Store.Id == storeId && item.Product.Id == element.Product.Id)
-                    .First();
+                    .Where(item => item.StoreId == storeId && item.ProductId == element.Product.Id)
+                    .SingleOrDefault();
 
-                if (item == null)
+                if (item == null || item.Stock - element.Amount < 0)
                 {
                     throw new ItemNotAvailableException(
                         "product with id " + element.Product.Id + "is not in stock of store " + storeId);
                 }
-
-                int newStock = item.Stock - element.Amount;
-                if (newStock < 0)
-                {
-                    throw new ItemNotAvailableException(
-                        "product with id " + element.Product.Id + "is not in stock of store " + storeId);
-                }
-                _storeService.UpdateStock(storeId, element.Product.Id, newStock);
+                item.Stock -= element.Amount;
+                _context.SaleElements.Add(_mapper.CreateSaleElement(sale, storeId, element));
             }
+
+            _context.SaveChanges();
         }
     }
 }

@@ -3,16 +3,16 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
 using CocomeStore.Services;
 using System;
 using CocomeStore.Exceptions;
+using CocomeStore.Models.Transfer;
 
 namespace CocomeStore.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class EnterpriseController : ControllerBase
+    public class EnterpriseController : Controller
     {
         private readonly ILogger<EnterpriseController> _logger;
         private readonly IEnterpriseService _service;
@@ -28,7 +28,7 @@ namespace CocomeStore.Controllers
 
         [HttpGet]
         [Route("orders")]
-        public ActionResult<IEnumerable<Order>> GetAllOrders()
+        public ActionResult<IEnumerable<OrderTO>> GetAllOrders()
         {
             return _service.GetAllOrders().ToArray();
         }
@@ -63,7 +63,7 @@ namespace CocomeStore.Controllers
 
         [HttpPost]
         [Route("create-product")]
-        public ActionResult<IEnumerable<Product>> CreateProduct(Product product)
+        public ActionResult<IEnumerable<Product>> CreateProduct(ProductTO product)
         {
             try
             {
@@ -79,7 +79,7 @@ namespace CocomeStore.Controllers
 
         [HttpPost]
         [Route("update-product/{id}")]
-        public ActionResult<IEnumerable<Product>> UpdateProduct(int id, Product product)
+        public ActionResult<IEnumerable<Product>> UpdateProduct(int id, ProductTO product)
         {
             try
             {

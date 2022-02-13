@@ -1,27 +1,22 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CocomeStore.Models
+namespace CocomeStore.Models.Transfer
 {
-    public class StockItem
+    public class StockItemTO
     {
-        [ScaffoldColumn(false)]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Required]
         public int Id { get; set; }
 
         [Required]
-        public int ProductId { get; set; }
-
         public Product Product { get; set; }
 
         [Required]
         public int Stock { get; set; }
 
         [Required]
-        public int StoreId { get; set; }
-
         public Store Store { get; set; }
 
+        [Required]
         public int Minimum { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { Product, StockItem } from 'src/services/Product';
+import { Product, StockItem } from 'src/services/Models';
 import { StoreStateService } from '../store.service';
 
 @Component({

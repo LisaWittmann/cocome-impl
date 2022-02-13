@@ -1,9 +1,7 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Chart } from 'chart.js';
-import { Store } from 'src/services/Store';
 import { monthValues } from 'src/services/Month';
-import { Order } from 'src/services/Order';
-import { Product, StockItem } from 'src/services/Product';
+import { StockItem, Store, Order } from 'src/services/Models';
 import { StoreStateService } from '../store.service';
 
 @Component({

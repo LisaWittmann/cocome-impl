@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { Product } from 'src/services/Product';
+import { Product } from 'src/services/Models';
 
 @Component({
   selector: 'app-product-table-row',

@@ -1,18 +1,15 @@
 import { Inject, Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Store } from 'src/services/Store';
 import { interpolateColors, toRGBA } from 'src/services/ColorGenerator';
 import { Month } from 'src/services/Month';
-import { Order } from 'src/services/Order';
-import { Product, StockItem } from 'src/services/Product';
 import { StateService } from 'src/services/StateService';
-import { HttpClient } from '@angular/common/http';
-import { SaleElement } from 'src/services/Sale';
+import { Product, StockItem, Store, SaleElement, Order, OrderElement } from 'src/services/Models';
 
 interface StoreState {
   store: Store;
   inventory: StockItem[];
-  currentOrder: Map<Product, number>;
+  currentOrder: OrderElement[];
   orders: Order[];
   sales: Map<number, Map<Month, number>>;
 }
@@ -20,7 +17,7 @@ interface StoreState {
 const initialState: StoreState = {
   store: { name: "Test" } as Store,
   inventory: [],
-  currentOrder: new Map<Product, number>(),
+  currentOrder: [],
   orders: [],
   sales: new Map<number, Map<Month, number>>(),
 };
@@ -28,7 +25,7 @@ const initialState: StoreState = {
 export class StoreStateService extends StateService<StoreState> {
   store$: Observable<Store> = this.select(state => state.store);
   inventory$: Observable<StockItem[]> = this.select(state => state.inventory);
-  currentOrder$: Observable<Map<Product, number>> = this.select(state => state.currentOrder);
+  currentOrder$: Observable<OrderElement[]> = this.select(state => state.currentOrder);
   orders$: Observable<Order[]> = this.select(state => state.orders);
   sales$: Observable<Map<number, Map<Month, number>>> = this.select(state => state.sales);
   api: string;
@@ -96,44 +93,35 @@ export class StoreStateService extends StateService<StoreState> {
 
   addToCard(product: Product, amount = 1, replace = false) {
     const currentOrder = this.state.currentOrder;
-    const cardProduct = [...currentOrder.keys()].find(p => p.id === product.id);
+    const cardProduct = currentOrder.find(element => element.product.id === product.id);
     if (cardProduct) {
-      const productAmount = replace ? amount : currentOrder.get(cardProduct) + amount;
-      currentOrder.set(cardProduct, productAmount);
+      cardProduct.amount = replace ? amount : cardProduct.amount + amount;
     } else {
-      currentOrder.set(product, amount);
+      currentOrder.push({ product: product, amount: amount });
     }
+    this.setState({ currentOrder: currentOrder });
   }
 
   removeFromCard(product: Product) {
     const currentOrder = this.state.currentOrder;
-    const cardProduct = [...currentOrder.keys()].find(p => p.id === product.id);
-    if (cardProduct && currentOrder.get(cardProduct) > 1) {
-      currentOrder.set(cardProduct, currentOrder.get(cardProduct) - 1);
+    const cardProduct = this.state.currentOrder.find(element => element.product.id === product.id);
+    if (cardProduct && cardProduct.amount > 1) {
+      cardProduct.amount--;
     }
     this.setState({ currentOrder: currentOrder });
   }
 
   removeAllFromCard(product: Product) {
-    const currentOrder = this.state.currentOrder;
-    currentOrder.delete(product);
-    this.setState({ currentOrder: currentOrder });
+    this.setState({ currentOrder: this.state.currentOrder.filter(element => element.product.id != product.id) });
   }
 
   placeNewOrder() {
-    if (this.state.currentOrder.size === 0) {
-      return;
-    }
-    console.log("state on enter", this.state);
-    const elements = new Array<SaleElement>();
-    for (const [product, amount] of this.state.currentOrder) {
-      elements.push({ product: product, amount: amount });
-    }
     this.http.post<Order[]>(
-      `${this.api}/create-order/${this.state.store.id}`, elements
+      `${this.api}/create-order/${this.state.store.id}`, 
+      this.state.currentOrder
     ).subscribe(result => {
       this.setState({ orders: result });
-      this.setState({ currentOrder: new Map<Product, number>() });
+      this.setState({ currentOrder: [] });
     }, error => console.error(error));
 }
 
@@ -145,14 +133,6 @@ export class StoreStateService extends StateService<StoreState> {
       this.setState({ orders: result });
       this.updateInventory();
     }, error => console.error(error));
-  }
-
-  removeProducts(products: Product[]) {
-    this.state.inventory.forEach(item => {
-      const amount = products.filter(p => p.id === item.product.id).length;
-      item.stock -= amount;
-    });
-    this.updateInventory();
   }
 
   updateInventory() {

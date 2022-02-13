@@ -1,6 +1,5 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Order } from 'src/services/Order';
-import { Product } from 'src/services/Product';
+import { Component, Input } from '@angular/core';
+import { OrderElement, Order } from 'src/services/Models';
 import { StoreStateService } from '../store.service';
 
 @Component({
@@ -17,9 +16,9 @@ export class StoreOrderDetailComponent {
         this.storeStateService.closeOrder(this.order.id);
     }
 
-    /*getProductPrice(product: Product) {
-        return this.order.products.get(product) * product.price;
-    }*/
+    getElementPrice(element: OrderElement) {
+        return element.amount * element.product.price;
+    }
 
     get status() {
         if (this.order.delivered) {
@@ -30,10 +29,9 @@ export class StoreOrderDetailComponent {
     }
 
     get totalPrice() {
-        /*let sum = 0;
-        for (const [product, amount] of this.order.products) {
-            sum += amount * product.price;
-        }*/
-        return this.order.product.price * this.order.amount;
+        if (this.order.orderElements.length == 0) return 0;
+        return this.order.orderElements
+            .map(element => element.product.price * element.amount)
+            .reduce((x, y) => (x + y));
     }
 }
