@@ -14,7 +14,7 @@ namespace CocomeStore.Services
 
         public OrderElement CreateOrderElement(Order order, OrderElementTO orderElementTO)
         {
-            OrderElement orderElement = new()
+            OrderElement orderElement = new ()
             {
                 ProductId = orderElementTO.Product.Id,
                 Amount = orderElementTO.Amount,
@@ -23,17 +23,40 @@ namespace CocomeStore.Services
             return orderElement;
         }
 
+        public OrderElementTO CreateOrderElementTO(OrderElement orderElement)
+        {
+            OrderElementTO orderElementTO = new ()
+            {
+                Product = orderElement.Product,
+                Amount = orderElement.Amount,
+            };
+            return orderElementTO;
+        }
+
+        public Order CreateOrder(OrderTO orderTO)
+        {
+            Order order = new()
+            {
+                StoreId = orderTO.Store.Id,
+                ProviderId = orderTO.Provider.Id,
+                PlacingDate = orderTO.PlacingDate,
+                Delivered = orderTO.Delivered,
+                Closed = orderTO.Closed,
+            };
+            return order;
+        }
+
         public OrderTO CreateOrderTO(Order order, IEnumerable<OrderElement> orderElements)
         {
-            var elements = orderElements;
-            if (elements.Count() == 0)
-            {
-                elements = Array.Empty<OrderElement>();
-            }
+            var elements = orderElements
+                 .DefaultIfEmpty()
+                 .Select(element => CreateOrderElementTO(element))
+                 .ToArray();
+
             OrderTO orderTO = new()
             {
                 Id = order.Id,
-                OrderElements = elements.ToArray(),
+                OrderElements = elements,
                 Store = order.Store,
                 Provider = order.Provider,
                 Closed = order.Closed,
@@ -57,6 +80,21 @@ namespace CocomeStore.Services
 
             };
             return product;
+        }
+
+        public ProductTO CreateProductTO(Product product)
+        {
+            ProductTO productTO = new()
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Price = product.Price,
+                SalePrice = product.SalePrice,
+                Description = product.Description,
+                ImageUrl = product.ImageUrl,
+                Provider = product.Provider
+            };
+            return productTO;
         }
 
         public SaleElement CreateSaleElement(Sale sale, int storeId, SaleElementTO saleElementTO)

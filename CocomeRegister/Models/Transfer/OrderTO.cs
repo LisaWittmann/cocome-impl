@@ -9,7 +9,7 @@ namespace CocomeStore.Models.Transfer
         public int Id { get; set; }
 
         [Required]
-        public OrderElement[] OrderElements { get; set; }
+        public OrderElementTO[] OrderElements { get; set; }
 
         [Required]
         public Store Store { get; set; }

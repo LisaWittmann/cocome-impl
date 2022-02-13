@@ -13,9 +13,10 @@ namespace CocomeStore.Services
         void CloseOrder(int storeId, int orderId);
         void PlaceOrder(int storeId, IEnumerable<OrderElementTO> elements);
 
-        IEnumerable<StockItem> GetInventory(int storeId);
-        void CreateProduct(int storeId, ProductTO productTO);
+        ProductTO GetProduct(int storeId, int productId);
         void UpdateProduct(int storeId, ProductTO productTO);
+
+        IEnumerable<StockItem> GetInventory(int storeId);
         void UpdateStock(int storeId, int productId, int stock);
 
         float GetProfitOfMonth(int storeId, int month, int year);

@@ -49,6 +49,22 @@ namespace CocomeStore.Controllers
         }
 
         [HttpGet]
+        [Route("{id}/product/{productId}")]
+        public ActionResult<ProductTO> GetProduct(int id, int productId)
+        {
+            try
+            {
+                _logger.LogInformation("requesting product {} of store {}", productId, id);
+                return _service.GetProduct(id, productId);
+            }
+            catch (CrossAccessException ex)
+            {
+                _logger.LogError(ex.Message);
+                return Conflict();
+            }
+        }
+
+        [HttpGet]
         [Route("inventory/{id}")]
         public ActionResult<IEnumerable<StockItem>> GetInventory(int id)
         {
@@ -70,16 +86,15 @@ namespace CocomeStore.Controllers
         public ActionResult<IEnumerable<OrderTO>> PlaceOrder(int id, IEnumerable<OrderElementTO> elements)
         {
             _logger.LogInformation("place new order for store {}", id);
-            try
-            {
+            
                 _service.PlaceOrder(id, elements);
                 return _service.GetOrders(id).ToArray();
-            }
-            catch (Exception ex)
+          
+            /*catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 return BadRequest();
-            }
+            }*/
            
         }
 
@@ -98,29 +113,6 @@ namespace CocomeStore.Controllers
                 _logger.LogError(ex.Message);
                 return NotFound();
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                return BadRequest();
-            }
-        }
-
-
-        [HttpPost]
-        [Route("create-product/{id}")]
-        public ActionResult<IEnumerable<StockItem>> CreateProduct(int id, ProductTO product)
-        {
-            try
-            {
-                _logger.LogInformation("adding new product to store {}", id);
-                _service.CreateProduct(id, product);
-                return _service.GetInventory(id).ToArray();
-            }
-            catch (EntityNotFoundException ex)
-            {
-                _logger.LogError(ex.Message);
-                return NotFound();
-            } 
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
