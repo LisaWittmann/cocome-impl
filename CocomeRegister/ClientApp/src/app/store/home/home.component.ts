@@ -21,7 +21,6 @@ export class StoreHomeComponent {
   ) {
     this.http.get<Store[]>(`${baseUrl}api/store`).subscribe(result => {
       this.stores = result;
-      console.log(this.stores);
     }, error => console.error(error));
   }
 

@@ -49,41 +49,18 @@ namespace CocomeStore.Controllers
         }
 
         [HttpGet]
-        [Route("{id}/product/{productId}")]
-        public ActionResult<ProductTO> GetProduct(int id, int productId)
+        [Route("profit/{id}")]
+        public ActionResult<IEnumerable<Statistic>> GetProfit(int id)
         {
             try
             {
-                _logger.LogInformation("requesting product {} of store {}", productId, id);
-                return _service.GetProduct(id, productId);
+                return _service.GetProfit(id).ToArray();
             }
-            catch (CrossAccessException ex)
+            catch (EntityNotFoundException ex)
             {
                 _logger.LogError(ex.Message);
-                return Conflict();
+                return NotFound();
             }
-        }
-
-        [HttpPost]
-        [Route("update-product/{id}")]
-        public ActionResult<IEnumerable<StockItem>> UpdateProduct(int id, ProductTO productTO)
-        {
-            try
-            {
-                _logger.LogInformation("updating product {} from store {}", productTO.Name, id);
-                _service.UpdateProduct(id, productTO);
-            }
-            catch (CrossAccessException ex)
-            {
-                _logger.LogError(ex.Message);
-                return Conflict();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                return BadRequest();
-            }
-            return _service.GetInventory(id).ToArray();
         }
 
         [HttpGet]
@@ -141,5 +118,59 @@ namespace CocomeStore.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpPost]
+        [Route("update-product/{id}")]
+        public ActionResult<IEnumerable<StockItem>> UpdateProduct(int id, ProductTO productTO)
+        {
+            try
+            {
+                _logger.LogInformation("updating product {} from store {}", productTO.Name, id);
+                _service.UpdateProduct(id, productTO);
+            }
+            catch (CrossAccessException ex)
+            {
+                _logger.LogError(ex.Message);
+                return Conflict();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest();
+            }
+            return _service.GetInventory(id).ToArray();
+        }
+
+        [HttpGet]
+        [Route("{id}/product/{productId}")]
+        public ActionResult<ProductTO> GetProduct(int id, int productId)
+        {
+            try
+            {
+                _logger.LogInformation("requesting product {} of store {}", productId, id);
+                return _service.GetProduct(id, productId);
+            }
+            catch (CrossAccessException ex)
+            {
+                _logger.LogError(ex.Message);
+                return Conflict();
+            }
+        }
+
+        [HttpGet]
+        [Route("{id}/profit/{year}")]
+        public ActionResult<Statistic> GetProfit(int id, int year)
+        {
+            try
+            {
+                return _service.GetProfitOfYear(id, year);
+            }
+            catch(EntityNotFoundException ex)
+            {
+                _logger.LogError(ex.Message);
+                return NotFound();
+            }
+        }
+
     }
 }

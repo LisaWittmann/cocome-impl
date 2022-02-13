@@ -77,6 +77,29 @@ namespace CocomeStore.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("provider-reports")]
+        public IDictionary<int, Statistic> GetProvidersStatistic()
+        {
+            return _service.GetProvidersStatistic();
+        }
+
+
+        [HttpGet]
+        [Route("provider-report/{id}")]
+        public ActionResult<Statistic> GetProviderStatistic(int id) 
+        {
+            try
+            {
+                return _service.GetProviderStatistic(id);
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _logger.LogError(ex.Message);
+                return NotFound();
+            }
+        }
+
         [HttpPost]
         [Route("update-product/{id}")]
         public ActionResult<IEnumerable<ProductTO>> UpdateProduct(int id, ProductTO product)

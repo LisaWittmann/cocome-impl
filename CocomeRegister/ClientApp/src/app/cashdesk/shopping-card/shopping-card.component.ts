@@ -25,7 +25,6 @@ export class CashDeskShoppingCardComponent {
         private cashDeskState: CashDeskStateService,
     ) {
         this.cashDeskState.shoppingCard$.subscribe(shoppingCard => {
-            console.log("triggered");
             this.shoppingCard = shoppingCard;
             this.shoppingCardSum = this.cashDeskState.getCardSum();
             this.totalDiscount = this.cashDeskState.getTotalDiscount();

@@ -123,7 +123,7 @@ namespace CocomeStore.Services
         }
 
 
-        public IEnumerable<TimeSpan> GetDeliverySpans(int providerId)
+        public Statistic GetProviderStatistic(int providerId)
         {
             Provider provider = _context.Providers.Find(providerId);
             if (provider == null)
@@ -132,10 +132,22 @@ namespace CocomeStore.Services
                    "provider with id " + providerId + " could not be found");
             }
 
-            return _context.Orders
+            var dataset = _context.Orders
                 .Where(order => order.Provider.Id == providerId && order.Closed)
-                .Select(order => (order.DeliveringDate - order.PlacingDate));
+                .Select(order => (order.DeliveringDate - order.PlacingDate).TotalDays);
+
+            return new() { Key = providerId, Dataset = dataset.ToArray() };
+
         }
 
+        public IDictionary<int, Statistic> GetProvidersStatistic()
+        {
+            var dataset = new Dictionary<int, Statistic>();
+            foreach (var provider in _context.Providers)
+            {
+                dataset.Add(provider.Id, GetProviderStatistic(provider.Id));
+            }
+            return dataset;
+        }
     }
 }
