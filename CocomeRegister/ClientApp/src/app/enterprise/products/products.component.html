@@ -1,0 +1,15 @@
+<div class="products page-container">
+    <div class="container">
+        <section>
+            <h1>Alle Produkte</h1>
+        </section>
+        <section>
+            <ul>
+                <app-product-table-row 
+                    *ngFor="let product of products"
+                    [product]="product"
+                >
+                </app-product-table-row>
+            </ul>
+        </section>
+</div>

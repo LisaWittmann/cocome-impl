@@ -21,7 +21,7 @@
                 >
                 </app-product-table-row>
             </ul>
-            <a [routerLink]="'/filiale/produkte'">Alle Produkte</a>
+            <a [routerLink]="'/filiale/sortiment'">Alle Produkte</a>
         </section>
         <section *ngIf="pendingOrders.length">
             <h2>Ausstehende Bestellungen</h2>
@@ -32,7 +32,7 @@
                 <app-store-order-detail [order]="order">
                 </app-store-order-detail>
             </app-accordion>
-            <a [routerLink]="'/filiale/produkte'">Alle Bestellungen</a>
+            <a [routerLink]="'/filiale/sortiment'">Alle Bestellungen</a>
         </section>
     </div>
 </div>

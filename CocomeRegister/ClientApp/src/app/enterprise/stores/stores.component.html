@@ -1,0 +1,17 @@
+<div class="stores page-container">
+    <div class="container">
+        <section>
+            <h1>Alle Filialen</h1>
+        </section>
+        <section>
+            <ul>
+                <li *ngFor="let store of stores">
+                    <p>
+                        {{ store.id }} - {{ store.name }}<br>
+                        {{ store.postalCode }} {{ store.city }}
+                    </p>
+                </li>
+            </ul>
+        </section>
+    </div>
+</div>

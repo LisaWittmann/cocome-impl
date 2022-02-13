@@ -1,0 +1,12 @@
+<div class="providers page-container">
+    <div class="container">
+        <section>
+            <h1>Alle Lieferanten</h1>
+        </section>
+        <section>
+            <ul>
+                <li *ngFor="let provider of providers">{{ provider.id }}, {{ provider.name }}</li>
+            </ul>
+        </section>
+    </div>
+</div>

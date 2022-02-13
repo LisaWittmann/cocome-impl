@@ -45,19 +45,22 @@ namespace CocomeStore.Services
         public IEnumerable<OrderTO> GetAllOrders()
         { 
            return _context.Orders
-                    .Include(order => order.Store)
-                    .Include(order => order.Provider)
-                    .AsEnumerable()
-                    .GroupJoin(_context.OrderElements
-                        .Include(element => element.Product),
-                        order => order.Id,
-                        element => element.OrderId,
-                        (order, elements) => _mapper.CreateOrderTO(order, elements.AsEnumerable()));
+                .Include(order => order.Store)
+                .Include(order => order.Provider)
+                .AsEnumerable()
+                .GroupJoin(_context.OrderElements
+                    .Include(element => element.Product),
+                    order => order.Id,
+                    element => element.OrderId,
+                    (order, elements) =>
+                        _mapper.CreateOrderTO(order, elements.AsEnumerable()));
         }
        
-        public IEnumerable<Product> GetAllProducts()
+        public IEnumerable<ProductTO> GetAllProducts()
         {
-            return _context.Products;
+            return _context.Products
+                .Include(product => product.Provider)
+                .Select(product => _mapper.CreateProductTO(product));
         }
 
         public IEnumerable<Provider> GetAllProvider()
@@ -68,8 +71,8 @@ namespace CocomeStore.Services
         public IEnumerable<StockItem> GetAllStockItems()
         {
             return _context.StockItems
-                    .Include(item => item.Product)
-                    .Include(item => item.Store);
+                .Include(item => item.Product)
+                .Include(item => item.Store);
         }
 
         public IEnumerable<Store> GetAllStores()
@@ -129,19 +132,9 @@ namespace CocomeStore.Services
                    "provider with id " + providerId + " could not be found");
             }
 
-            IEnumerable<Order> providerOrders = _context.Orders
-                .Where(order => order.Provider.Id == providerId);
-
-            var timeSpans = new List<TimeSpan>();
-            foreach (var order in providerOrders)
-            {
-                if (order.Delivered)
-                {
-                    TimeSpan span = order.DeliveringDate - order.PlacingDate;
-                    timeSpans.Add(span);
-                }
-            }
-            return timeSpans;
+            return _context.Orders
+                .Where(order => order.Provider.Id == providerId && order.Closed)
+                .Select(order => (order.DeliveringDate - order.PlacingDate));
         }
 
     }

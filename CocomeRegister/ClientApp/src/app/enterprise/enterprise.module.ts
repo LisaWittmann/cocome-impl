@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { SharedModule } from '../shared/shared.module';
 
 import { EnterpriseComponent } from './enterprise.component';
 import { EnterpriseNavigationComponent } from './navigation/navigation.component';
@@ -16,13 +17,17 @@ import { EnterpriseProvidersComponent } from './providers/providers.component';
 import { EnterpriseProviderDetailComponent } from './provider-detail/provider-detail.component';
 
 const enterpriseRoutes: Routes = [
-  { path: '', component: EnterpriseHomeComponent },
+  { path: 'home', component: EnterpriseHomeComponent },
+  { path: 'produkte', component: EnterpriseProductsComponent },
+  { path: 'produkte/:id', component: EnterpriseProductDetailComponent },
   { path: 'filialen', component: EnterpriseStoresComponent },
+  { path: 'filialen/:id', component: EnterpriseStoreDetailComponent},
   { path: 'lieferanten', component: EnterpriseProvidersComponent },
-  { path: 'lieferant/:id', component: EnterpriseProviderDetailComponent },
+  { path: 'lieferanten/:id', component: EnterpriseProviderDetailComponent },
 ];
 @NgModule({
   imports: [
+    SharedModule,
     CommonModule,
     FormsModule,
     RouterModule.forChild(enterpriseRoutes)

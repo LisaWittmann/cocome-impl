@@ -33,7 +33,8 @@ export class StoreProductDetailComponent {
   }
 
   updateProduct() {
-    this.storeStateService.updateInventory();
+    this.storeStateService.updateProduct(this.product);
+    this.router.navigate(['/filiale/sortiment']);
   }
 
   addToCard() {

@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { interpolateColors, toRGBA } from 'src/services/ColorGenerator';
 import { Month } from 'src/services/Month';
 import { StateService } from 'src/services/StateService';
-import { Product, StockItem, Store, SaleElement, Order, OrderElement } from 'src/services/Models';
+import { Product, StockItem, Store, Order, OrderElement } from 'src/services/Models';
 
 interface StoreState {
   store: Store;
@@ -39,14 +39,14 @@ export class StoreStateService extends StateService<StoreState> {
       this.getSession();
   }
 
-  private fetchInventory() {
+  fetchInventory() {
     this.http.get<StockItem[]>(`${this.api}/inventory/${this.state.store.id}`).subscribe(result => {
       console.log(result);
       this.setState({ inventory: result });
     }, error => console.error(error));
   }
 
-  private fetchOrders() {
+  fetchOrders() {
     this.http.get<Order[]>(`${this.api}/orders/${this.state.store.id}`).subscribe(result => {
       console.log(result);
       this.setState({ orders: result });
@@ -124,7 +124,7 @@ export class StoreStateService extends StateService<StoreState> {
       this.setState({ orders: result });
       this.setState({ currentOrder: [] });
     }, error => console.error(error));
-}
+  }
 
   closeOrder(orderId: number) {
     this.http.post<Order[]>(
@@ -132,14 +132,14 @@ export class StoreStateService extends StateService<StoreState> {
       orderId
     ).subscribe(result => {
       this.setState({ orders: result });
-      this.updateInventory();
+      this.fetchInventory();
     }, error => console.error(error));
   }
 
-  updateInventory() {
+  updateProduct(product: Product) {
     this.http.post<StockItem[]>(
-      `${this.api}/update-inventory/${this.state.store.id}`,
-      this.state.inventory
+      `${this.api}/update-product/${this.state.store.id}`,
+      product
     ).subscribe(result => {
       this.setState({ inventory: result });
     }, error => console.error(error));
@@ -147,14 +147,5 @@ export class StoreStateService extends StateService<StoreState> {
 
   getProduct(id: number) {
     return this.http.get<Product>(`${this.api}/${this.state.store.id}/product/${id}`);
-  }
-
-  createProduct(product: Product) {
-    this.http.post<StockItem[]>(
-      `${this.api}/create-product/${this.state.store.id}`,
-      product
-    ).subscribe(result => {
-       this.setState({ inventory: result });
-    }, error => console.error(error));
   }
 }

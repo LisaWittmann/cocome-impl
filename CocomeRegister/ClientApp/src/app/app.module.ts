@@ -13,7 +13,6 @@ import { EnterpriseComponent } from './enterprise/enterprise.component';
 import { StoreModule } from './store/store.module';
 import { EnterpriseModule } from './enterprise/enterprise.module';
 import { CashDeskModule } from './cashdesk/cashdesk.module';
-import { StoreStateService } from './store/store.service';
 
 const appRoutes: Routes = [
   { path: 'kasse', component: CashDeskComponent, loadChildren: () => import('./cashdesk/cashdesk.module').then(m => m.CashDeskModule) },

@@ -30,6 +30,6 @@ export class StoreProductsComponent {
     }
 
     navigateToDetail(product: Product) {
-        this.router.navigate(['/filiale/produkt', product.id]);
+        this.router.navigate(['/filiale/sortiment', product.id]);
     }
 }

@@ -56,14 +56,14 @@ namespace CocomeStore.Controllers
 
         [HttpGet]
         [Route("products")]
-        public ActionResult<IEnumerable<Product>> GetAllProducts()
+        public ActionResult<IEnumerable<ProductTO>> GetAllProducts()
         {
             return _service.GetAllProducts().ToArray();
         }
 
         [HttpPost]
         [Route("create-product")]
-        public ActionResult<IEnumerable<Product>> CreateProduct(ProductTO product)
+        public ActionResult<IEnumerable<ProductTO>> CreateProduct(ProductTO product)
         {
             try
             {
@@ -79,7 +79,7 @@ namespace CocomeStore.Controllers
 
         [HttpPost]
         [Route("update-product/{id}")]
-        public ActionResult<IEnumerable<Product>> UpdateProduct(int id, ProductTO product)
+        public ActionResult<IEnumerable<ProductTO>> UpdateProduct(int id, ProductTO product)
         {
             try
             {

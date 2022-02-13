@@ -64,6 +64,28 @@ namespace CocomeStore.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("update-product/{id}")]
+        public ActionResult<IEnumerable<StockItem>> UpdateProduct(int id, ProductTO productTO)
+        {
+            try
+            {
+                _logger.LogInformation("updating product {} from store {}", productTO.Name, id);
+                _service.UpdateProduct(id, productTO);
+            }
+            catch (CrossAccessException ex)
+            {
+                _logger.LogError(ex.Message);
+                return Conflict();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest();
+            }
+            return _service.GetInventory(id).ToArray();
+        }
+
         [HttpGet]
         [Route("inventory/{id}")]
         public ActionResult<IEnumerable<StockItem>> GetInventory(int id)
@@ -85,17 +107,17 @@ namespace CocomeStore.Controllers
         [Route("create-order/{id}")]
         public ActionResult<IEnumerable<OrderTO>> PlaceOrder(int id, IEnumerable<OrderElementTO> elements)
         {
-            _logger.LogInformation("place new order for store {}", id);
-            
+            try
+            {
+                _logger.LogInformation("place new order for store {}", id);
                 _service.PlaceOrder(id, elements);
                 return _service.GetOrders(id).ToArray();
-          
-            /*catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 return BadRequest();
-            }*/
-           
+            }
         }
 
         [HttpPost]

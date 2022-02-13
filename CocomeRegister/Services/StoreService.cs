@@ -5,7 +5,6 @@ using CocomeStore.Models;
 using CocomeStore.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using CocomeStore.Models.Transfer;
-using Microsoft.Extensions.Logging;
 
 namespace CocomeStore.Services
 {
@@ -25,7 +24,7 @@ namespace CocomeStore.Services
 
         public Store GetStore(int storeId)
         {
-            Store store = _context.Stores.Find(1);
+            Store store = _context.Stores.Find(storeId);
             if (store == null)
             {
                 throw new EntityNotFoundException("store with id " + storeId + " could not be found");
@@ -62,10 +61,22 @@ namespace CocomeStore.Services
                 throw new EntityNotFoundException("order with id " + orderId + " could not be found");
             }
 
-            if (order.Store.Id != storeId)
+            if (order.StoreId != storeId)
             {
                 throw new CrossAccessException("no access to order " + orderId);
             }
+
+            var orderElements = _context.OrderElements
+                .Where(element => element.OrderId == orderId)
+                .Include(element => element.Product);
+
+            foreach(var element in orderElements)
+            {
+                StockItem item = _context.StockItems
+                    .Where(item => item.ProductId == element.ProductId && item.StoreId == storeId)
+                    .SingleOrDefault();
+                item.Stock += element.Amount;
+            };
 
             order.Closed = true;
             _context.SaveChanges();
@@ -75,7 +86,7 @@ namespace CocomeStore.Services
         {
 
             DateTime dateTime = DateTime.Now;
-            Store store = _context.Stores.Find(storeId);
+            Store store = GetStore(storeId);
             if (store == null)
             {
                 throw new EntityNotFoundException("store with id " + storeId + " could not be found");

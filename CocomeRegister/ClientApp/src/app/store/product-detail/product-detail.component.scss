@@ -54,7 +54,7 @@
             input, textarea {
                 text-align: center;
                 border: 0;
-                background-color: transparent;
+                background-color: $color-light-grey;
                 width: fit-content;
 
                 &[type="number"] {
