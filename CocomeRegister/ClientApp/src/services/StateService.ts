@@ -19,9 +19,11 @@ export class StateService<T> {
   }
 
   protected setState(newState: Partial<T>) {
+    console.log("setting state", newState)
     this.state$.next({
       ...this.state,
       ...newState,
     });
+    console.log(this.state);
   }
 }

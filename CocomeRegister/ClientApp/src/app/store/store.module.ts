@@ -5,6 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { StoreComponent } from './store.component';
 import { StoreHomeComponent } from './home/home.component';
+import { StoreDashboardComponent } from './dashboard/dashboard.component';
 import { StoreNavigationComponent } from './navigation/navigation.component';
 import { StoreProductsComponent } from './products/products.component';
 import { StoreProductDetailComponent } from './product-detail/product-detail.component';
@@ -13,13 +14,14 @@ import { StoreOrdersComponent } from './orders/orders.component';
 import { StoreOrderDetailComponent } from './order-detail/order-detail.component';
 import { StoreReportsComponent } from './reports/reports.component';
 
-import { AccordionComponent } from '../accordion/accordion.component';
-import { ProductTableRowComponent } from '../product-table-row/product-table-row.component';
+import { AccordionComponent } from '../shared/accordion/accordion.component';
+import { ProductTableRowComponent } from '../shared/product-table-row/product-table-row.component';
 
 import { StoreStateService } from './store.service';
 
 const storeRoutes: Routes = [
   { path: '', component: StoreHomeComponent },
+  { path: 'dashboard', component: StoreDashboardComponent },
   { path: 'produkte', component: StoreProductsComponent },
   { path: 'bestellungen', component: StoreOrdersComponent },
   { path: 'berichte', component: StoreReportsComponent },
@@ -35,8 +37,9 @@ const storeRoutes: Routes = [
   ],
   declarations: [
     StoreComponent,
-    StoreReportsComponent,
     StoreHomeComponent,
+    StoreReportsComponent,
+    StoreDashboardComponent,
     StoreNavigationComponent,
     StoreProductsComponent,
     StoreProductDetailComponent,

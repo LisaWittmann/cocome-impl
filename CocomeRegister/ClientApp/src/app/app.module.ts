@@ -13,12 +13,12 @@ import { EnterpriseComponent } from './enterprise/enterprise.component';
 import { StoreModule } from './store/store.module';
 import { EnterpriseModule } from './enterprise/enterprise.module';
 import { CashDeskModule } from './cashdesk/cashdesk.module';
+import { StoreStateService } from './store/store.service';
 
 const appRoutes: Routes = [
-  { path: '', redirectTo: 'kasse', pathMatch: 'full' },
   { path: 'kasse', component: CashDeskComponent, loadChildren: () => import('./cashdesk/cashdesk.module').then(m => m.CashDeskModule) },
   { path: 'filiale', component: StoreComponent, loadChildren: () => import('./store/store.module').then(m => m.StoreModule) },
-  { path: 'admin', component: EnterpriseComponent, loadChildren: () => import('./enterprise/enterprise.module').then(m => m.EnterpriseModule)},
+  { path: 'admin', component: EnterpriseComponent, loadChildren: () => import('./enterprise/enterprise.module').then(m => m.EnterpriseModule) },
 ];
 
 @NgModule({
@@ -29,7 +29,7 @@ const appRoutes: Routes = [
     StoreModule,
     CashDeskModule,
     EnterpriseModule,
-    RouterModule.forRoot(appRoutes,  { scrollPositionRestoration: 'top' } )
+    RouterModule.forRoot(appRoutes)
   ],
   declarations: [
     AppComponent,

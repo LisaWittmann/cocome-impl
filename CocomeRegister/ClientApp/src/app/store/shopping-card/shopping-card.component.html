@@ -14,10 +14,10 @@
             </button>
         </div>
         <div class="shopping-card__items">
-            <table *ngIf="shoppingCard.size > 0">
-                <tr *ngFor="let item of shoppingCard | keyvalue">
+            <table *ngIf="shoppingCard.length > 0">
+                <tr *ngFor="let item of shoppingCard">
                     <td>
-                        <button (click)="removeAll(item.key)">
+                        <button (click)="removeAll(item.product)">
                             <img
                                 src="assets/svg/times-solid.svg"
                                 alt="Produkt entfernen"
@@ -25,30 +25,30 @@
                         </button>
                     </td>
                     <td>
-                        {{ item.key.name }}<br>
-                        Artikelnummer: {{ item.key.id }}
+                        {{ item.product.name }}<br>
+                        Artikelnummer: {{ item.product.id }}
                     </td>
                     <td>
-                        {{ item.key.price.toFixed(2) }}
+                        {{ item.product.price.toFixed(2) }}
                     </td>
                     <td>
                         <button
-                            (click)="removeInstance(item.key)"
-                            [class.disabled]="item.value == 1"
+                            (click)="removeInstance(item.product)"
+                            [class.disabled]="item.amount == 1"
                         >-</button>
                         <input
                             #item.key.id
                             type="number"
                             min=1
-                            [ngModel]="item.value"
-                            (change)="updateInstance(item.key, $event.target.value, true)"
+                            [ngModel]="item.amount"
+                            (change)="updateInstance(item.product, $event.target.value, true)"
                         >
                         <button
-                            (click)="addInstance(item.key)"
+                            (click)="addInstance(item.product)"
                         >+</button>
                     </td>
                     <td>
-                        {{ (item.key.price * item.value).toFixed(2) }}
+                        {{ (item.product.price * item.amount).toFixed(2) }}
                     </td>
                 </tr>
                 <tr>
@@ -57,7 +57,7 @@
                     <td>{{ totalPrice.toFixed(2) }}</td>
                 </tr>
             </table>
-            <div class="shopping-card__empty" *ngIf="shoppingCard.size < 1">
+            <div class="shopping-card__empty" *ngIf="shoppingCard.length < 1">
                 <p>Ihr Warenkorb ist leer</p>
                 <button
                     class="button"
@@ -67,7 +67,7 @@
                 </button>
             </div>
         </div>
-        <div class="shopping-card__footer" *ngIf="shoppingCard.size > 0">
+        <div class="shopping-card__footer" *ngIf="shoppingCard.length > 0">
             <button
                 class="button"
                 (click)="confirm()"

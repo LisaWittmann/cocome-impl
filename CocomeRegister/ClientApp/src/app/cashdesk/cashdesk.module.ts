@@ -9,9 +9,10 @@ import { CashDeskCheckoutComponent } from './checkout/checkout.component';
 import { CashDeskPaymentComponent } from './payment/payment.component';
 import { CashDeskShoppingCardComponent } from './shopping-card/shopping-card.component';
 
-import { ProductListComponent } from '../product-list/product-list.component';
-import { ProductCardComponent } from '../product-card/product-card.component';
+import { ProductListComponent } from '../shared/product-list/product-list.component';
+import { ProductCardComponent } from '../shared/product-card/product-card.component';
 import { CashDeskStateService } from './cashdesk.service';
+import { StoreStateService } from '../store/store.service';
 
 export const cashdeskRoutes: Routes = [
   { path: '', component: CashDeskHomeComponent },
@@ -35,7 +36,7 @@ export const cashdeskRoutes: Routes = [
     ProductCardComponent,
   ],
   exports: [CashDeskComponent],
-  providers: [CashDeskStateService],
+  providers: [CashDeskStateService, StoreStateService],
   bootstrap: [CashDeskComponent]
 })
 export class CashDeskModule { }

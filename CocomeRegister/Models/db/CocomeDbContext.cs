@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace CocomeStore.Models
 {
@@ -6,9 +7,11 @@ namespace CocomeStore.Models
     {
         public DbSet<Store> Stores { get; set; }
 
+        public DbSet<Product> Products { get; set; }
+
         public DbSet<Provider> Providers { get; set; }
 
-        public DbSet<Product> Products { get; set; }
+        public DbSet<OrderElement> OrderElements { get; set; } 
 
         public DbSet<Order> Orders { get; set; }
 
@@ -19,6 +22,15 @@ namespace CocomeStore.Models
         public DbSet<Sale> Sales { get; set; }
 
         public DbSet<StockItem> StockItems { get; set; }
+
+        public CocomeDbContext(DbContextOptions<CocomeDbContext> options)
+            : base(options)
+        {
+        }
+
+        public CocomeDbContext()
+        {
+        }
 
 
         //public AuthDbContext(DbContextOptions<AuthDbContext> options) : base(options)
@@ -50,9 +62,10 @@ namespace CocomeStore.Models
 
             });
         }*/
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite("Filename=MyDatabase.db");
+            optionsBuilder.UseSqlite("Filename=Cocome.db");
         }
     }
 }

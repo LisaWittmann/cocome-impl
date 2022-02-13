@@ -22,6 +22,9 @@ namespace CocomeStore.Models
 
         public string ImageUrl { get; set; }
 
-        //public ProduktGruppe gruppe { get; set; }
+        [Required]
+        public int ProviderId { get; set; }
+
+        public Provider Provider { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { Product } from 'src/services/Product';
+import { Product, SaleElement } from 'src/services/Models';
 import { CashDeskStateService } from '../cashdesk.service';
 
 @Component({
@@ -15,7 +15,7 @@ export class CashDeskShoppingCardComponent {
     @Output() removeProductEvent = new EventEmitter<Product>();
 
     selectedProduct: Product | undefined = undefined;
-    shoppingCard: Product[];
+    shoppingCard: SaleElement[];
     shoppingCardSum: number;
     totalDiscount: number;
     totalPrice: number;
@@ -25,19 +25,12 @@ export class CashDeskShoppingCardComponent {
         private cashDeskState: CashDeskStateService,
     ) {
         this.cashDeskState.shoppingCard$.subscribe(shoppingCard => {
+            console.log("triggered");
             this.shoppingCard = shoppingCard;
-            this.shoppingCardSum = this.cashDeskState.shoppingCardSum;
-            this.totalDiscount = this.cashDeskState.totalDiscount;
-            this.totalPrice = this.cashDeskState.totalPrice;
+            this.shoppingCardSum = this.cashDeskState.getCardSum();
+            this.totalDiscount = this.cashDeskState.getTotalDiscount();
+            this.totalPrice = this.cashDeskState.getTotalPrice();
         });
-    }
-
-    get productSet() {
-        return [...new Set(this.shoppingCard)];
-    }
-
-    getAmount(product: Product): number {
-        return this.shoppingCard.filter(p => p.id === product.id).length;
     }
 
     addProduct(product: Product): void {

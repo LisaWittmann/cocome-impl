@@ -23,7 +23,7 @@ export class CashDeskPaymentComponent {
       this.expressMode = mode;
     });
     this.cashdeskState.shoppingCard$.subscribe(() => {
-      this.totalPrice = this.cashdeskState.totalPrice;
+      this.totalPrice = this.cashdeskState.getTotalPrice();
     });
   }
 
@@ -59,7 +59,7 @@ export class CashDeskPaymentComponent {
   }
 
   confirmPayment() {
-    this.cashdeskState.closeCheckoutSession();
-    this.router.navigate(['cashdesk']);
+    this.cashdeskState.confirmCheckout();
+    this.router.navigate(['kasse']);
   }
 }

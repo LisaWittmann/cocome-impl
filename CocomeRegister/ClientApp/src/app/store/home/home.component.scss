@@ -1,27 +1,13 @@
 @import "variables";
 
-.store {
-    h2 {
-        margin-bottom: $spacing-s;
-    }
+.store-start {
+    &__select {
+        @include overlay(25);
+        @include flex-center($direction: column);
+        background-color: $color-white;
 
-    a {
-        margin-top: $spacing-s;
-        float: right;
-        font-weight: $poppins-medium;
-
-        &:hover {
-            text-decoration: none;
-            color: $color-light-green;
+        & > * {
+            margin-bottom: $spacing-s;
         }
-
-        &::after {
-            content: "\2192";
-            margin-left: $spacing-xs;
-        }
-    }
-
-    #salesChart {
-        margin-bottom: $spacing-s;
     }
 }

@@ -23,14 +23,14 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
+            <tr *ngFor="let element of order.orderElements">
                 <td>
-                    {{ order.product.name }}<br>
-                    <span class="highlighted">Artikelnummer: {{ order.product.id }}</span>
+                    {{ element.product.name }}<br>
+                    <span class="highlighted">Artikelnummer: {{ element.product.id }}</span>
                 </td>
-                <td>{{ order.amount }}</td>
-                <td>EUR {{ order.product.price.toFixed(2) }}</td>
-                <td>EUR {{ totalPrice.toFixed(2) }}</td>
+                <td>{{ element.amount }}</td>
+                <td>EUR {{ element.product.price.toFixed(2) }}</td>
+                <td>EUR {{ getElementPrice(element) }}</td>
             </tr>
             <tr>
                 <td colspan="2"></td>

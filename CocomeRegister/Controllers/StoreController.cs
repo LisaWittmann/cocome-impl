@@ -1,111 +1,131 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using CocomeStore.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using CocomeStore.Services;
+using CocomeStore.Exceptions;
+using CocomeStore.Models.Transfer;
 
 namespace CocomeStore.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class StoreController : ControllerBase
+    public class StoreController : Controller
     {
         private readonly ILogger<StoreController> _logger;
-        private static Random random = new Random();
+        private readonly IStoreService _service;
 
-        private static Store testStore = new Store { Id = random.Next(250), Name = "Filiale Lisa", City = "Bacharach", PostalCode = 55422 };
-        private static IList<StockItem> testInventory = new List<StockItem>()
+        public StoreController(
+            ILogger<StoreController> logger,
+            IStoreService service
+        )
         {
-            new StockItem { Id = random.Next(), Product = (new Product { Id = random.Next(), Name = "Salatgurke", SalePrice = 0.59F, Price = 0.10F}), Stock = random.Next(100), Store = testStore },
-            new StockItem { Id = random.Next(), Product = (new Product { Id = random.Next(), Name = "Endiviensalat", SalePrice = 0.99F, Price = 0.17F}), Stock = random.Next(100), Store = testStore },
-            new StockItem { Id = random.Next(), Product = (new Product { Id = random.Next(), Name = "Kräuterbaguette", SalePrice = 1.59F, Price = 0.99F}), Stock = random.Next(100), Store = testStore },
-            new StockItem { Id = random.Next(), Product = (new Product { Id = random.Next(), Name = "Schokoriegel", SalePrice = 0.99F, Price = 0.50F}), Stock = random.Next(100), Store = testStore },
-            new StockItem { Id = random.Next(), Product = (new Product { Id = random.Next(), Name = "Papaya", SalePrice = 2.15F, Price = 1.15F}), Stock = random.Next(100), Store = testStore },
-            new StockItem { Id = random.Next(), Product = (new Product { Id = random.Next(), Name = "Kartoffeln", SalePrice = 1.99F, Price = 0.99F}), Stock = random.Next(100), Store = testStore },
-            new StockItem { Id = random.Next(), Product = (new Product { Id = random.Next(), Name = "Eistee Zitrone", SalePrice = 1.59F, Price = 0.75F}), Stock = random.Next(100), Store = testStore },
-            new StockItem { Id = random.Next(), Product = (new Product { Id = random.Next(), Name = "Schlagsahne", SalePrice = 0.29F, Price = 0.15F}), Stock = random.Next(100), Store = testStore },
-        };
-
-        public StoreController(ILogger<StoreController> logger)
-        {
+            _service = service;
             _logger = logger;
         }
 
         [HttpGet]
-        [Route("{id}")]
-        public Store GetStore(int id)
+        public IEnumerable<Store> GetAllStores()
         {
-            _logger.LogInformation("requesting store by id {}", id);
-            return testStore;
+            return _service.GetAllStores().ToArray();
         }
 
         [HttpGet]
-        [Route("{id}/product/{productId}")]
-        public Product GetProduct(int id, int productId)
+        [Route("{id}")]
+        public ActionResult<Store> GetStore(int id)
         {
-            Product product = null;
-            foreach (StockItem item in testInventory)
+            try
             {
-                if (item.Product.Id == productId)
-                {
-                    product = item.Product;
-                }
+                _logger.LogInformation("requesting store by id {}", id);
+                return _service.GetStore(id);
             }
-            return product;
+            catch(EntityNotFoundException ex)
+            {
+                _logger.LogError(ex.Message);
+                return NotFound();
+            }
         }
 
         [HttpGet]
         [Route("inventory/{id}")]
-        public IEnumerable<StockItem> GetInventory(int id)
+        public ActionResult<IEnumerable<StockItem>> GetInventory(int id)
         {
             _logger.LogInformation("requesting inventory of store {}", id);
-            return testInventory;
+            return _service.GetInventory(id).ToArray();
+            
         }
 
         [HttpGet]
         [Route("orders/{id}")]
-        public IEnumerable<Order> GetOrders(int id)
+        public ActionResult<IEnumerable<OrderTO>> GetOrders(int id)
         {
             _logger.LogInformation("requesting orders of store {}", id);
-            IEnumerable<Order> storeOrders = new List<Order>();
-            return storeOrders;
-        }
-
-        [HttpPost]
-        [Route("create-product/{id}")]
-        public IEnumerable<StockItem> CreateProduct(int id, Product product)
-        {
-            _logger.LogInformation("adding new product to store {}", id);
-            testInventory.Add(new StockItem { Id = random.Next(), Product = product, Stock = 0, Store = testStore });
-            return testInventory;
-
+            return _service.GetOrders(id).ToArray();
         }
 
         [HttpPost]
         [Route("create-order/{id}")]
-        public IEnumerable<Order> PlaceOrder(int id, IDictionary<Product, int> products)
+        public ActionResult<IEnumerable<OrderTO>> PlaceOrder(int id, IEnumerable<OrderElementTO> elements)
         {
             _logger.LogInformation("place new order for store {}", id);
-            IEnumerable<Order> storeOrders = new List<Order>();
-            return storeOrders;
+            try
+            {
+                _service.PlaceOrder(id, elements);
+                return _service.GetOrders(id).ToArray();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest();
+            }
+           
         }
 
         [HttpPost]
         [Route("close-order/{id}")]
-        public IEnumerable<Order> CloseOrder(int id, int orderId)
+        public ActionResult<IEnumerable<OrderTO>> CloseOrder(int id, int orderId)
         {
-            _logger.LogInformation("close order with id {} for store {}", orderId, id);
-            IEnumerable<Order> storeOrders = new List<Order>();
-            return storeOrders;
+            try
+            {
+                _logger.LogInformation("close order with id {} for store {}", orderId, id);
+                _service.CloseOrder(id, orderId);
+                return _service.GetOrders(id).ToArray();
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _logger.LogError(ex.Message);
+                return NotFound();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest();
+            }
         }
 
+
         [HttpPost]
-        [Route("update-inventory/{id}")]
-        public IEnumerable<StockItem> UpdateInventory(int id, IList<StockItem> inventory)
+        [Route("create-product/{id}")]
+        public ActionResult<IEnumerable<StockItem>> CreateProduct(int id, ProductTO product)
         {
-            _logger.LogInformation("update inventory for store {}", id);
-            testInventory = inventory;
-            return testInventory;
+            try
+            {
+                _logger.LogInformation("adding new product to store {}", id);
+                _service.CreateProduct(id, product);
+                return _service.GetInventory(id).ToArray();
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _logger.LogError(ex.Message);
+                return NotFound();
+            } 
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest();
+            }
         }
     }
 }

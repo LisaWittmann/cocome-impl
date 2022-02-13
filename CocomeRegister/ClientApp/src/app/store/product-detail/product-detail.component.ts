@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
-import { Product } from 'src/services/Product';
+import { Product } from 'src/services/Models';
 import { StoreStateService } from '../store.service';
 
 @Component({

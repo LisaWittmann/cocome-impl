@@ -1,7 +1,7 @@
 import { EventEmitter } from '@angular/core';
-import { ChangeDetectionStrategy, Component, Output } from '@angular/core';
+import { Component, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { Product } from 'src/services/Product';
+import { OrderElement, Product } from 'src/services/Models';
 import { StoreStateService } from '../store.service';
 
 @Component({
@@ -11,7 +11,7 @@ import { StoreStateService } from '../store.service';
 })
 export class StoreShoppingCardComponent {
   @Output() closeShoppingCardEvent = new EventEmitter<Boolean>();
-  shoppingCard: Map<Product, number>;
+  shoppingCard: OrderElement[];
 
   constructor(private storeStateService: StoreStateService, private router: Router) {
     this.storeStateService.currentOrder$.subscribe(currentOrder => {
@@ -20,11 +20,10 @@ export class StoreShoppingCardComponent {
   }
 
   get totalPrice() {
-    let sum = 0;
-    for (const [product, amount] of this.shoppingCard) {
-      sum += amount * product.price;
-    }
-    return sum;
+    if (this.shoppingCard.length == 0) return 0;
+    return this.shoppingCard
+            .map(element => element.product.price * element.amount)
+            .reduce((x, y) => (x + y));
   }
 
   close = () => this.closeShoppingCardEvent.emit(false);
@@ -48,7 +47,7 @@ export class StoreShoppingCardComponent {
 
   confirm() {
     this.storeStateService.placeNewOrder();
-    this.router.navigate(['store/orders']);
+    this.router.navigate(['/filiale/bestellungen']);
     this.closeShoppingCardEvent.emit(false);
   }
 }

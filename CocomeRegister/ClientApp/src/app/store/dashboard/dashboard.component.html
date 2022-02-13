@@ -1,0 +1,38 @@
+<div class="store-dashboard page-container">
+    <div class="container">
+        <section>
+            <h1>{{ store.name }}</h1>
+            <p>
+                Geschäftstelle {{ store.id }}<br>
+                {{ store.postalCode }} {{ store.city }}
+            </p>
+        </section>
+        <section>
+            <h2>Jahresumsatz</h2>
+            <canvas id="salesChart">{{ salesChart }}</canvas>
+        </section>
+        <section *ngIf="runningOutOfStock.length">
+            <h2>Geringer Bestand:</h2>
+            <ul>
+                <app-product-table-row 
+                    *ngFor="let item of runningOutOfStock"
+                    [product]="item.product"
+                    (selectProductEvent)="addToCard($event)"
+                >
+                </app-product-table-row>
+            </ul>
+            <a [routerLink]="'/filiale/produkte'">Alle Produkte</a>
+        </section>
+        <section *ngIf="pendingOrders.length">
+            <h2>Ausstehende Bestellungen</h2>
+            <app-accordion 
+                *ngFor="let order of pendingOrders"
+                [header]="title(order)"
+            >
+                <app-store-order-detail [order]="order">
+                </app-store-order-detail>
+            </app-accordion>
+            <a [routerLink]="'/filiale/produkte'">Alle Bestellungen</a>
+        </section>
+    </div>
+</div>

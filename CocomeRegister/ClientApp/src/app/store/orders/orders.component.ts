@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { Order } from 'src/services/Order';
+import { Component } from '@angular/core';
+import { Order } from 'src/services/Models';
 import { StoreStateService } from '../store.service';
 
 @Component({
@@ -30,6 +30,6 @@ export class StoreOrdersComponent {
 
     title = (order: Order) => {
         return `Bestellung ${order.id} vom
-                ${order.placingDate.toLocaleDateString('de-DE')}`;
+                ${new Date(order.placingDate).toLocaleDateString('de-DE')}`;
     }
 }

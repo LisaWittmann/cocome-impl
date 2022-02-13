@@ -1,5 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using CocomeStore.Exceptions;
 using CocomeStore.Models;
+using CocomeStore.Models.Transfer;
+using CocomeStore.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -7,16 +11,21 @@ namespace CocomeStore.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class CashDeskController : ControllerBase
+    public class CashDeskController : Controller
     {
         private readonly ILogger<CashDeskController> _logger;
+        private readonly ICashDeskService _service;
 
         // testData
         private bool inExpressMode = true;
 
-        public CashDeskController(ILogger<CashDeskController> logger)
+        public CashDeskController(
+            ILogger<CashDeskController> logger,
+            ICashDeskService service
+        )
         {
             _logger = logger;
+            _service = service;
         }
 
         [HttpGet]
@@ -38,9 +47,24 @@ namespace CocomeStore.Controllers
 
         [HttpPost]
         [Route("checkout/{id}")]
-        public void ConfirmCheckout(IEnumerable<Product> products)
+        public ActionResult<bool> ConfirmCheckout(int id, IEnumerable<SaleElementTO> elements)
         {
-            _logger.LogInformation("confirm checkout");
+            try
+            {
+                _logger.LogInformation("confirm checkout");
+                _service.CreateSale(id, elements);
+                return true;
+            }
+            catch (ItemNotAvailableException ex)
+            {
+                _logger.LogError(ex.Message);
+                return Conflict();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest();
+            }
         }
 
     }
