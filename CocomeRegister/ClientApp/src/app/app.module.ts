@@ -1,10 +1,11 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
 
 import { AppComponent } from './app.component';
+import { HomeComponent } from './home/home.component';
 import { NavigationComponent } from './navigation/navigation.component';
 import { StoreComponent } from './store/store.component';
 import { CashDeskComponent } from './cashdesk/cashdesk.component';
@@ -14,10 +15,15 @@ import { StoreModule } from './store/store.module';
 import { EnterpriseModule } from './enterprise/enterprise.module';
 import { CashDeskModule } from './cashdesk/cashdesk.module';
 
+import { AuthorizationModule } from './authorization/authorization.module';
+import { AuthorizeGuard } from './authorization/authorize.guard';
+import { AuthorizeInterceptor } from './authorization/authorize.interceptor';
+
 const appRoutes: Routes = [
-  { path: 'kasse', component: CashDeskComponent, loadChildren: () => import('./cashdesk/cashdesk.module').then(m => m.CashDeskModule) },
-  { path: 'filiale', component: StoreComponent, loadChildren: () => import('./store/store.module').then(m => m.StoreModule) },
-  { path: 'admin', component: EnterpriseComponent, loadChildren: () => import('./enterprise/enterprise.module').then(m => m.EnterpriseModule) },
+  { path: '', component: HomeComponent },
+  { path: 'kasse', component: CashDeskComponent, canActivate: [AuthorizeGuard], loadChildren: () => import('./cashdesk/cashdesk.module').then(m => m.CashDeskModule) },
+  { path: 'filiale', component: StoreComponent, canActivate: [AuthorizeGuard], loadChildren: () => import('./store/store.module').then(m => m.StoreModule) },
+  { path: 'admin', component: EnterpriseComponent, canActivate: [AuthorizeGuard], loadChildren: () => import('./enterprise/enterprise.module').then(m => m.EnterpriseModule) },
 ];
 
 @NgModule({
@@ -25,6 +31,7 @@ const appRoutes: Routes = [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
+    AuthorizationModule,
     StoreModule,
     CashDeskModule,
     EnterpriseModule,
@@ -32,9 +39,16 @@ const appRoutes: Routes = [
   ],
   declarations: [
     AppComponent,
+    HomeComponent,
     NavigationComponent,
   ],
-  providers: [],
+  providers: [
+    { 
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthorizeInterceptor,
+      multi: true 
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

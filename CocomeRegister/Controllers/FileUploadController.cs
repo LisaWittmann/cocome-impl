@@ -2,11 +2,13 @@
 using System.IO;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CocomeStore.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class FileUploadController : Controller

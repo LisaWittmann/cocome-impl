@@ -17,7 +17,7 @@ import { StoreStateService } from './store.service';
 import { SharedModule } from '../shared/shared.module';
 
 const storeRoutes: Routes = [
-  { path: '', component: StoreHomeComponent },
+  { path: 'home', component: StoreHomeComponent },
   { path: 'dashboard', component: StoreDashboardComponent },
   { path: 'sortiment', component: StoreProductsComponent },
   { path: 'sortiment/:id', component: StoreProductComponent },

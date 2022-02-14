@@ -15,7 +15,7 @@ import { CashDeskStateService } from './cashdesk.service';
 import { StoreStateService } from '../store/store.service';
 
 export const cashdeskRoutes: Routes = [
-  { path: '', component: CashDeskHomeComponent },
+  { path: 'home', component: CashDeskHomeComponent },
   { path: 'checkout', component: CashDeskCheckoutComponent },
   { path: 'payment', component: CashDeskPaymentComponent },
 ];

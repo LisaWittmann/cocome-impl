@@ -1,0 +1,18 @@
+@import "variables";
+
+.home {
+    @include flex-center();
+
+    &__content {
+        @include flex-center($direction: column);
+         
+        a {
+            width: 200px;
+            text-align: center;
+        }
+
+        * {
+            margin: $spacing-xs 0;
+        }
+    }
+}

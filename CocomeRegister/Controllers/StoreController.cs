@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using CocomeStore.Services;
 using CocomeStore.Exceptions;
 using CocomeStore.Models.Transfer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CocomeStore.Controllers
 {

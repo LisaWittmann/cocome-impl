@@ -7,11 +7,11 @@ using CocomeStore.Services;
 using System;
 using CocomeStore.Exceptions;
 using CocomeStore.Models.Transfer;
-using Microsoft.AspNetCore.Identity;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CocomeStore.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class EnterpriseController : Controller
