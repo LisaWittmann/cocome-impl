@@ -5,13 +5,12 @@ import { Product } from 'src/services/Models';
 import { StoreStateService } from '../store.service';
 
 @Component({
-  selector: 'app-store-product-detail',
-  templateUrl: './product-detail.component.html',
-  styleUrls: ['./product-detail.component.scss']
+  selector: 'app-store-product',
+  templateUrl: './product.component.html',
+  styleUrls: ['./product.component.scss']
 })
-export class StoreProductDetailComponent {
+export class StoreProductComponent {
   product: Product;
-  create: boolean;
 
   constructor(
     private storeStateService: StoreStateService,
@@ -25,11 +24,6 @@ export class StoreProductDetailComponent {
       console.error(error);
       this.location.back()
     });
-  }
-
-  uploadImage(files: FileList) {
-    const file = files[0];
-    console.log(file);
   }
 
   updateProduct() {

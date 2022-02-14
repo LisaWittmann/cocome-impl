@@ -9,10 +9,20 @@ import { EnterpriseStateService } from '../enterprise.service';
 })
 export class EnterpriseProvidersComponent {
   providers: Provider[];
+  newProvider = {} as Provider;
 
   constructor(private enterpriseService: EnterpriseStateService) {
     enterpriseService.providers$.subscribe(provider => {
       this.providers = provider;
     })
+  }
+
+  saveChanges(provider: Provider) {
+    this.enterpriseService.updateProvider(provider);
+  }
+
+  submitProvider() {
+    this.enterpriseService.addProvider(this.newProvider);
+    this.newProvider = {} as Provider;
   }
 }

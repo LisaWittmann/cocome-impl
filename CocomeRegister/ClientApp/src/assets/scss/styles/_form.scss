@@ -1,20 +1,52 @@
 select {
-    @include color-scheme-primary();
-    background-color: transparent;
-    border-radius: $border-radius-s;
-    border-width: $border-width;
-    border-style: solid;
-    padding: $spacing-xs $spacing-s;
-    margin: $spacing-xs;
-    min-width: 200px;
-    font-family: $font-poppins;
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
+  @include color-scheme-primary();
+  background-color: transparent;
+  border-radius: $border-radius-s;
+  border-width: $border-width;
+  border-style: solid;
+  padding: $spacing-xs $spacing-s;
+  margin: $spacing-xs;
+  min-width: 200px;
+  font-family: $font-poppins;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
 
-    &:active,
-    &:focus {
-      outline: none;
-      box-shadow: none;
+  &:active,
+  &:focus {
+    outline: none;
+    box-shadow: none;
+  }
+}
+
+input {
+  border: 0;
+  width: fit-content;
+  background-color: $color-light-grey;
+  margin: 5px;
+  padding: 5px;
+}
+
+.input-wrapper {
+  position: relative;
+
+  label {
+    position: absolute;
+    top: 8px;
+    left: 10px;
+    z-index: 2;
+    color: gray;
+    background-color: $color-white;
+  }
+  
+  input, select, textarea {
+    &.input--labeled {
+      padding: $spacing-xs;
+      margin: $spacing-s 0;
+      background-color: transparent;
+      border-radius: 2px;
+      border: 1px solid $color-grey;
+      min-width: 300px;
     }
+  }
 }

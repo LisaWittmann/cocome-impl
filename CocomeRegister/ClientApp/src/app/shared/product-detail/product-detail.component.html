@@ -1,0 +1,90 @@
+
+
+<div class="product-detail">
+    <label class="product-detail__image">
+        <input
+            type="file"
+            accept=".jpg, .jpeg, .png"
+            (change)="uploadImage($event.target.files)"
+        >
+        <img 
+            *ngIf="product.imageUrl"
+            [src]="product.imageUrl"
+            [alt]="product.name"
+        >
+    </label>
+    <div class="product-detail__attributes">
+        <div class="input-wrapper">
+            <label for="name">Produktname</label>
+            <input 
+                name="name"
+                type="text"
+                [readonly]="restricted"
+                [(ngModel)]="product.name"
+                class="input--labeled"
+            >
+        </div>
+        <div class="input-wrapper" *ngIf="product.id">
+            <label for="id">Artikelnummer</label>
+            <input
+                name="id"
+                readonly="readonly"
+                [(ngModel)]="product.id"
+                class="input--labeled"
+            >
+        </div>
+        <div class="input-wrapper">
+            <label for="price">Preis</label>
+            <input
+                name="price"
+                type="number"
+                step="0.01"
+                [readonly]="restricted"
+                [(ngModel)]="product.price"
+                class="input--labeled"
+            >
+        </div>
+        <div class="input-wrapper">
+            <label for="saleprice">Verkaufspreis</label>
+                <input
+                    name="saleprice"
+                    type="number"
+                    step="0.01"
+                    [min]="product.price"
+                    [(ngModel)]="product.salePrice"
+                    class="input--labeled"
+                >
+        </div>
+        <div class="input-wrapper">
+            <label for="provider">Lieferant</label>
+            <input *ngIf="restricted" readonly="readonly" [ngModel]="product.provider.name">
+            <select 
+                *ngIf="providers && providers.length"
+                [(ngModel)]="product.provider" 
+                [value]="product.provider"
+                name="provider"
+                class="input--labeled"
+            >
+                <option *ngFor="let provider of providers" [ngValue]="provider">
+                    {{ provider.name }}
+                </option>
+            </select>
+        </div>
+        <div class="input-wrapper">
+            <label for="description">Beschreibung</label>
+            <textarea 
+                name="description"
+                [(ngModel)]="product.description"
+                class="input--labeled"
+            ></textarea>                      
+        </div>
+        <div class="product-detail__save-button">
+            <button
+                class="button__form"
+                (click)="updateProduct()"
+            >
+                Speichern
+            </button>
+        </div>
+    </div>
+</div>

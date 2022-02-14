@@ -1,0 +1,14 @@
+<div class="product-detail page-container">
+    <div class="container">
+        <section>
+            <h1>{{ product.name }}</h1>
+        </section>
+        <section>
+            <app-product-detail 
+                [product]="product"
+                [restricted]="true"
+                (updateProductEvent)="updateProduct()"
+            ></app-product-detail>
+        </section>
+    </div>
+</div>

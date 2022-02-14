@@ -8,7 +8,7 @@ import { StoreHomeComponent } from './home/home.component';
 import { StoreDashboardComponent } from './dashboard/dashboard.component';
 import { StoreNavigationComponent } from './navigation/navigation.component';
 import { StoreProductsComponent } from './products/products.component';
-import { StoreProductDetailComponent } from './product-detail/product-detail.component';
+import { StoreProductComponent } from './product/product.component';
 import { StoreShoppingCardComponent } from './shopping-card/shopping-card.component';
 import { StoreOrdersComponent } from './orders/orders.component';
 import { StoreOrderDetailComponent } from './order-detail/order-detail.component';
@@ -20,7 +20,7 @@ const storeRoutes: Routes = [
   { path: '', component: StoreHomeComponent },
   { path: 'dashboard', component: StoreDashboardComponent },
   { path: 'sortiment', component: StoreProductsComponent },
-  { path: 'sortiment/:id', component: StoreProductDetailComponent },
+  { path: 'sortiment/:id', component: StoreProductComponent },
   { path: 'bestellungen', component: StoreOrdersComponent },
   { path: 'berichte', component: StoreReportsComponent },
 ];
@@ -39,7 +39,7 @@ const storeRoutes: Routes = [
     StoreDashboardComponent,
     StoreNavigationComponent,
     StoreProductsComponent,
-    StoreProductDetailComponent,
+    StoreProductComponent,
     StoreShoppingCardComponent,
     StoreOrdersComponent,
     StoreOrderDetailComponent,

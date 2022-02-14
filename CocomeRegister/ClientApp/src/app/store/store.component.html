@@ -1,5 +1,6 @@
 <div [class.page-container--fixed]="shoppingCardOpen">
-    <app-store-navigation (openShoppingCardEvent)="toggleShoppingCard($event)"></app-store-navigation>
+    <app-store-navigation (openShoppingCardEvent)="toggleShoppingCard($event)">
+    </app-store-navigation>
     <app-store-shopping-card
         *ngIf="shoppingCardOpen"
         (closeShoppingCardEvent)="toggleShoppingCard($event)"

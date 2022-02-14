@@ -1,12 +1,59 @@
 <div class="providers page-container">
     <div class="container">
         <section>
-            <h1>Alle Lieferanten</h1>
+            <h1>Lieferanten</h1>
         </section>
         <section>
-            <ul>
-                <li *ngFor="let provider of providers">{{ provider.id }}, {{ provider.name }}</li>
-            </ul>
+            <app-accordion
+                *ngFor="let provider of providers"
+                [header]="provider.name"
+            >
+                <div class="provider-detail">
+                    <div class="input-wrapper">
+                        <label for="id">Id</label>
+                        <input 
+                            name="id"
+                            readonly="readonly"
+                            [ngModel]="provider.id"
+                            class="input--labeled"
+                        >
+                    </div>
+                    <div>
+                        <div class="input-wrapper">
+                            <label for="name">Name</label>
+                            <input
+                                name="name"
+                                type="text"
+                                [(ngModel)]="provider.name"
+                                class="input--labeled"
+                            >
+                        </div>
+                        <button 
+                            class="button__form"
+                            (click)="saveChanges(provider)"
+                        >
+                            Speichern
+                        </button>
+                    </div>
+                </div>
+            </app-accordion>
+        </section>
+        <section>
+            <h2>Neuen Lieferanten hinzufügen</h2>
+            <form class="provider-detail" (submit)="submitProvider()">
+                <div class="input-wrapper">
+                    <label for="name">Name</label>
+                    <input 
+                        name="name"
+                        class="input--labeled"
+                        type="text"
+                        [(ngModel)]="newProvider.name"
+                    >
+                </div>
+                <div>
+                    <button class="button__form" type="submit">Speichern</button>
+                </div>
+            </form>
         </section>
     </div>
 </div>

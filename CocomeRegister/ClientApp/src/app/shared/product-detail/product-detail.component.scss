@@ -1,11 +1,9 @@
 @import "variables";
 
 .product-detail {
-    &__data {
-        @include flex-center($justify: space-between);
-        align-items: flex-start;
-        flex-wrap: wrap;
-    }
+    @include flex-center($justify: space-between);
+    align-items: flex-start;
+    flex-wrap: wrap;
 
     &__image {
         flex-basis: 50%;
@@ -34,42 +32,30 @@
 
         @media all and (max-width: 1000px) {
             flex-basis: 100%;
+            margin-top: $spacing-s;
+
+            .input-wrapper, .input--labeled {
+                width: 100%;
+            }
+           
         }
 
         > * {
-            text-align: center;
-            width: 70%;
-            padding: $spacing-s;
-            
-            &:not(:last-of-type) {
-                border-bottom: 1px solid $color-grey;
-            }
-
-            p:first-of-type {
-                font-weight: $poppins-medium;
-                font-size: $text-m;
-                margin-bottom: 0;
-            }
-
-            input, textarea {
-                text-align: center;
-                border: 0;
-                background-color: $color-light-grey;
-                width: fit-content;
-
-                &[type="number"] {
-                    max-width: 80px;
-                }
-            }
+            text-align: center;         
             
             textarea {
-                width: 100%;
                 font-size: $text-xs;
             }
         }
     }
 
-    &__card-button {
+    &__save-button {
         margin-top: $spacing-m;
+        width: 70%;
+
+        .button__form {
+            width: 70%;
+            max-width: 500px;
+        }
     }
 }

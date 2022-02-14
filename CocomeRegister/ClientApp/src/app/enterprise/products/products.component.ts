@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { Product } from 'src/services/Models';
 import { EnterpriseStateService } from '../enterprise.service';
 
@@ -10,9 +11,20 @@ import { EnterpriseStateService } from '../enterprise.service';
 export class EnterpriseProductsComponent {
   products: Product[];
 
-  constructor(private enterpriseService: EnterpriseStateService) {
+  constructor(
+    private enterpriseService: EnterpriseStateService,
+    private router: Router
+  ) {
     this.enterpriseService.products$.subscribe(products => {
       this.products = products;
     });
+  }
+
+  toDetailPage(product: Product) {
+    this.router.navigate(['/admin/produkte/bearbeiten', product.id]);
+  }
+
+  createProduct() {
+    this.router.navigate(['/admin/produkte/neu']);
   }
 }

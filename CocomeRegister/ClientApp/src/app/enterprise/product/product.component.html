@@ -1,0 +1,15 @@
+<div class="product page-container">
+    <div class="container">
+        <section>
+            <h1>Produkt bearbeiten</h1>
+        </section>
+        <section>
+            <app-product-detail
+                [product]="product"
+                [restricted]="false"
+                [providers]="providers"
+                (updateProductEvent)="updateProduct()"
+            ></app-product-detail>
+        </section>
+    </div>
+</div>
