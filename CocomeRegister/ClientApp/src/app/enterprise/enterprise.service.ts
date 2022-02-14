@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import * as internal from 'assert';
 import { Observable } from 'rxjs';
-import { Product, Store, Provider } from 'src/services/Models';
+import { Product, Store, Provider, Statistic } from 'src/services/Models';
 import { StateService } from 'src/services/StateService';
 
 interface EnterpriseState {
@@ -106,5 +107,25 @@ export class EnterpriseStateService extends StateService<EnterpriseState> {
         ).subscribe(result => {
             this.setState({ providers: result });
         }, error => console.error(error));
+    }
+
+    getProductsByProvider(provider: Provider) {
+        return this.state.products.filter(p => p.provider.id == provider.id);
+    }
+
+    getStoresByProduct(productId: number) {
+        return this.http.get<Store[]>(`${this.api}/product/${productId}/stores`);
+    }
+
+    getDeliveryStatistic() {
+        return this.http.get<Statistic[]>(`${this.api}/provider-reports`);
+    }
+
+    getProfitStatistic() {
+        return this.http.get<Statistic[]>(`${this.api}/store-reports`);
+    }
+
+    addProductToStore(productId: number, storeId: number) {
+        return this.http.post<Store[]>(`${this.api}/create-stock/${storeId}`, productId);
     }
 }

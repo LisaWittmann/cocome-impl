@@ -18,9 +18,5 @@ namespace CocomeStore.Services
 
         IEnumerable<StockItem> GetInventory(int storeId);
         void UpdateStock(int storeId, int productId, int stock);
-
-        double GetProfitOfMonth(int storeId, int month, int year);
-        Statistic GetProfitOfYear(int storeId, int year);
-        IEnumerable<Statistic> GetProfit(int storeId);
     }
 }

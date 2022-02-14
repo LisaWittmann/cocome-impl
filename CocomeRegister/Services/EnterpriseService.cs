@@ -122,32 +122,26 @@ namespace CocomeStore.Services
             _context.SaveChanges();
         }
 
-
-        public Statistic GetProviderStatistic(int providerId)
+        public IEnumerable<Store> GetStores(int productId)
         {
-            Provider provider = _context.Providers.Find(providerId);
-            if (provider == null)
-            {
-                throw new EntityNotFoundException(
-                   "provider with id " + providerId + " could not be found");
-            }
-
-            var dataset = _context.Orders
-                .Where(order => order.Provider.Id == providerId && order.Closed)
-                .Select(order => (order.DeliveringDate - order.PlacingDate).TotalDays);
-
-            return new() { Key = providerId, Dataset = dataset.ToArray() };
-
+            return _context.StockItems
+                .Include(item => item.Store)
+                .Where(item => item.ProductId == productId)
+                .Select(item => item.Store)
+                .ToHashSet();
         }
 
-        public IDictionary<int, Statistic> GetProvidersStatistic()
+        public void addToStock(int storeId, int productId)
         {
-            var dataset = new Dictionary<int, Statistic>();
-            foreach (var provider in _context.Providers)
+            Store store = _context.Stores.Find(storeId);
+            Product product = _context.Products.Find(productId);
+            if (store == null || product == null)
             {
-                dataset.Add(provider.Id, GetProviderStatistic(provider.Id));
+                throw new EntityNotFoundException();
             }
-            return dataset;
+
+            _context.StockItems.Add(new() { ProductId = productId, StoreId = storeId, Stock = 0 });
+            _context.SaveChanges();
         }
     }
 }

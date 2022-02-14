@@ -1,4 +1,4 @@
-<div class="providers page-container">
+<div class="provider page-container">
     <div class="container">
         <section>
             <h1>Lieferanten</h1>
@@ -8,7 +8,7 @@
                 *ngFor="let provider of providers"
                 [header]="provider.name"
             >
-                <div class="provider-detail">
+                <div class="provider__detail">
                     <div class="input-wrapper">
                         <label for="id">Id</label>
                         <input 
@@ -35,6 +35,17 @@
                             Speichern
                         </button>
                     </div>
+                </div>
+                <div class="provider__products" *ngIf="getProducts(provider).length">
+                    <p>Belieferte Produkte:</p>
+                    <ul class="table">
+                        <li 
+                            *ngFor="let product of getProducts(provider)"
+                            (click)="toProductPage(product)"
+                        >
+                            {{ product.id }}: {{ product.name }}
+                        </li>
+                    </ul>
                 </div>
             </app-accordion>
         </section>

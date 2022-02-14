@@ -16,14 +16,17 @@ namespace CocomeStore.Controllers
     {
         private readonly ILogger<StoreController> _logger;
         private readonly IStoreService _service;
+        private readonly IDatabaseStatistics _statistics;
 
         public StoreController(
             ILogger<StoreController> logger,
-            IStoreService service
+            IStoreService service,
+            IDatabaseStatistics statistics
         )
         {
             _service = service;
             _logger = logger;
+            _statistics = statistics;
         }
 
         [HttpGet]
@@ -54,7 +57,7 @@ namespace CocomeStore.Controllers
         {
             try
             {
-                return _service.GetProfit(id).ToArray();
+                return _statistics.GetStoreProfit(id).ToArray();
             }
             catch (EntityNotFoundException ex)
             {
@@ -163,7 +166,7 @@ namespace CocomeStore.Controllers
         {
             try
             {
-                return _service.GetProfitOfYear(id, year);
+                return _statistics.GetProfitOfYear(id, year);
             }
             catch(EntityNotFoundException ex)
             {

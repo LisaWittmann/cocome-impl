@@ -8,7 +8,7 @@
             (change)="uploadImage($event.target.files)"
         >
         <img 
-            *ngIf="product.imageUrl"
+            *ngIf="product && product.imageUrl"
             [src]="product.imageUrl"
             [alt]="product.name"
         >

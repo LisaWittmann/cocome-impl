@@ -31,7 +31,9 @@ namespace CocomeRegister
             services.AddTransient<ICashDeskService, CashDeskService>();
             services.AddTransient<IEnterpriseService, EnterpriseService>();
             services.AddTransient<IStoreService, StoreService>();
+
             services.AddTransient<IModelMapper, ModelMapper>();
+            services.AddTransient<IDatabaseStatistics, DatabaseStatistics>();
 
             services.AddControllersWithViews();
             

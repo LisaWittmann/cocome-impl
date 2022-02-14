@@ -56,8 +56,7 @@ export interface Sale {
     saleElements: SaleElement[];
     timeStamp: Date;
 }
-
 export interface Statistic {
-    key: number;
+    label: string;
     dataset: number[];
 }

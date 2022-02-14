@@ -1,3 +1,47 @@
 <div class="reports page-container">
-    
+    <div class="container">
+        <section>
+            <h1>Statistiken</h1>
+        </section>
+        <section>
+            <h2>Lieferzeiten</h2>
+            <canvas id="deliveryChart">{{deliveryChart}}</canvas>
+            <table class="legend">
+                <thead>
+                    <tr>
+                        <td>Lieferant</td>
+                        <td>Lieferungen insgesamt</td>
+                        <td>Durchschnittliche Lieferzeit</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let data of deliveryStatistic">
+                        <td>{{ data.label }}</td>
+                        <td>{{ data.dataset.length }}</td>
+                        <td>{{ getAverage(data).toFixed(2) }} Tage</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+        <section>
+            <h2>Jahresumsatz</h2>
+            <canvas id="salesChart">{{ salesChart }}</canvas>
+            <table class="legend">
+                <thead>
+                    <tr>
+                        <td>Filiale</td>
+                        <td>Monatsdurchschnitt</td>
+                        <td>Jahresumsatz</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let data of salesStatistic">
+                        <td>{{ data.label }}</td>
+                        <td>{{ getAverage(data).toFixed(2)}} €</td>
+                        <td>{{ getSum(data).toFixed(2)}} €</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
 </div>

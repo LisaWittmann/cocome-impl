@@ -5,6 +5,7 @@ using CocomeStore.Models;
 using CocomeStore.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using CocomeStore.Models.Transfer;
+using Microsoft.Extensions.Logging;
 
 namespace CocomeStore.Services
 {
@@ -162,59 +163,6 @@ namespace CocomeStore.Services
             }
             item.Stock = stock;
             _context.SaveChanges();
-        }
-
-
-        public double GetProfitOfMonth(int storeId, int month, int year)
-        {
-            Store store = GetStore(storeId);
-            var sales = _context.Sales
-                .Where(sale =>
-                    sale.StoreId == storeId &&
-                    sale.TimeStamp.Year == year &&
-                    sale.TimeStamp.Month == month
-                )
-                .Select(sale => sale.Id)
-                .ToArray();
-
-            double profit = 0;
-            foreach (var sale in sales)
-            {
-                profit += _context.SaleElements
-                    .Where(element => element.SaleId == sale)
-                    .Include(element => element.Product)
-                    .Select(element => element.Product.SalePrice * element.Amount)
-                    .Aggregate((x, y) => x + y);
-            }
-            return profit;
-        }
-
-        public Statistic GetProfitOfYear(int storeId, int year)
-        {
-            var dataset = new List<double>();
-            for (int month = 1; month <= 12; month++)
-            {
-                dataset.Add(GetProfitOfMonth(storeId, year, month));
-            }
-            return new Statistic{ Key = year, Dataset = dataset.ToArray() };
-        }
-
-        public IEnumerable<Statistic> GetProfit(int storeId)
-        {
-            var first = _context.Sales
-                .Where(sale => sale.StoreId == storeId)
-                .OrderBy(sale => sale.TimeStamp.Year)
-                .Select(sale => sale.TimeStamp.Year)
-                .FirstOrDefault();
-
-            var now = DateTime.Now.Year;
-
-            var statistics = new List<Statistic>();
-            for (int year = first; year <= now; year++)
-            {
-                statistics.Add(GetProfitOfYear(storeId, year));
-            }
-            return statistics;
         }
     }
 }

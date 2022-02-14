@@ -25,6 +25,7 @@ const enterpriseRoutes: Routes = [
   { path: 'produkte/neu', component: EnterpriseCreateProductComponent },
   { path: 'filialen', component: EnterpriseStoresComponent },
   { path: 'lieferanten', component: EnterpriseProvidersComponent },
+  { path: 'statistik', component: EnterpriseReportsComponent },
 ];
 @NgModule({
   imports: [

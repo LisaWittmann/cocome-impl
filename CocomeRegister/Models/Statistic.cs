@@ -5,7 +5,7 @@ namespace CocomeStore.Models
     public class Statistic
     {
         [Required]
-        public int Key { get; set; }
+        public string Label { get; set; }
 
         [Required]
         public double[] Dataset { get; set; }

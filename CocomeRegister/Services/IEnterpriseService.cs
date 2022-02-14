@@ -22,7 +22,7 @@ namespace CocomeStore.Services
         void CreateProvider(Provider providerTO);
         void UpdateProvider(int providerId, Provider providerTO);
 
-        Statistic GetProviderStatistic(int providerId);
-        IDictionary<int, Statistic> GetProvidersStatistic();
+        IEnumerable<Store> GetStores(int productId);
+        void addToStock(int storeId, int productId);
     }
 }

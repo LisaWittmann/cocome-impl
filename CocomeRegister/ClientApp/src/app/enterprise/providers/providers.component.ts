@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { Provider } from 'src/services/Models';
+import { Router } from '@angular/router';
+import { Provider, Product } from 'src/services/Models';
 import { EnterpriseStateService } from '../enterprise.service';
 
 @Component({
@@ -11,10 +12,21 @@ export class EnterpriseProvidersComponent {
   providers: Provider[];
   newProvider = {} as Provider;
 
-  constructor(private enterpriseService: EnterpriseStateService) {
+  constructor(
+    private enterpriseService: EnterpriseStateService,
+    private router: Router
+  ) {
     enterpriseService.providers$.subscribe(provider => {
       this.providers = provider;
     })
+  }
+
+  getProducts(provider: Provider) {
+    return this.enterpriseService.getProductsByProvider(provider);
+  }
+
+  toProductPage(product: Product) {
+    this.router.navigate(['/admin/produkte/bearbeiten', product.id]);
   }
 
   saveChanges(provider: Provider) {

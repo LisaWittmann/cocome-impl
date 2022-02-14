@@ -49,7 +49,7 @@ export class StoreDashboardComponent implements OnInit {
       type: 'line',
       data: {
         datasets: [{
-          label: `${this.statistic.key}`,
+          label: this.statistic.label,
           data: this.statistic.dataset
         }],
         labels: monthValues,

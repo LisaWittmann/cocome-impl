@@ -7,11 +7,9 @@ import { Store, StockItem, Statistic } from 'src/services/Models';
 import { StoreStateService } from '../store.service';
 import html2canvas from 'html2canvas';
 
-
 @Component({
   selector: 'app-store-reports',
   templateUrl: './reports.component.html',
-  styleUrls: ['./reports.component.scss'],
 })
 export class StoreReportsComponent implements OnInit {
   store: Store;
@@ -43,10 +41,9 @@ export class StoreReportsComponent implements OnInit {
   }
 
   get salesDataset() {
-    const colorRange = { colorStart: 0.6, colorEnd: 0.8 };
-    const chartColors = interpolateColors(this.salesData.length, colorRange);
+    const chartColors = interpolateColors(this.salesData.length, { colorStart: 0.6, colorEnd: 0.8 });
     return this.salesData.map(data => ({
-      label: `${data.key}`,
+      label: data.label,
       data: data.dataset,
       borderColor: chartColors[this.salesData.indexOf(data)],
       backgroundColor: toRGBA(chartColors[this.salesData.indexOf(data)], 0.5)
@@ -94,7 +91,7 @@ export class StoreReportsComponent implements OnInit {
     }
   }
 
-  private generatePDFSection(elementId: string, pdf: jsPDF) {
+  async generatePDFSection(elementId: string, pdf: jsPDF) {
     const section = document.getElementById(elementId);
     const pageHeight = 295;
     const pageWidth = 210;

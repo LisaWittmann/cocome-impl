@@ -11,5 +11,30 @@
                 (updateProductEvent)="updateProduct()"
             ></app-product-detail>
         </section>
+        <section>
+            <h2>Erhältlich in folgenden Filialen:</h2>
+            <ul class="table">
+                <li *ngFor="let store of availableStores">{{ store.id }} - {{ store.name }}</li>
+            </ul>
+        </section>
+        <section>
+            <h2>Zu Filiale hinzufügen</h2>
+            <div class="input-wrapper">
+                <label for="store">Filiale</label>
+                <select 
+                    [(ngModel)]="newStore" 
+                    [value]="newStore"
+                    name="store"
+                    class="input--labeled"
+                >
+                    <option *ngFor="let store of stores" [ngValue]="store">
+                        {{ store.name }}
+                    </option>
+                </select>
+            </div>
+            <button class="button__form" (click)="addToStore()">
+                Hinzufügen
+            </button>
+        </section>
     </div>
 </div>
