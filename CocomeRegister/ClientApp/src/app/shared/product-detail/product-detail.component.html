@@ -57,7 +57,12 @@
         </div>
         <div class="input-wrapper">
             <label for="provider">Lieferant</label>
-            <input *ngIf="restricted" readonly="readonly" [ngModel]="product.provider.name">
+            <input
+                *ngIf="restricted"
+                readonly="readonly"
+                class="input--labeled"
+                [ngModel]="product.provider.name"
+            >
             <select 
                 *ngIf="providers && providers.length"
                 [(ngModel)]="product.provider" 
