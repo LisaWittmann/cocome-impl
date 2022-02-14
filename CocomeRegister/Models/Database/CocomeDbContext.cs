@@ -1,10 +1,19 @@
-﻿using System.Linq;
+﻿using IdentityServer4.EntityFramework.Options;
+using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace CocomeStore.Models
 {
-    public class CocomeDbContext : DbContext
+    public class CocomeDbContext : ApiAuthorizationDbContext<ApplicationUser>
     {
+        public CocomeDbContext(
+           DbContextOptions options,
+           IOptions<OperationalStoreOptions> operationalStoreOptions)
+           : base(options, operationalStoreOptions)
+        {
+        }
+
         public DbSet<Store> Stores { get; set; }
 
         public DbSet<Product> Products { get; set; }
@@ -23,14 +32,7 @@ namespace CocomeStore.Models
 
         public DbSet<StockItem> StockItems { get; set; }
 
-        public CocomeDbContext(DbContextOptions<CocomeDbContext> options)
-            : base(options)
-        {
-        }
-
-        public CocomeDbContext()
-        {
-        }
+       
 
 
         //public AuthDbContext(DbContextOptions<AuthDbContext> options) : base(options)

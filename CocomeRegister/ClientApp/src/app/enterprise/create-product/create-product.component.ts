@@ -22,5 +22,6 @@ export class EnterpriseCreateProductComponent {
 
   saveProduct() {
     this.enterpriseService.addProduct(this.product);
+    this.router.navigate(['/admin/produkte']);
   }
 }

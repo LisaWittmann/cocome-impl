@@ -7,6 +7,8 @@ using CocomeStore.Services;
 using System;
 using CocomeStore.Exceptions;
 using CocomeStore.Models.Transfer;
+using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
 
 namespace CocomeStore.Controllers
 {

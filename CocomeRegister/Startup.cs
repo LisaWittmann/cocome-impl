@@ -1,8 +1,10 @@
 using System.IO;
 using CocomeStore.Models;
 using CocomeStore.Services;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -17,10 +19,6 @@ namespace CocomeRegister
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            using (var client = new CocomeDbContext())
-            {
-                client.Database.EnsureCreated();
-            }
         }
 
         public IConfiguration Configuration { get; }
@@ -29,6 +27,23 @@ namespace CocomeRegister
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddEntityFrameworkSqlite().AddDbContext<CocomeDbContext>(ServiceLifetime.Transient, ServiceLifetime.Singleton);
+            services.AddDefaultIdentity<ApplicationUser>(options =>
+                {
+                    options.SignIn.RequireConfirmedAccount = true;
+                    options.Password.RequireDigit = true;
+                    options.Password.RequireLowercase = true;
+                    options.Password.RequireUppercase = true;
+                    options.Password.RequireNonAlphanumeric = true;
+                    options.Password.RequiredLength = 8;
+                })
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<CocomeDbContext>();
+
+            services.AddIdentityServer()
+                .AddApiAuthorization<ApplicationUser, CocomeDbContext>();
+
+            services.AddAuthentication()
+                .AddIdentityServerJwt();
 
             services.AddTransient<ICashDeskService, CashDeskService>();
             services.AddTransient<IEnterpriseService, EnterpriseService>();
@@ -47,12 +62,12 @@ namespace CocomeRegister
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, CocomeDbContext context)
         {
-            UpdateDatabase(app);
-
             if (env.IsDevelopment())
             {
+                context.Database.EnsureCreated();
+                context.Database.Migrate();
                 app.UseDeveloperExceptionPage();
             }
             else
@@ -65,7 +80,6 @@ namespace CocomeRegister
             {
                 app.UseSpaStaticFiles();
             }
-
            
             app.UseFileServer(new FileServerOptions
             {
@@ -75,9 +89,10 @@ namespace CocomeRegister
                 EnableDirectoryBrowsing = true
             });
 
-
-
             app.UseRouting();
+            app.UseAuthentication();
+            app.UseIdentityServer();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
@@ -95,19 +110,6 @@ namespace CocomeRegister
                     spa.UseAngularCliServer(npmScript: "start");
                 }
             });
-        }
-
-        private static void UpdateDatabase(IApplicationBuilder app)
-        {
-            using (var serviceScope = app.ApplicationServices
-                .GetRequiredService<IServiceScopeFactory>()
-                .CreateScope())
-            {
-                using (var context = serviceScope.ServiceProvider.GetService<CocomeDbContext>())
-                {
-                    context.Database.Migrate();
-                }
-            }
         }
     }
 }
