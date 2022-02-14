@@ -5,9 +5,10 @@
         <input
             type="file"
             accept=".jpg, .jpeg, .png"
-            (change)="uploadImage($event.target.files)"
+            (change)="updateImage($event.target.files)"
         >
         <img 
+            width="100%"
             *ngIf="product && product.imageUrl"
             [src]="product.imageUrl"
             [alt]="product.name"

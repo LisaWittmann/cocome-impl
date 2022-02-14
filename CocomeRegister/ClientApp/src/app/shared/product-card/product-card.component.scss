@@ -2,30 +2,34 @@
 
 .product-card {
     cursor: pointer;
+    position: relative;
     @include flex-center(flex-start, column);
-    height: 180px;
+    height: 250px;
     width: 200px;
     border-radius: $border-radius-s;
     border: 1px solid $color-grey;
     background-color: $color-white;
     margin: 8px;
-    box-shadow: 5px 5px 0 0 rgba(0, 0, 0, 0.04);
-
-    &:hover {
-        box-shadow: 10px 10px 0 0 rgba($color-light-green, 0.16);
-    }
+    box-shadow: 5px 5px 0 0 rgba(0, 0, 0, 0.01);
     
     &__image {
-        height: 60%;
+        position: relative;
+        height: 75%;
         width: 100%;
+        overflow: hidden;
         border-top-left-radius: inherit;
         border-top-right-radius: inherit;
         background-color: $color-light-grey;
+
+        img {
+            width: 100%;
+            height: auto;
+        }
     }
     
     &__attributes {
         @include flex-center($direction: column);
-        height: 40%;
+        height: 30%;
         
         & > strong {
             @include text-break();

@@ -1,3 +1,4 @@
+using System.IO;
 using CocomeStore.Models;
 using CocomeStore.Services;
 using Microsoft.AspNetCore.Builder;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 
 namespace CocomeRegister
@@ -36,7 +38,8 @@ namespace CocomeRegister
             services.AddTransient<IDatabaseStatistics, DatabaseStatistics>();
 
             services.AddControllersWithViews();
-            
+            services.AddDirectoryBrowser();
+
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/dist";
@@ -62,6 +65,17 @@ namespace CocomeRegister
             {
                 app.UseSpaStaticFiles();
             }
+
+           
+            app.UseFileServer(new FileServerOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                Path.Combine(env.ContentRootPath, "StaticFiles")),
+                RequestPath = "/StaticFiles",
+                EnableDirectoryBrowsing = true
+            });
+
+
 
             app.UseRouting();
 

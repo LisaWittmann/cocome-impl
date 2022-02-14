@@ -42,7 +42,6 @@ export class EnterpriseProductComponent {
 
   updateProduct() {
     this.enterpriseService.updateProduct(this.product);
-    this.router.navigate(['/admin/produkte']);
   }
 
   addToStore() {

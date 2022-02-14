@@ -1,6 +1,12 @@
-import { EventEmitter } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { EventEmitter, Inject } from '@angular/core';
 import { Component, Input, Output } from '@angular/core';
+import { Observable } from 'rxjs';
 import { Product, Provider } from 'src/services/Models';
+
+export interface Resource {
+  path: string;
+}
 
 @Component({
   selector: 'app-product-detail',
@@ -13,10 +19,24 @@ export class ProductDetailComponent {
   @Input() restricted: boolean;
   @Output() updateProductEvent = new EventEmitter<Product>();
 
-  uploadImage(files: FileList) {
-    const file = files[0];
-    console.log(file);
+  baseUrl: string
+
+  constructor(private http: HttpClient, @Inject("BASE_URL") baseUrl: string) {
+    this.baseUrl = baseUrl;
   }
+
+  updateImage(files: FileList) {
+    if (files.length > 0) {
+      const file = files[0];
+      const data = new FormData();
+      data.append("file", file);
+      this.http.post<Resource>(`${this.baseUrl}api/fileupload`, data).subscribe(result => {
+        this.product.imageUrl = result.path;
+        this.updateProduct();
+      }, error => console.error(error));
+    }
+  }
+
 
   updateProduct() {
     this.updateProductEvent.emit(this.product);

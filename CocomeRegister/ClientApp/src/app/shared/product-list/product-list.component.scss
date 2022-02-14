@@ -15,6 +15,7 @@
             min-width: 400px;
             width: 60%;
             min-height: 40px;
+            background-color: transparent;
             border-radius: $border-radius-s;
             margin: $spacing-s;
             padding: 0 $spacing-s;
@@ -22,7 +23,7 @@
             box-shadow: 5px 5px 0 0 rgba(0, 0, 0, 0.04);
 
             &::placeholder {
-                opacity: 0.3;
+                opacity: 0.5;
             }
 
             &:focus::placeholder {
