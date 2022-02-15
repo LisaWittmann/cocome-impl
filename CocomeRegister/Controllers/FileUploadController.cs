@@ -8,8 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CocomeStore.Controllers
 {
-    [Authorize]
     [ApiController]
+    //[Authorize(Policy = "store")]
     [Route("api/[controller]")]
     public class FileUploadController : Controller
     {
@@ -20,7 +20,6 @@ namespace CocomeStore.Controllers
         [HttpPost]
         public async Task<IActionResult> OnPostUploadAsync(IFormFile file)
         {
-
             var folderName = Path.Combine("StaticFiles", "Images");
             var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
 
@@ -33,8 +32,6 @@ namespace CocomeStore.Controllers
             }
 
             return Ok(new { path = Path.Combine(folderName, fileName) });
- 
         }
-
     }
 }

@@ -26,6 +26,7 @@
     <PackageReference Include="Microsoft.AspNetCore.ApiAuthorization.IdentityServer" Version="5.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.11" />
+    <PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -46,6 +47,8 @@
     <None Remove="Microsoft.AspNetCore.Identity.UI" />
     <None Remove="Microsoft.AspNetCore.ApiAuthorization.IdentityServer" />
     <None Remove="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
+    <None Remove="Models\Authorization\" />
+    <None Remove="Microsoft.AspNetCore.SpaProxy" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\" />
@@ -53,6 +56,7 @@
     <Folder Include="Models\Transfer\" />
     <Folder Include="StaticFiles\" />
     <Folder Include="StaticFiles\Images\" />
+    <Folder Include="Models\Authorization\" />
   </ItemGroup>
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
     <!-- Ensure Node.js is installed -->

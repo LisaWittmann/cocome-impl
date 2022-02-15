@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthorizeService, AuthenticationResultStatus } from '../authorize.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
-import { LoginActions, QueryParameterNames, ApplicationPaths, ReturnUrlType } from '../authorization.constants';
+import { LoginActions, QueryParameterNames, ApplicationPaths, ReturnUrlType } from '../api-authorization.constants';
 
 @Component({
   selector: 'app-login',

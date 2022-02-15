@@ -1,18 +1,18 @@
-﻿using CocomeStore.Models;
+﻿using System;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using CocomeStore.Services;
-using System;
 using CocomeStore.Exceptions;
+using CocomeStore.Models;
 using CocomeStore.Models.Transfer;
 using Microsoft.AspNetCore.Authorization;
 
 namespace CocomeStore.Controllers
 {
-    [Authorize]
     [ApiController]
+    [Authorize(Policy = "enterprise")]
     [Route("api/[controller]")]
     public class EnterpriseController : Controller
     {

@@ -15,9 +15,9 @@ import { StoreModule } from './store/store.module';
 import { EnterpriseModule } from './enterprise/enterprise.module';
 import { CashDeskModule } from './cashdesk/cashdesk.module';
 
-import { AuthorizationModule } from './authorization/authorization.module';
-import { AuthorizeGuard } from './authorization/authorize.guard';
-import { AuthorizeInterceptor } from './authorization/authorize.interceptor';
+import { ApiAuthorizationModule } from './api-authorization/api-authorization.module';
+import { AuthorizeGuard } from './api-authorization/authorize.guard';
+import { AuthorizeInterceptor } from './api-authorization/authorize.interceptor';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
@@ -31,7 +31,7 @@ const appRoutes: Routes = [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
-    AuthorizationModule,
+    ApiAuthorizationModule,
     StoreModule,
     CashDeskModule,
     EnterpriseModule,

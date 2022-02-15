@@ -4,12 +4,14 @@ using CocomeStore.Exceptions;
 using CocomeStore.Models;
 using CocomeStore.Models.Transfer;
 using CocomeStore.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace CocomeStore.Controllers
 {
     [ApiController]
+    //[Authorize(Policy = "store")]
     [Route("api/[controller]")]
     public class CashDeskController : Controller
     {
