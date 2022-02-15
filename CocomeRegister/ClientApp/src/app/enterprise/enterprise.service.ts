@@ -125,7 +125,7 @@ export class EnterpriseStateService extends StateService<EnterpriseState> {
         return this.http.get<Statistic[]>(`${this.api}/store-reports`);
     }
 
-    addProductToStore(productId: number, storeId: number) {
-        return this.http.post<Store[]>(`${this.api}/create-stock/${storeId}`, productId);
+    addProductToStore(storeId: number, product: Product) {
+        return this.http.post<Store[]>(`${this.api}/create-stock/${storeId}`, product);
     }
 }

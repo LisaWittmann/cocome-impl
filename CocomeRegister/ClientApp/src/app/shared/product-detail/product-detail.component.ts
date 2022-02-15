@@ -35,7 +35,6 @@ export class ProductDetailComponent {
     }
   }
 
-
   updateProduct() {
     this.updateProductEvent.emit(this.product);
   }

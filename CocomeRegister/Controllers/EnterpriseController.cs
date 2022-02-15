@@ -186,13 +186,13 @@ namespace CocomeStore.Controllers
 
         [HttpPost]
         [Route("create-stock/{id}")]
-        public ActionResult<IEnumerable<Store>> CreateStock(int id, int productId)
+        public ActionResult<IEnumerable<Store>> CreateStock(int id, ProductTO product)
         {
             try
             {
-                _logger.LogInformation("adding product {} to store {}", productId, id);
-                _service.addToStock(id, productId);
-                return _service.GetStores(productId).ToArray();
+                _logger.LogInformation("adding product {} to store {}", product.Id, id);
+                _service.addToStock(id, product.Id);
+                return _service.GetStores(product.Id).ToArray();
             }
             catch (EntityNotFoundException ex)
             {

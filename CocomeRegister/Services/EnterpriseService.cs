@@ -134,9 +134,15 @@ namespace CocomeStore.Services
         {
             Store store = _context.Stores.Find(storeId);
             Product product = _context.Products.Find(productId);
-            if (store == null || product == null)
+            if (store == null)
             {
-                throw new EntityNotFoundException();
+                throw new EntityNotFoundException(
+                    "store with id " + storeId + " could not be found");
+            }
+            if (product == null)
+            {
+                throw new EntityNotFoundException(
+                    "product with id " + productId + " could not be found");
             }
 
             _context.StockItems.Add(new() { ProductId = productId, StoreId = storeId, Stock = 0 });

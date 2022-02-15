@@ -28,6 +28,7 @@ export class StoreProductComponent {
 
   updateProduct() {
     this.storeStateService.updateProduct(this.product);
+    this.router.navigate(['/fililale/sortiment']);
   }
 
   addToCard() {
