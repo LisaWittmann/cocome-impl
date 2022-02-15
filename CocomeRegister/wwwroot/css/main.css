@@ -1,0 +1,85 @@
+body {
+    position: absolute;
+    font-family: 'Manrope', sans-serif;
+    background-color: #f8f7f5;
+    color: #1a1e16;
+    overflow-x: hidden;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    min-width: 320px;
+} 
+
+* {
+    font-family: 'Manrope', sans-serif;
+    color: #1a1e16;
+}
+
+.flex-container {
+    display: flex;
+    height: 100%;
+    max-width: 1920px;
+    margin: auto;
+}
+
+.page-container {
+    width: 100vw;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+section {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+button, a, i {
+    cursor: pointer;
+    text-decoration: none;
+    color: #1a1e16; 
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #eee;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 2px;
+    margin: 10px 0;
+    width: 300px;
+}
+
+.input-wrapper {
+    position: relative;
+}
+
+.input-wrapper label {
+    position: absolute;
+    top: 8px;
+    left: 10px;
+    z-index: 2;
+    color: gray;
+    background-color: #f8f7f5;
+}
+
+.input--labeled {
+    padding: 10px;
+    margin: 20px 0;
+    background-color: transparent;
+    border-radius: 2px;
+    border: 1px solid #ddd;
+    min-width: 300px;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+}
+
+.center-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;   
+}

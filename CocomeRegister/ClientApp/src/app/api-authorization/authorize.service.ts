@@ -37,7 +37,7 @@ export interface IUser {
   providedIn: 'root'
 })
 export class AuthorizeService {
-  private popUpDisabled = false;
+  private popUpDisabled = true;
   private userManager: UserManager;
   private userSubject: BehaviorSubject<IUser | null> = new BehaviorSubject(null);
 

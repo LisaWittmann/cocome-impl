@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthenticationResultStatus, AuthorizeService } from '../authorize.service';
-import { LogoutActions, ApplicationPaths, ReturnUrlType } from "../api-authorization.constants";
 import { BehaviorSubject } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs/operators';
+import { ApplicationPaths, LogoutActions, ReturnUrlType } from '../api-authorization.constants';
 
 @Component({
   selector: 'app-logout',

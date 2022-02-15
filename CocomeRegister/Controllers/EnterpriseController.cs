@@ -12,7 +12,8 @@ using Microsoft.AspNetCore.Authorization;
 namespace CocomeStore.Controllers
 {
     [ApiController]
-    [Authorize(Policy = "enterprise")]
+    //[Authorize(Policy = "enterprise")]
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     public class EnterpriseController : Controller
     {
