@@ -4,6 +4,7 @@ using CocomeStore.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
@@ -45,6 +46,25 @@ namespace CocomeRegister
             services.AddAuthentication()
                 .AddIdentityServerJwt();
 
+            services.AddAuthentication(options =>
+                {
+                    options.DefaultScheme = "cookies";
+                    options.DefaultChallengeScheme = "oidc";
+                })
+                .AddCookie("cookies", options =>
+                {
+                    options.Cookie.Name = "appcookie";
+                    options.Cookie.SameSite = SameSiteMode.Strict;
+                    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("enterprise", policy => policy.RequireRole("Administrator"));
+                options.AddPolicy("store", policy => policy.RequireRole("Filialleiter", "Administrator"));
+                options.AddPolicy("cashdesk", policy => policy.RequireRole("Filialleiter", "Kassierer"));
+            });
+
             services.AddTransient<ICashDeskService, CashDeskService>();
             services.AddTransient<IEnterpriseService, EnterpriseService>();
             services.AddTransient<IStoreService, StoreService>();
@@ -69,6 +89,7 @@ namespace CocomeRegister
                 context.Database.EnsureCreated();
                 context.Database.Migrate();
                 app.UseDeveloperExceptionPage();
+                app.UseHsts();
             }
             else
             {
@@ -90,6 +111,8 @@ namespace CocomeRegister
             });
 
             app.UseRouting();
+            app.UseHttpsRedirection();
+            
             app.UseAuthentication();
             app.UseIdentityServer();
             app.UseAuthorization();
