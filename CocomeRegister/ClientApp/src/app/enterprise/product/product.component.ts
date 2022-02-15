@@ -42,11 +42,13 @@ export class EnterpriseProductComponent {
 
   updateProduct() {
     this.enterpriseService.updateProduct(this.product);
+    this.router.navigate(['/admin/produkte']);
   }
 
   addToStore() {
     if (this.newStore) {
-      this.enterpriseService.addProductToStore(this.product.id, this.newStore.id).subscribe(stores => {
+      console.log(this.newStore);
+      this.enterpriseService.addProductToStore(this.newStore.id, this.product).subscribe(stores => {
         this.availableStores = stores;
       });
     }

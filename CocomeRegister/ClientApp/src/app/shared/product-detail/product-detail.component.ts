@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Inject } from '@angular/core';
 import { Component, Input, Output } from '@angular/core';
-import { Observable } from 'rxjs';
 import { Product, Provider } from 'src/services/Models';
 
 export interface Resource {
@@ -32,11 +31,9 @@ export class ProductDetailComponent {
       data.append("file", file);
       this.http.post<Resource>(`${this.baseUrl}api/fileupload`, data).subscribe(result => {
         this.product.imageUrl = result.path;
-        this.updateProduct();
       }, error => console.error(error));
     }
   }
-
 
   updateProduct() {
     this.updateProductEvent.emit(this.product);
