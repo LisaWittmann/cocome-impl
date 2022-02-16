@@ -92,11 +92,17 @@ namespace CocomeStore.Services
 
         public IEnumerable<Statistic> GetStoreProfit(int storeId)
         {
+            var latest = DateTime.Now.Year;
             var first = _context.Sales
                 .Where(sale => sale.StoreId == storeId)
                 .OrderBy(sale => sale.TimeStamp.Year)
                 .Select(sale => sale.TimeStamp.Year)
                 .FirstOrDefault();
+
+            if (first == 0)
+            {
+                first = latest;
+            }
 
             var statistics = new List<Statistic>();
             for (int year = first; year <= DateTime.Now.Year; year++)

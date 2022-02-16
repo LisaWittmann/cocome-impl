@@ -26,7 +26,7 @@
         <section>
             <h2>Lieferzeiten</h2>
             <canvas id="deliveryChart">{{deliveryChart}}</canvas>
-            <table class="legend">
+            <table *ngIf="deliveryStatistic.length" class="legend">
                 <thead>
                     <tr>
                         <td>Lieferant</td>

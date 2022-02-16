@@ -16,19 +16,19 @@ namespace CocomeStore.Controllers
         private readonly CocomeDbContext _context;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly JwtHandler _jwtHandler;
+        private readonly ClaimManager _claimManager;
 
         public SeedController(
             CocomeDbContext context,
             RoleManager<IdentityRole> roleManager,
             UserManager<ApplicationUser> userManager,
-            JwtHandler jwtHandler
+            ClaimManager claimManager
         )
         {
             _context = context;
             _roleManager = roleManager;
             _userManager = userManager;
-            _jwtHandler = jwtHandler;
+            _claimManager = claimManager;
         }
 
         [HttpGet]
@@ -64,7 +64,7 @@ namespace CocomeStore.Controllers
                 await _userManager.CreateAsync(user_Admin, "MySecr3t$");
 
                 await _userManager.AddToRoleAsync(user_Admin, role_Administrator);
-                await _userManager.AddClaimsAsync(user_Admin, await _jwtHandler.GetClaims(user_Admin));
+                await _userManager.AddClaimsAsync(user_Admin, await _claimManager.GetClaims(user_Admin));
 
 
                 user_Admin.EmailConfirmed = true;
@@ -94,7 +94,7 @@ namespace CocomeStore.Controllers
                 await _userManager.CreateAsync(user_Manager, "MySecr3t$");
 
                 await _userManager.AddToRoleAsync(user_Manager, role_Manager);
-                await _userManager.AddClaimsAsync(user_Manager, await _jwtHandler.GetClaims(user_Manager));;
+                await _userManager.AddClaimsAsync(user_Manager, await _claimManager.GetClaims(user_Manager));;
 
                 user_Manager.EmailConfirmed = true;
                 user_Manager.LockoutEnabled = false;
@@ -117,7 +117,7 @@ namespace CocomeStore.Controllers
                 await _userManager.CreateAsync(user_Cashier, "MySecr3t$");
 
                 await _userManager.AddToRoleAsync(user_Cashier, role_Cashier);
-                await _userManager.AddClaimsAsync(user_Cashier, await _jwtHandler.GetClaims(user_Cashier));
+                await _userManager.AddClaimsAsync(user_Cashier, await _claimManager.GetClaims(user_Cashier));
 
                 user_Cashier.EmailConfirmed = true;
                 user_Cashier.LockoutEnabled = false;

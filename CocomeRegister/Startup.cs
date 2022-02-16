@@ -67,7 +67,7 @@ namespace CocomeRegister
 
             services.AddTransient<IModelMapper, ModelMapper>();
             services.AddTransient<IDatabaseStatistics, DatabaseStatistics>();
-            services.AddTransient<JwtHandler>();
+            services.AddTransient<ClaimManager>();
 
             services.AddControllersWithViews();
             services.AddDirectoryBrowser();

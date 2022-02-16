@@ -80,7 +80,7 @@ export class EnterpriseGuard implements CanActivate {
   canActivate(
     _next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-      return this.authorize.isManager()
+      return this.authorize.isAdmin()
         .pipe(tap(isAuthenticated => this.handleAuthorization(isAuthenticated, state)));
   }
 

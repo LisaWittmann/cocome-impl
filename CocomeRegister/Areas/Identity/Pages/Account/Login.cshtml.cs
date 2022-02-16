@@ -18,19 +18,19 @@ namespace CocomeStore.Areas.Identity.Pages.Account
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly JwtHandler _jwtHandler;
+        private readonly ClaimManager _claimManager;
         private readonly ILogger<LoginModel> _logger;
 
         public LoginModel(
             SignInManager<ApplicationUser> signInManager,
-            JwtHandler jwtHandler,
+            ClaimManager claimManager,
             ILogger<LoginModel> logger,
             UserManager<ApplicationUser> userManager
         )
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _jwtHandler = jwtHandler;
+            _claimManager = claimManager;
             _logger = logger;
         }
 

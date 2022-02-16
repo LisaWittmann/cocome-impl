@@ -8,10 +8,6 @@ namespace CocomeStore.Services
 {
     public class ModelMapper : IModelMapper
     {
-        public ModelMapper()
-        {
-        }
-
         public OrderElement CreateOrderElement(Order order, OrderElementTO orderElementTO)
         {
             OrderElement orderElement = new ()

@@ -85,7 +85,7 @@ export class AuthorizeService {
       this.userSubject.next(user.profile);
       return this.success(state);
     } catch (silentError) {
-      console.error('Silent authentication error: ', silentError);
+      console.log('Silent authentication error: ', silentError);
       try {
         await this.userManager.signinRedirect(this.createArguments(state));
         return this.redirect();

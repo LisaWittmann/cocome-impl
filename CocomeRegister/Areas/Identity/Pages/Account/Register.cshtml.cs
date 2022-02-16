@@ -24,25 +24,26 @@ namespace CocomeStore.Areas.Identity.Pages.Account
         private readonly CocomeDbContext _context;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ClaimManager _claimManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
-        private readonly JwtHandler _jwtHandler;
+
 
         public RegisterModel(
             CocomeDbContext context,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
+            ClaimManager claimManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender,
-            JwtHandler jwtHandler
+            IEmailSender emailSender
         )
         {
             _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
+            _claimManager = claimManager;
             _logger = logger;
             _emailSender = emailSender;
-            _jwtHandler = jwtHandler;
         }
 
         [BindProperty]
@@ -106,7 +107,7 @@ namespace CocomeStore.Areas.Identity.Pages.Account
                 {
                     await _userManager.AddToRoleAsync(user, "Kassierer");
                 }
-                await _userManager.AddClaimsAsync(user, await _jwtHandler.GetClaims(user));
+                await _userManager.AddClaimsAsync(user, await _claimManager.GetClaims(user));
 
                 if (result.Succeeded)
                 {

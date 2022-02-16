@@ -5,12 +5,10 @@ using Microsoft.AspNetCore.Identity;
 
 namespace CocomeStore.Models.Authorization
 {
-    public class JwtHandler
+    public class ClaimManager
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        public JwtHandler(
-            UserManager<ApplicationUser> userManager
-        )
+        public ClaimManager(UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
         }
