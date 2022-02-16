@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace CocomeStore.Controllers
 {
     [ApiController]
-    //[Authorize(Policy = "cashdesk")]
+    [Authorize(Policy = "store")]
     [Route("api/[controller]")]
     public class StoreController : Controller
     {

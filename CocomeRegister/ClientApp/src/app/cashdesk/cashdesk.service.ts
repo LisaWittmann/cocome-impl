@@ -13,8 +13,8 @@ interface CashDeskState {
 }
 
 const initialState: CashDeskState = {
-    id: 1,
-    storeId: 1,
+    id: undefined,
+    storeId: undefined,
     expressMode: true,
     shoppingCard: [],
 };
@@ -42,13 +42,18 @@ export class CashDeskStateService extends StateService<CashDeskState> {
     }
 
     private fetchExpressMode() {
-        this.http.get<boolean>(`${this.api}/express/${this.state.id}`).subscribe(result => {
+        this.http.get<boolean>(
+            `${this.api}/express/${this.state.id}`
+        ).subscribe(result => {
             this.setState({ expressMode: result});
         }, error => console.error(error))
     }
 
     resetExpressMode() {
-        this.http.post<boolean>(`${this.api}/update-express/${this.state.id}`, false).subscribe(result => {
+        this.http.post<boolean>(
+            `${this.api}/update-express/${this.state.id}`,
+            false
+        ).subscribe(result => {
             this.setState({ expressMode: result });
         }, error => console.error(error));
     }
@@ -69,15 +74,15 @@ export class CashDeskStateService extends StateService<CashDeskState> {
     }
 
     removeProduct(product: Product) {
-        this.setState({ shoppingCard: [...this.state.shoppingCard.filter(
+        this.setState({ shoppingCard: this.state.shoppingCard.filter(
             cardItem => cardItem.product.id !== product.id
-        )]});
+        )});
     }
 
     confirmCheckout() {
         this.http.post(
             `${this.api}/checkout/${this.state.storeId}`,
-            this.state.shoppingCard
+            this.state.shoppingCard,
         ).subscribe(() => {
             this.storeStateService.fetchInventory();
             this.setState({ shoppingCard: [] });
@@ -93,8 +98,8 @@ export class CashDeskStateService extends StateService<CashDeskState> {
             return 0;
         }
         return this.state.shoppingCard
-                .map(item => item.amount)
-                .reduce((x, y) => (x + y));
+            .map(item => item.amount)
+            .reduce((x, y) => (x + y));
     }
 
     getCardSum(): number {
@@ -102,8 +107,8 @@ export class CashDeskStateService extends StateService<CashDeskState> {
             return 0;
         }
         return this.state.shoppingCard
-                .map(item => item.product.salePrice * item.amount)
-                .reduce((x, y) => (x + y));
+            .map(item => item.product.salePrice * item.amount)
+            .reduce((x, y) => (x + y));
     }
 
     getTotalDiscount(): number {

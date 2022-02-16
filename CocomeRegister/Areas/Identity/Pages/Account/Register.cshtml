@@ -1,34 +1,54 @@
 ﻿@page
 @model RegisterModel
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "Registrieren";
 }
 
 <div class="center-content">
-    <div>
+    <div class="container">
         <section>
             <h1>@ViewData["Title"]</h1>
         </section>
         <section>
             <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
-                <h4>Create a new account.</h4>
-                <div asp-validation-summary="All" class="text-danger"></div>
-                <div class="input-wrapper">
-                    <label asp-for="Input.Email"></label>
-                    <input asp-for="Input.Email" class="input--labeled" />
+                <div class="row">
+                    <div class="col-md-6 col-s-12">
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                        <div class="input-wrapper">
+                            <label asp-for="Input.FirstName"></label>
+                            <input asp-for="Input.FirstName" class="input--labeled" />
+                        </div>
+                        <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                        <div class="input-wrapper">
+                            <label asp-for="Input.LastName"></label>
+                            <input asp-for="Input.LastName" class="input--labeled" />
+                        </div>
+                        <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                        <div class="input-wrapper">
+                            <label asp-for="Input.StoreId"></label>
+                            <input asp-for="Input.StoreId" class="input--labeled" />
+                        </div>
+                        <span asp-validation-for="Input.StoreId" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6 col-s-12">
+                        <div class="input-wrapper">
+                            <label asp-for="Input.Email"></label>
+                            <input asp-for="Input.Email" class="input--labeled" />
+                        </div>
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                        <div class="input-wrapper">
+                            <label asp-for="Input.Password"></label>
+                            <input asp-for="Input.Password" class="input--labeled" />
+                        </div>
+                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                        <div class="input-wrapper">
+                            <label asp-for="Input.ConfirmPassword"></label>
+                            <input asp-for="Input.ConfirmPassword" class="input--labeled" />
+                        </div>
+                        <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                        <button type="submit">Registrieren</button>
+                    </div>
                 </div>
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
-                <div class="input-wrapper">
-                    <label asp-for="Input.Password"></label>
-                    <input asp-for="Input.Password" class="input--labeled" />
-                </div>
-                <span asp-validation-for="Input.Password" class="text-danger"></span>
-                <div class="input-wrapper">
-                    <label asp-for="Input.ConfirmPassword"></label>
-                    <input asp-for="Input.ConfirmPassword" class="input--labeled" />
-                </div>
-                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-                <button type="submit">Register</button>
             </form>
         </section>
     </div>

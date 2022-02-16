@@ -13,6 +13,7 @@ import { ProductListComponent } from '../shared/product-list/product-list.compon
 import { ProductCardComponent } from '../shared/product-card/product-card.component';
 import { CashDeskStateService } from './cashdesk.service';
 import { StoreStateService } from '../store/store.service';
+import { AuthorizeService } from '../api-authorization/authorize.service';
 
 export const cashdeskRoutes: Routes = [
   { path: 'home', component: CashDeskHomeComponent },
@@ -36,11 +37,11 @@ export const cashdeskRoutes: Routes = [
     ProductCardComponent,
   ],
   exports: [CashDeskComponent],
-  providers: [CashDeskStateService, StoreStateService],
+  providers: [
+    CashDeskStateService,
+    StoreStateService,
+    AuthorizeService
+  ],
   bootstrap: [CashDeskComponent]
 })
 export class CashDeskModule { }
-
-export function CashDeskEntrypoint() {
-  return CashDeskModule;
-}

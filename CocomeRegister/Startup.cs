@@ -1,7 +1,10 @@
 using System.IO;
+using System.Security.Claims;
 using CocomeStore.Models;
+using CocomeStore.Models.Authorization;
 using CocomeStore.Services;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -40,16 +43,22 @@ namespace CocomeRegister
                 .AddEntityFrameworkStores<CocomeDbContext>();
 
             services.AddIdentityServer()
-                .AddApiAuthorization<ApplicationUser, CocomeDbContext>();
+                 .AddApiAuthorization<ApplicationUser, CocomeDbContext>()
+                 .AddProfileService<ProfileService>();
 
-            services.AddAuthentication()
+            services.AddAuthentication(options =>
+                {
+                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer()
                 .AddIdentityServerJwt();
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("enterprise", policy => policy.RequireRole("Administrator"));
-                options.AddPolicy("store", policy => policy.RequireRole("Filialleiter", "Administrator"));
-                options.AddPolicy("cashdesk", policy => policy.RequireRole("Filialleiter", "Kassierer"));
+                options.AddPolicy("enterprise", policy => policy.RequireClaim(ClaimTypes.Role, "Administrator"));
+                options.AddPolicy("store", policy => policy.RequireClaim(ClaimTypes.Role, "Filialleiter"));
+                options.AddPolicy("cashdesk", policy => policy.RequireClaim(ClaimTypes.Role, "Kassierer"));
             });
 
             services.AddTransient<ICashDeskService, CashDeskService>();
@@ -58,6 +67,7 @@ namespace CocomeRegister
 
             services.AddTransient<IModelMapper, ModelMapper>();
             services.AddTransient<IDatabaseStatistics, DatabaseStatistics>();
+            services.AddTransient<JwtHandler>();
 
             services.AddControllersWithViews();
             services.AddDirectoryBrowser();

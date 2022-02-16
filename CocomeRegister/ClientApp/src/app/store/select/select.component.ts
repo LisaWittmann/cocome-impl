@@ -6,10 +6,10 @@ import { StoreStateService } from '../store.service';
 
 @Component({
   selector: 'app-store',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  templateUrl: './select.component.html',
+  styleUrls: ['./select.component.scss']
 })
-export class StoreHomeComponent {
+export class StoreSelectComponent {
   stores: Store[];
   selectedStore: Store;
 
@@ -26,6 +26,6 @@ export class StoreHomeComponent {
 
   selectStore() {
     this.storeStateService.setStore(this.selectedStore);
-    this.router.navigate(['/filiale/dashboard']);
+    this.router.navigate(['/filiale/home']);
   }
 }

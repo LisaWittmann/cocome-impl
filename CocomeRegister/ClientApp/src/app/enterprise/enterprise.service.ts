@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import * as internal from 'assert';
 import { Observable } from 'rxjs';
 import { Product, Store, Provider, Statistic } from 'src/services/Models';
 import { StateService } from 'src/services/StateService';
@@ -38,19 +37,25 @@ export class EnterpriseStateService extends StateService<EnterpriseState> {
     }
 
     private fetchProducts() {
-        this.http.get<Product[]>(`${this.api}/products`).subscribe(result => {
+        this.http.get<Product[]>(
+            `${this.api}/products`
+        ).subscribe(result => {
             this.setState({ products: result });
         }, error => console.error(error));
     }
 
     private fetchProviders() {
-        this.http.get<Provider[]>(`${this.api}/provider`).subscribe(result => {
+        this.http.get<Provider[]>(
+            `${this.api}/provider`
+        ).subscribe(result => {
             this.setState({ providers: result });
         }, error => console.error(error));
     }
 
     private fetchStores() {
-        this.http.get<Store[]>(`${this.api}/stores`).subscribe(result => {
+        this.http.get<Store[]>(
+            `${this.api}/stores`
+        ).subscribe(result => {
             this.setState({ stores: result });
         }, error => console.error(error));
     }
@@ -67,7 +72,7 @@ export class EnterpriseStateService extends StateService<EnterpriseState> {
     addStore(store: Store) {
         this.http.post<Store[]>(
             `${this.api}/create-store`,
-            store
+            store,
         ).subscribe(result => {
             this.setState({ stores: result });
         }, error => console.error(error));
@@ -114,18 +119,26 @@ export class EnterpriseStateService extends StateService<EnterpriseState> {
     }
 
     getStoresByProduct(productId: number) {
-        return this.http.get<Store[]>(`${this.api}/product/${productId}/stores`);
+        return this.http.get<Store[]>(
+            `${this.api}/product/${productId}/stores`
+        );
     }
 
     getDeliveryStatistic() {
-        return this.http.get<Statistic[]>(`${this.api}/provider-reports`);
+        return this.http.get<Statistic[]>(
+            `${this.api}/provider-reports`
+        );
     }
 
     getProfitStatistic() {
-        return this.http.get<Statistic[]>(`${this.api}/store-reports`);
+        return this.http.get<Statistic[]>(
+            `${this.api}/store-reports`
+        );
     }
 
     addProductToStore(storeId: number, product: Product) {
-        return this.http.post<Store[]>(`${this.api}/create-stock/${storeId}`, product);
+        return this.http.post<Store[]>(
+            `${this.api}/create-stock/${storeId}`, product
+        );
     }
 }

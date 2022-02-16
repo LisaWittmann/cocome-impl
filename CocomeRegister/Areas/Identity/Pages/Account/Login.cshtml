@@ -2,7 +2,7 @@
 @model LoginModel
 
 @{
-    ViewData["Title"] = "Log in";
+    ViewData["Title"] = "Anmelden";
 }
 
 <div class="center-content">
@@ -12,7 +12,6 @@
         </section>
         <section>
             <form id="account" method="post">
-                <h4>Use a local account to log in.</h4>
                 <div asp-validation-summary="All" class="text-danger"></div>
                 <div class="input-wrapper">
                     <label asp-for="Input.Email"></label>
@@ -32,12 +31,12 @@
                         </label>
                     </div>
                 </div>
-                <button type="submit">Log in</button>
+                <button type="submit">Anmelden</button>
             </form>
         </section>
         <section>
             <p>
-                <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
+                <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Neu hier? Zur Registrierung</a>
             </p>
         </section>
     </div>

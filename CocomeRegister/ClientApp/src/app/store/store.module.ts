@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 
 import { StoreComponent } from './store.component';
-import { StoreHomeComponent } from './home/home.component';
+import { StoreSelectComponent } from './select/select.component';
 import { StoreDashboardComponent } from './dashboard/dashboard.component';
 import { StoreNavigationComponent } from './navigation/navigation.component';
 import { StoreProductsComponent } from './products/products.component';
@@ -15,14 +15,16 @@ import { StoreOrderDetailComponent } from './order-detail/order-detail.component
 import { StoreReportsComponent } from './reports/reports.component';
 import { StoreStateService } from './store.service';
 import { SharedModule } from '../shared/shared.module';
+import { AuthorizeService } from '../api-authorization/authorize.service';
+import { StoreGuard } from './store.guard';
 
 const storeRoutes: Routes = [
-  { path: 'home', component: StoreHomeComponent },
-  { path: 'dashboard', component: StoreDashboardComponent },
-  { path: 'sortiment', component: StoreProductsComponent },
-  { path: 'sortiment/:id', component: StoreProductComponent },
-  { path: 'bestellungen', component: StoreOrdersComponent },
-  { path: 'berichte', component: StoreReportsComponent },
+  { path: 'auswahl', component: StoreSelectComponent },
+  { path: 'home', component: StoreDashboardComponent, canActivate: [StoreGuard] },
+  { path: 'sortiment', component: StoreProductsComponent, canActivate: [StoreGuard] },
+  { path: 'sortiment/:id', component: StoreProductComponent, canActivate: [StoreGuard] },
+  { path: 'bestellungen', component: StoreOrdersComponent, canActivate: [StoreGuard] },
+  { path: 'berichte', component: StoreReportsComponent, canActivate: [StoreGuard] },
 ];
 
 @NgModule({
@@ -34,7 +36,7 @@ const storeRoutes: Routes = [
   ],
   declarations: [
     StoreComponent,
-    StoreHomeComponent,
+    StoreSelectComponent,
     StoreReportsComponent,
     StoreDashboardComponent,
     StoreNavigationComponent,
@@ -45,7 +47,10 @@ const storeRoutes: Routes = [
     StoreOrderDetailComponent,
   ],
   exports: [StoreComponent],
-  providers: [StoreStateService],
+  providers: [
+    StoreStateService,
+    AuthorizeService
+  ],
   bootstrap: [StoreComponent],
 })
 export class StoreModule { }

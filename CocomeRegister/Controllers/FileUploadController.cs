@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -9,14 +8,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace CocomeStore.Controllers
 {
     [ApiController]
-    //[Authorize(Policy = "store")]
+    [Authorize(Policy = "store")]
     [Route("api/[controller]")]
     public class FileUploadController : Controller
     {
-        public FileUploadController()
-        {
-        }
-
         [HttpPost]
         public async Task<IActionResult> OnPostUploadAsync(IFormFile file)
         {

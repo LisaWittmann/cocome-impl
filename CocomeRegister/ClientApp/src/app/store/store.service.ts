@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { StateService } from 'src/services/StateService';
 import { Product, StockItem, Store, Order, OrderElement, Statistic } from 'src/services/Models';
+import { AuthorizeService } from '../api-authorization/authorize.service';
+import { map } from 'rxjs/operators';
 
 interface StoreState {
   store: Store;
@@ -12,7 +14,7 @@ interface StoreState {
 }
 
 const initialState: StoreState = {
-  store: { name: "Test" } as Store,
+  store: undefined,
   inventory: [],
   currentOrder: [],
   orders: [],
@@ -27,22 +29,46 @@ export class StoreStateService extends StateService<StoreState> {
   api: string;
 
   constructor(
+      private authServide: AuthorizeService,
       private http: HttpClient,
       @Inject('BASE_URL') baseUrl: string
   ) {
       super(initialState);
       this.api = baseUrl + "api/store";
-      this.getSession();
+      this.authServide.getUser().subscribe(user => {
+        if (user && user.store) {
+          this.fetchStore(user.store);
+        }
+      })
+  }
+
+  isInitialized(): Observable<boolean> {
+    return this.store$.pipe(map(store => {
+      console.log(store);
+      return store != undefined
+    }));
+  }
+
+  fetchStore(id: string) {
+    this.http.get<Store>(
+      `${this.api}/${id}`,
+    ).subscribe(result => {
+      this.setStore(result);
+    }, error => console.error(error));
   }
 
   fetchInventory() {
-    this.http.get<StockItem[]>(`${this.api}/inventory/${this.state.store.id}`).subscribe(result => {
+    this.http.get<StockItem[]>(
+      `${this.api}/inventory/${this.state.store.id}`
+    ).subscribe(result => {
       this.setState({ inventory: result });
     }, error => console.error(error));
   }
 
   fetchOrders() {
-    this.http.get<Order[]>(`${this.api}/orders/${this.state.store.id}`).subscribe(result => {
+    this.http.get<Order[]>(
+      `${this.api}/orders/${this.state.store.id}`
+    ).subscribe(result => {
       this.setState({ orders: result });
     }, error => console.error(error));
   }
@@ -55,16 +81,9 @@ export class StoreStateService extends StateService<StoreState> {
     return this.state.inventory.filter(item => item.stock < 10);
   }
 
-  getSession() {
-    const store: Store = JSON.parse(sessionStorage.getItem("store"));
-    if (store) {
-      this.setStore(store);
-    }
-  }
-
   setStore(store: Store) {
-    sessionStorage.setItem("store", JSON.stringify(store));
     this.setState({ store: store });
+    console.log(this.state.store);
     this.fetchInventory();
     this.fetchOrders();
   }
@@ -96,7 +115,7 @@ export class StoreStateService extends StateService<StoreState> {
   placeNewOrder() {
     this.http.post<Order[]>(
       `${this.api}/create-order/${this.state.store.id}`, 
-      this.state.currentOrder
+      this.state.currentOrder,
     ).subscribe(result => {
       this.setState({ orders: result });
       this.setState({ currentOrder: [] });
@@ -106,7 +125,8 @@ export class StoreStateService extends StateService<StoreState> {
   closeOrder(orderId: number) {
     this.http.post<Order[]>(
       `${this.api}/close-order/${this.state.store.id}`,
-      orderId
+      orderId,
+      { headers: !this.token ? {} : { 'Authorization': `Bearer ${this.token}` }}
     ).subscribe(result => {
       this.setState({ orders: result });
       this.fetchInventory();
@@ -116,14 +136,16 @@ export class StoreStateService extends StateService<StoreState> {
   updateProduct(product: Product) {
     this.http.post<StockItem[]>(
       `${this.api}/update-product/${this.state.store.id}`,
-      product
+      product,
     ).subscribe(result => {
       this.setState({ inventory: result });
     }, error => console.error(error));
   }
 
   getProduct(id: number) {
-    return this.http.get<Product>(`${this.api}/${this.state.store.id}/product/${id}`);
+    return this.http.get<Product>(
+      `${this.api}/${this.state.store.id}/product/${id}`
+    );
   }
 
   getLatestProfits() {

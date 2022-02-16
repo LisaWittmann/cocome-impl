@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 namespace CocomeStore.Controllers
 {
     [ApiController]
-    [Authorize]
+    [Authorize(Policy = "cashdesk")]
     [Route("api/[controller]")]
     public class CashDeskController : Controller
     {

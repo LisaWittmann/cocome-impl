@@ -4,8 +4,16 @@ namespace CocomeStore.Models
 {
     public class ApplicationUser : IdentityUser
     {
-        public ApplicationUser()
-        {
-        }
+        [PersonalData]
+        public string FirstName { get; set; }
+
+        [PersonalData]
+        public string LastName { get; set; }
+
+        [PersonalData]
+        public int? StoreId { get; set; }
+
+        [PersonalData]
+        public Store Store { get; set; }
     }
 }
