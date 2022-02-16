@@ -126,7 +126,6 @@ export class StoreStateService extends StateService<StoreState> {
     this.http.post<Order[]>(
       `${this.api}/close-order/${this.state.store.id}`,
       orderId,
-      { headers: !this.token ? {} : { 'Authorization': `Bearer ${this.token}` }}
     ).subscribe(result => {
       this.setState({ orders: result });
       this.fetchInventory();
