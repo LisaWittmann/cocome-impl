@@ -4,7 +4,6 @@ using CocomeStore.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
@@ -45,18 +44,6 @@ namespace CocomeRegister
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();
-
-            services.AddAuthentication(options =>
-                {
-                    options.DefaultScheme = "cookies";
-                    options.DefaultChallengeScheme = "oidc";
-                })
-                .AddCookie("cookies", options =>
-                {
-                    options.Cookie.Name = "appcookie";
-                    options.Cookie.SameSite = SameSiteMode.Strict;
-                    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-                });
 
             services.AddAuthorization(options =>
             {

@@ -11,29 +11,20 @@
     <div class="col-md-6">
         <form id="email-form" method="post">
             <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-group">
+            <div class="input-wrapper">
                 <label asp-for="Email"></label>
-                @if (Model.IsEmailConfirmed)
-                {
-                    <div class="input-group">
-                        <input asp-for="Email" class="form-control" disabled />
-                        <div class="input-group-append">
-                            <span class="input-group-text text-success font-weight-bold">✓</span>
-                        </div>
-                    </div>
-                }
-                 else
-                {
-                    <input asp-for="Email" class="form-control" disabled />
-                    <button id="email-verification" type="submit" asp-page-handler="SendVerificationEmail" class="btn btn-link">Send verification email</button>
-                }
+                <input asp-for="Email" class="input--labeled" disabled />
             </div>
-            <div class="form-group">
+            @if (!Model.IsEmailConfirmed)
+            {
+                <button id="email-verification" type="submit" asp-page-handler="SendVerificationEmail">Send verification email</button>
+            }
+            <div class="input-wrapper">
                 <label asp-for="Input.NewEmail"></label>
-                <input asp-for="Input.NewEmail" class="form-control" />
-                <span asp-validation-for="Input.NewEmail" class="text-danger"></span>
+                <input asp-for="Input.NewEmail" class="input--labeled" />
             </div>
-            <button id="change-email-button" type="submit" asp-page-handler="ChangeEmail" class="btn btn-primary">Change email</button>
+            <span asp-validation-for="Input.NewEmail" class="text-danger"></span>
+            <button id="change-email-button" type="submit" asp-page-handler="ChangeEmail">Change email</button>
         </form>
     </div>
 </div>

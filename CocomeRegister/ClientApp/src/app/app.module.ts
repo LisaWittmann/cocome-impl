@@ -18,6 +18,7 @@ import { CashDeskModule } from './cashdesk/cashdesk.module';
 import { ApiAuthorizationModule } from './api-authorization/api-authorization.module';
 import { AuthorizeGuard } from './api-authorization/authorize.guard';
 import { AuthorizeInterceptor } from './api-authorization/authorize.interceptor';
+import { AuthorizeService } from './api-authorization/authorize.service';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
@@ -43,6 +44,7 @@ const appRoutes: Routes = [
     NavigationComponent,
   ],
   providers: [
+    AuthorizeService,
     { 
       provide: HTTP_INTERCEPTORS,
       useClass: AuthorizeInterceptor,

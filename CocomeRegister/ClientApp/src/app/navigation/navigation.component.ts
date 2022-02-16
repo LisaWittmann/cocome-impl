@@ -1,11 +1,17 @@
 import { Component } from '@angular/core';
+import { AuthorizeService } from '../api-authorization/authorize.service';
 
 @Component({
   selector: 'app-navigation',
   templateUrl: './navigation.component.html',
-  styleUrls: ['./navigation.component.scss']
 })
 export class NavigationComponent {
-  opened = false;
-  toggle = () => this.opened = !this.opened;
+  user: string;
+  isAuthenticated: string;
+
+  constructor(private authService: AuthorizeService) {
+    this.authService.getUser().subscribe(user => {
+      this.user = user ? user.name : undefined;
+    });
+  }
 }

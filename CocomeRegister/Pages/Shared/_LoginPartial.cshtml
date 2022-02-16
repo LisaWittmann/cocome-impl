@@ -12,3 +12,32 @@
     }
 }
 
+<div class="nav-items container">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@User.Identity.Name</a>
+    }
+    else
+    {
+        <a></a>
+    }
+    <ul>
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <li class="nav-item">
+                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="/">
+                    <button type="submit" class="text-button">Logout</button>
+                </form>
+            </li>
+        }
+        else
+        {
+            <li>
+                <a asp-area="Identity" asp-page="/Account/Register" asp-route-returnUrl="@returnUrl">Register</a>
+            </li>
+            <li>
+                <a asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@returnUrl">Login</a>
+            </li>
+        }
+    </ul>
+</div>

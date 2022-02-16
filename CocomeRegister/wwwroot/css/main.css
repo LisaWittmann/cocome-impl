@@ -29,9 +29,19 @@ body {
     justify-content: center;
 }
 
+ul {
+    list-style: none;
+    padding-inline-start: 0;
+    margin-bottom: 0;
+  }
+
 section {
     margin-top: 10px;
     margin-bottom: 20px;
+}
+
+section:last-of-type {
+    padding-bottom: 20px;
 }
 
 button, a, i {
@@ -40,7 +50,7 @@ button, a, i {
     color: #1a1e16; 
 }
 
-button {
+button, .button {
     padding: 10px 20px;
     background-color: #eee;
     border: 1px solid #ddd;
@@ -50,8 +60,16 @@ button {
     width: 300px;
 }
 
+.text-button {
+    width: auto;
+    padding: 0;
+    background-color: transparent;
+    border: 0;
+}  
+
 .input-wrapper {
     position: relative;
+    width: 300px;
 }
 
 .input-wrapper label {
@@ -82,4 +100,48 @@ button {
     display: flex;
     align-items: center;
     justify-content: center;   
+}
+
+.navigation {
+    position: sticky;
+    justify-content: center;
+    z-index: 12;
+    top: 0;
+    width: 100%;
+    background-color: #f8f7f5;
+    box-shadow: 0 0 10px 6px rgba(0, 0, 0, 0.1);
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+}
+
+.nav-items {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 18px;
+    height: 65px;
+    width: 80%;
+}
+
+.nav-items > * {
+    height: 100%;
+    margin: 0;
+    gap: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-items *:hover {
+    text-decoration: none;
+    user-select: none;
+}
+
+@media all and (max-width: 768px) {
+    .nav-items > a:first-of-type {
+        display: none;
+    }
 }

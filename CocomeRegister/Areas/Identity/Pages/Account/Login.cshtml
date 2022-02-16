@@ -5,41 +5,42 @@
     ViewData["Title"] = "Log in";
 }
 
-<div class="content">
-    <section>
-        <h1>@ViewData["Title"]</h1>
-    </section>
-    <section>
-        <form id="account" method="post">
-            <h4>Use a local account to log in.</h4>
-            <hr />
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="input-wrapper">
-                <label asp-for="Input.Email"></label>
-                <input asp-for="Input.Email" class="input--labeled" />
-            </div>
-            <span asp-validation-for="Input.Email" class="text-danger"></span>
-            <div class="input-wrapper">
-                <label asp-for="Input.Password"></label>
-                <input asp-for="Input.Password" class="input--labeled" />
-            </div>
-            <span asp-validation-for="Input.Password" class="text-danger"></span>
-            <div class="form-group">
-                <div class="checkbox">
-                    <label asp-for="Input.RememberMe">
-                        <input asp-for="Input.RememberMe" />
-                        @Html.DisplayNameFor(m => m.Input.RememberMe)
-                    </label>
+<div class="center-content">
+    <div>
+        <section>
+            <h1>@ViewData["Title"]</h1>
+        </section>
+        <section>
+            <form id="account" method="post">
+                <h4>Use a local account to log in.</h4>
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="input-wrapper">
+                    <label asp-for="Input.Email"></label>
+                    <input asp-for="Input.Email" class="input--labeled" />
                 </div>
-            </div>
-            <button type="submit">Log in</button>
-        </form>
-    </section>
-    <section>
-        <p>
-            <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
-        </p>
-    </section>
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+                <div class="input-wrapper">
+                    <label asp-for="Input.Password"></label>
+                    <input asp-for="Input.Password" class="input--labeled" />
+                </div>
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+                <div class="form-group">
+                    <div class="checkbox">
+                        <label asp-for="Input.RememberMe">
+                            <input asp-for="Input.RememberMe" />
+                            @Html.DisplayNameFor(m => m.Input.RememberMe)
+                        </label>
+                    </div>
+                </div>
+                <button type="submit">Log in</button>
+            </form>
+        </section>
+        <section>
+            <p>
+                <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
+            </p>
+        </section>
+    </div>
 </div>
 
 @section Scripts {
