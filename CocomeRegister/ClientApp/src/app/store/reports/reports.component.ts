@@ -1,17 +1,15 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Chart } from 'chart.js';
 import { jsPDF } from 'jspdf';
-import { ColorRange, interpolateColors } from 'src/services/ColorGenerator';
+import { interpolateColors, toRGBA } from 'src/services/ColorGenerator';
 import { Month, monthOrdinals, monthValues } from 'src/services/Month';
-import { Store, StockItem } from 'src/services/Models';
+import { Store, StockItem, Statistic } from 'src/services/Models';
 import { StoreStateService } from '../store.service';
 import html2canvas from 'html2canvas';
-
 
 @Component({
   selector: 'app-store-reports',
   templateUrl: './reports.component.html',
-  styleUrls: ['./reports.component.scss'],
 })
 export class StoreReportsComponent implements OnInit {
   store: Store;
@@ -21,53 +19,79 @@ export class StoreReportsComponent implements OnInit {
   salesChart: Chart;
   inventoryChart: Chart;
 
-  salesData = this.storeStateService.salesDataset;
+  salesData: Statistic[];
   salesLegend = monthOrdinals;
 
   constructor(private storeStateService: StoreStateService) {
     this.storeStateService.store$.subscribe(store => {
       this.store = store;
     });
-    this.storeStateService.sales$.subscribe(sales => {
-        this.sales = sales;
-    });
     this.storeStateService.inventory$.subscribe(inventory => {
-        this.inventory = inventory;
+      this.inventory = inventory;
     });
+    this.storeStateService.getProfits().subscribe(profits => {
+      this.salesData = profits;
+      this.initSalesChart();
+      this.initInventoryChart();
+    })
   }
 
   get date() {
     return new Date(Date.now()).toLocaleDateString('de-DE');
   }
 
-  ngOnInit() {
-    const salesContext = (document.getElementById('salesChart') as HTMLCanvasElement).getContext('2d');
-    this.salesChart = new Chart(salesContext, {
-      type: 'line',
-      data: {
-        datasets: this.salesData,
-        labels: monthValues,
-      },
-      options: { responsive: true }
-    });
-
-    const colorRange: ColorRange = { colorStart: 0.2, colorEnd: 1 };
-    const chartColors = interpolateColors(this.inventory.length, colorRange);
-    const inventoryContext = (document.getElementById('inventoryChart') as HTMLCanvasElement).getContext('2d');
-    this.inventoryChart = new Chart(inventoryContext, {
-        type: 'pie',
+  get salesDataset() {
+    const chartColors = interpolateColors(this.salesData.length, { colorStart: 0.6, colorEnd: 0.8 });
+    return this.salesData.map(data => ({
+      label: data.label,
+      data: data.dataset,
+      borderColor: chartColors[this.salesData.indexOf(data)],
+      backgroundColor: toRGBA(chartColors[this.salesData.indexOf(data)], 0.5)
+    }));
+  }
+ 
+  initSalesChart() {
+    const canvas = document.getElementById('salesChart') as HTMLCanvasElement;
+    if (canvas) {
+      this.salesChart = new Chart(canvas.getContext('2d'), {
+        type: 'line',
         data: {
-            labels: this.inventory.map(item => item.product.name),
-            datasets: [{
-                backgroundColor: chartColors,
-                data: this.inventory.map(item => item.stock)
-            }]
+          datasets: this.salesDataset,
+          labels: monthValues,
         },
         options: { responsive: true }
-    });
+      });
+    }
   }
 
-  private generatePDFSection(elementId: string, pdf: jsPDF) {
+  initInventoryChart() {
+    const chartColors = interpolateColors(this.inventory.length, { colorStart: 0.2, colorEnd: 1 });
+    const canvas = document.getElementById('inventoryChart') as HTMLCanvasElement;
+    if (canvas) {
+      this.inventoryChart = new Chart(canvas.getContext('2d'), {
+          type: 'pie',
+          data: {
+            labels: this.inventory.map(item => item.product.name),
+            datasets: [{
+              backgroundColor: chartColors,
+              data: this.inventory.map(item => item.stock)
+            }]
+          },
+          options: { responsive: true }
+      });
+    }
+  }
+
+  ngOnInit() {
+    if (this.salesData && !this.salesChart) {
+      this.initSalesChart();
+    }
+    if (this.inventory && !this.inventoryChart) {
+      this.initInventoryChart();
+    }
+  }
+
+  async generatePDFSection(elementId: string, pdf: jsPDF) {
     const section = document.getElementById(elementId);
     const pageHeight = 295;
     const pageWidth = 210;

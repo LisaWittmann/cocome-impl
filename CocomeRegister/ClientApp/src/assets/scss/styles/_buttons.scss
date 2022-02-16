@@ -16,6 +16,15 @@ button {
     color: #9ACC91;
     text-decoration: none
   }
+
+  &__form {
+    background-color: $color-light-grey;
+    border: 1px solid $color-grey;
+    padding: $spacing-xs;
+    border-radius: 2px;
+    margin: $spacing-s 0;
+    max-width: 300px;
+  } 
 }
   
 .button--filled {

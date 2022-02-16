@@ -33,7 +33,6 @@ export class StoreShoppingCardComponent {
   }
 
   updateInstance(product: Product, amount: number, replace = false) {
-    console.log(amount);
     this.storeStateService.addToCard(product, amount, replace);
   }
 

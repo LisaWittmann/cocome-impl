@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Product, StockItem } from 'src/services/Models';
 import { StoreStateService } from '../store.service';
@@ -30,10 +30,6 @@ export class StoreProductsComponent {
     }
 
     navigateToDetail(product: Product) {
-        this.router.navigate(['/filiale/produkt', product.id]);
-    }
-
-    createNewProduct() {
-        this.router.navigate(['/filiale/erstellen']);
+        this.router.navigate(['/filiale/sortiment', product.id]);
     }
 }

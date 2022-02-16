@@ -1,0 +1,20 @@
+@import "variables";
+
+.product-detail {
+
+    &__header {
+        width: 100%;
+        @include flex-center($justify: space-between);
+    }
+
+    &__card-button {
+        img {
+            height: 30px;
+            width: auto;
+        }
+
+        @media all and (min-width: 1000px) {
+            margin-right: 10%;
+        }
+    }
+}

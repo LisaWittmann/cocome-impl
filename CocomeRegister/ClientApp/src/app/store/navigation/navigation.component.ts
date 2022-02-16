@@ -1,6 +1,6 @@
 import { EventEmitter } from '@angular/core';
-import { Component, Input, Output } from '@angular/core';
-import { OrderElement, Product } from 'src/services/Models';
+import { Component, Output } from '@angular/core';
+import { OrderElement } from 'src/services/Models';
 import { StoreStateService } from '../store.service';
 
 @Component({

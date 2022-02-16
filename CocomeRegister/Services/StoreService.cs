@@ -5,6 +5,7 @@ using CocomeStore.Models;
 using CocomeStore.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using CocomeStore.Models.Transfer;
+using Microsoft.Extensions.Logging;
 
 namespace CocomeStore.Services
 {
@@ -24,7 +25,7 @@ namespace CocomeStore.Services
 
         public Store GetStore(int storeId)
         {
-            Store store = _context.Stores.Find(1);
+            Store store = _context.Stores.Find(storeId);
             if (store == null)
             {
                 throw new EntityNotFoundException("store with id " + storeId + " could not be found");
@@ -40,16 +41,17 @@ namespace CocomeStore.Services
         public IEnumerable<OrderTO> GetOrders(int storeId)
         {
             return _context.Orders
-                    .Where(order => order.StoreId == storeId)
-                    .Include(order => order.Store)
-                    .Include(order => order.Provider)
-                    .AsEnumerable()
-                    .GroupJoin(_context.OrderElements
-                        .Include(element => element.Product),
-                        order => order.Id,
-                        element => element.OrderId,
-                        (order, elements) => _mapper.CreateOrderTO(order, elements.AsEnumerable()));
+                .Where(order => order.StoreId == storeId)
+                .Include(order => order.Store)
+                .Include(order => order.Provider)
+                .AsEnumerable()
+                .GroupJoin(_context.OrderElements
+                    .Include(element => element.Product),
+                    order => order.Id,
+                    element => element.OrderId,
+                    (order, elements) => _mapper.CreateOrderTO(order, elements.AsEnumerable()));
         }
+
 
         public void CloseOrder(int storeId, int orderId)
         {
@@ -60,42 +62,56 @@ namespace CocomeStore.Services
                 throw new EntityNotFoundException("order with id " + orderId + " could not be found");
             }
 
-            if (order.Store.Id != storeId)
+            if (order.StoreId != storeId)
             {
                 throw new CrossAccessException("no access to order " + orderId);
             }
+
+            var orderElements = _context.OrderElements
+                .Where(element => element.OrderId == orderId)
+                .Include(element => element.Product);
+
+            foreach(var element in orderElements)
+            {
+                StockItem item = _context.StockItems
+                    .Where(item => item.ProductId == element.ProductId && item.StoreId == storeId)
+                    .SingleOrDefault();
+                item.Stock += element.Amount;
+            };
 
             order.Closed = true;
             _context.SaveChanges();
         }
 
-
         public void PlaceOrder(int storeId, IEnumerable<OrderElementTO> elements)
         {
-  
-            Store store = _context.Stores.Find(storeId);
+
+            DateTime dateTime = DateTime.Now;
+            Store store = GetStore(storeId);
             if (store == null)
             {
                 throw new EntityNotFoundException("store with id " + storeId + " could not be found");
             }
 
-            // TODO: get provider by products
-            Provider provider = _context.Providers.First();
-            DateTime dateTime = DateTime.Now;
-
-            Order order = new Order {
-                StoreId = store.Id,
-                ProviderId = provider.Id,
-                PlacingDate = dateTime,
-                Closed = false,
-                Delivered = false
-            };
-            _context.Orders.Add(order);
-
-            foreach (var element in elements)
+            var groupedElements = elements.GroupBy(element => element.Product.Provider.Id);
+            foreach (var element in groupedElements)
             {
-                _context.OrderElements.Add(_mapper.CreateOrderElement(order, element));
-            }
+                Order order = new()
+                {
+                    ProviderId = element.Key,
+                    StoreId = storeId,
+                    PlacingDate = dateTime,
+                    DeliveringDate = dateTime,
+                    Delivered = false,
+                    Closed = false,
+                };
+                
+                var orderElements = element.ToArray()
+                    .Select(element => _mapper.CreateOrderElement(order, element))
+                    .ToArray();
+
+                _context.AddRange(orderElements);
+            };
             _context.SaveChanges();
         }
 
@@ -103,20 +119,29 @@ namespace CocomeStore.Services
         public IEnumerable<StockItem> GetInventory(int storeId)
         {
             return _context.StockItems
-                    .Where(item => item.Store.Id == storeId)
-                    .Include(item => item.Store)
-                    .Include(item => item.Product)
-                    .ThenInclude(product => product.Provider);
+                .Where(item => item.Store.Id == storeId)
+                .Include(item => item.Store)
+                .Include(item => item.Product)
+                .ThenInclude(product => product.Provider);
         }
 
 
-        public void CreateProduct(int storeId, ProductTO productTO)
+        public ProductTO GetProduct(int storeId, int productId)
         {
-            Product product = _mapper.CreateProduct(productTO);
-            StockItem item = new StockItem { Product = product, Stock = 0, StoreId = storeId };
-  
-            _context.StockItems.Add(item);
-            _context.SaveChanges();
+            Product product = _context.StockItems
+                .Where(item => item.StoreId == storeId && item.ProductId == productId)
+                .Include(item => item.Product)
+                .ThenInclude(product => product.Provider)
+                .Select(item => item.Product)
+                .SingleOrDefault();
+
+            if (product == null)
+            {
+                throw new CrossAccessException(
+                    "product " + productId + " is not accessable in store " + storeId);
+            }
+
+            return _mapper.CreateProductTO(product);
         }
 
         public void UpdateProduct(int storeId, ProductTO productTO)
@@ -129,8 +154,8 @@ namespace CocomeStore.Services
         public void UpdateStock(int storeId, int productId, int stock)
         {
             StockItem item = _context.StockItems
-                                .Where(item => item.Store.Id == storeId && item.Product.Id == productId)
-                                .SingleOrDefault();
+                .Where(item => item.Store.Id == storeId && item.Product.Id == productId)
+                .SingleOrDefault();
             if (item == null)
             {
                 throw new EntityNotFoundException(
@@ -138,28 +163,6 @@ namespace CocomeStore.Services
             }
             item.Stock = stock;
             _context.SaveChanges();
-        }
-
-
-        public float GetProfitOfMonth(int storeId, int month, int year)
-        {
-            Store store = GetStore(storeId);
-            var sales = _context.Sales
-                .Where(sale =>
-                    sale.Store.Id == storeId &&
-                    sale.TimeStamp.Year == year &&
-                    sale.TimeStamp.Month == month
-                );
-
-            float profit = 0;
-            foreach (var sale in sales)
-            {
-                var profits = _context.SaleElements
-                    .Where(element => element.Sale.Id == sale.Id)
-                    .Select(element => element.Product.SalePrice - element.Product.Price);
-                profit += profits.Aggregate((x, y) => (x + y));
-            }
-            return profit;
         }
     }
 }

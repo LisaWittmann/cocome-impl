@@ -16,14 +16,17 @@ namespace CocomeStore.Controllers
     {
         private readonly ILogger<EnterpriseController> _logger;
         private readonly IEnterpriseService _service;
+        private readonly IDatabaseStatistics _statistics;
 
         public EnterpriseController(
             ILogger<EnterpriseController> logger,
-            IEnterpriseService service
+            IEnterpriseService service,
+            IDatabaseStatistics statistics
         )
         {
             _logger = logger;
             _service = service;
+            _statistics = statistics;
         }
 
         [HttpGet]
@@ -56,14 +59,21 @@ namespace CocomeStore.Controllers
 
         [HttpGet]
         [Route("products")]
-        public ActionResult<IEnumerable<Product>> GetAllProducts()
+        public ActionResult<IEnumerable<ProductTO>> GetAllProducts()
         {
             return _service.GetAllProducts().ToArray();
         }
 
+        [HttpGet]
+        [Route("product/{id}/stores")]
+        public ActionResult<IEnumerable<Store>> GetStores(int id)
+        {
+            return _service.GetStores(id).ToArray();
+        }
+
         [HttpPost]
         [Route("create-product")]
-        public ActionResult<IEnumerable<Product>> CreateProduct(ProductTO product)
+        public ActionResult<IEnumerable<ProductTO>> CreateProduct(ProductTO product)
         {
             try
             {
@@ -79,7 +89,7 @@ namespace CocomeStore.Controllers
 
         [HttpPost]
         [Route("update-product/{id}")]
-        public ActionResult<IEnumerable<Product>> UpdateProduct(int id, ProductTO product)
+        public ActionResult<IEnumerable<ProductTO>> UpdateProduct(int id, ProductTO product)
         {
             try
             {
@@ -169,6 +179,53 @@ namespace CocomeStore.Controllers
             {
                 _logger.LogError(ex.Message);
                 return BadRequest();
+            }
+        }
+
+        [HttpPost]
+        [Route("create-stock/{id}")]
+        public ActionResult<IEnumerable<Store>> CreateStock(int id, ProductTO product)
+        {
+            try
+            {
+                _logger.LogInformation("adding product {} to store {}", product.Id, id);
+                _service.addToStock(id, product.Id);
+                return _service.GetStores(product.Id).ToArray();
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _logger.LogError(ex.Message);
+                return NotFound();
+            }
+        }
+
+        [HttpGet]
+        [Route("store-reports")]
+        public IEnumerable<Statistic> GetStoreStatistic()
+        {
+            return _statistics.GetLatestProfit().ToArray();
+        }
+
+        [HttpGet]
+        [Route("provider-reports")]
+        public IEnumerable<Statistic> GetProvidersStatistic()
+        {
+            return _statistics.GetProvidersStatistic().ToArray();
+        }
+
+
+        [HttpGet]
+        [Route("provider-report/{id}")]
+        public ActionResult<Statistic> GetProviderStatistic(int id)
+        {
+            try
+            {
+                return _statistics.GetProviderStatistic(id);
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _logger.LogError(ex.Message);
+                return NotFound();
             }
         }
     }

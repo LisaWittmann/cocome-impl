@@ -1,0 +1,15 @@
+<div class="create-product page-container">
+    <div class="container">
+        <section>
+            <h1>Neues Produkt hinzufügen</h1>
+        </section>
+        <section>
+            <app-product-detail
+                [product]="product"
+                [providers]="providers"
+                [restricted]="false"
+                (updateProductEvent)="saveProduct()"
+            ></app-product-detail>
+        </section>
+    </div>
+</div>

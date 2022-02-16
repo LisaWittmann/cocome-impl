@@ -9,15 +9,15 @@
         position: relative;
         @include flex-center();
         @include color-scheme-green();
+        opacity: 0.7;
         width: 100%;
         padding: 25px;
         font-size: $text-l;
-        font-weight: $poppins-medium;
+        font-weight: $weight-medium;
     }
  
     &__products {
         width: 70%;
-        @include color-scheme-grey();
         overflow-y: auto;
         @include flex-center(flex-start, column);
     }

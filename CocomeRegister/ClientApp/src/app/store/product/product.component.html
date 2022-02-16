@@ -1,0 +1,25 @@
+<div class="product-detail page-container">
+    <div class="container">
+        <section>
+            <div class="product-detail__header">
+                <h1>{{ product.name }}</h1>
+                <button 
+                    class="product-detail__card-button"
+                    (click)="addToCard()"
+                >
+                    <img 
+                        src="assets/svg/shopping-basket-solid.svg"
+                        alt="In den Warenkorb"
+                    >
+                </button>
+            </div>
+        </section>
+        <section>
+            <app-product-detail 
+                [product]="product"
+                [restricted]="true"
+                (updateProductEvent)="updateProduct()"
+            ></app-product-detail>
+        </section>
+    </div>
+</div>

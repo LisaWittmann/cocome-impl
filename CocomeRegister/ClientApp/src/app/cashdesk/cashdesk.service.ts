@@ -79,7 +79,7 @@ export class CashDeskStateService extends StateService<CashDeskState> {
             `${this.api}/checkout/${this.state.storeId}`,
             this.state.shoppingCard
         ).subscribe(() => {
-            this.storeStateService.updateInventory();
+            this.storeStateService.fetchInventory();
             this.setState({ shoppingCard: [] });
         }, error => console.error(error));
     }

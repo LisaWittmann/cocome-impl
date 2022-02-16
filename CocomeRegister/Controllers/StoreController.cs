@@ -16,14 +16,17 @@ namespace CocomeStore.Controllers
     {
         private readonly ILogger<StoreController> _logger;
         private readonly IStoreService _service;
+        private readonly IDatabaseStatistics _statistics;
 
         public StoreController(
             ILogger<StoreController> logger,
-            IStoreService service
+            IStoreService service,
+            IDatabaseStatistics statistics
         )
         {
             _service = service;
             _logger = logger;
+            _statistics = statistics;
         }
 
         [HttpGet]
@@ -42,6 +45,21 @@ namespace CocomeStore.Controllers
                 return _service.GetStore(id);
             }
             catch(EntityNotFoundException ex)
+            {
+                _logger.LogError(ex.Message);
+                return NotFound();
+            }
+        }
+
+        [HttpGet]
+        [Route("profit/{id}")]
+        public ActionResult<IEnumerable<Statistic>> GetProfit(int id)
+        {
+            try
+            {
+                return _statistics.GetStoreProfit(id).ToArray();
+            }
+            catch (EntityNotFoundException ex)
             {
                 _logger.LogError(ex.Message);
                 return NotFound();
@@ -69,9 +87,9 @@ namespace CocomeStore.Controllers
         [Route("create-order/{id}")]
         public ActionResult<IEnumerable<OrderTO>> PlaceOrder(int id, IEnumerable<OrderElementTO> elements)
         {
-            _logger.LogInformation("place new order for store {}", id);
             try
             {
+                _logger.LogInformation("place new order for store {}", id);
                 _service.PlaceOrder(id, elements);
                 return _service.GetOrders(id).ToArray();
             }
@@ -80,7 +98,6 @@ namespace CocomeStore.Controllers
                 _logger.LogError(ex.Message);
                 return BadRequest();
             }
-           
         }
 
         [HttpPost]
@@ -105,27 +122,58 @@ namespace CocomeStore.Controllers
             }
         }
 
-
         [HttpPost]
-        [Route("create-product/{id}")]
-        public ActionResult<IEnumerable<StockItem>> CreateProduct(int id, ProductTO product)
+        [Route("update-product/{id}")]
+        public ActionResult<IEnumerable<StockItem>> UpdateProduct(int id, ProductTO productTO)
         {
             try
             {
-                _logger.LogInformation("adding new product to store {}", id);
-                _service.CreateProduct(id, product);
-                return _service.GetInventory(id).ToArray();
+                _logger.LogInformation("updating product {} from store {}", productTO.Name, id);
+                _service.UpdateProduct(id, productTO);
             }
-            catch (EntityNotFoundException ex)
+            catch (CrossAccessException ex)
             {
                 _logger.LogError(ex.Message);
-                return NotFound();
-            } 
+                return Conflict();
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 return BadRequest();
             }
+            return _service.GetInventory(id).ToArray();
         }
+
+        [HttpGet]
+        [Route("{id}/product/{productId}")]
+        public ActionResult<ProductTO> GetProduct(int id, int productId)
+        {
+            try
+            {
+                _logger.LogInformation("requesting product {} of store {}", productId, id);
+                return _service.GetProduct(id, productId);
+            }
+            catch (CrossAccessException ex)
+            {
+                _logger.LogError(ex.Message);
+                return Conflict();
+            }
+        }
+
+        [HttpGet]
+        [Route("{id}/profit/{year}")]
+        public ActionResult<Statistic> GetProfit(int id, int year)
+        {
+            try
+            {
+                return _statistics.GetProfitOfYear(id, year);
+            }
+            catch(EntityNotFoundException ex)
+            {
+                _logger.LogError(ex.Message);
+                return NotFound();
+            }
+        }
+
     }
 }

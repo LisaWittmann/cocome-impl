@@ -10,7 +10,7 @@ namespace CocomeStore.Services
         IEnumerable<Store> GetAllStores();
         IEnumerable<OrderTO> GetAllOrders();
         IEnumerable<StockItem> GetAllStockItems();
-        IEnumerable<Product> GetAllProducts();
+        IEnumerable<ProductTO> GetAllProducts();
         IEnumerable<Provider> GetAllProvider();
 
         void CreateProduct(ProductTO productTO);
@@ -22,6 +22,7 @@ namespace CocomeStore.Services
         void CreateProvider(Provider providerTO);
         void UpdateProvider(int providerId, Provider providerTO);
 
-        IEnumerable<TimeSpan> GetDeliverySpans(int providerId);
+        IEnumerable<Store> GetStores(int productId);
+        void addToStock(int storeId, int productId);
     }
 }

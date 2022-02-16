@@ -1,7 +1,7 @@
 body {
   @include color-scheme-primary();
   position: absolute;
-  font-family: $font-poppins;
+  font-family: $font-family;
   overscroll-behavior-y: none;
   overscroll-behavior-x: none;
   overflow-x: hidden;
@@ -11,19 +11,20 @@ body {
   min-width: 320px;
 
   * {
-    font-family: $font-poppins;
+    font-family: $font-family;
     color: $color-black;
   }
 } 
 
 button, a, i {
-    cursor: pointer;
-    text-decoration: none;
+  cursor: pointer;
+  text-decoration: none;
 }
 
 ul {
-    list-style: none;
-    padding-inline-start: 0;
+  list-style: none;
+  padding-inline-start: 0;
+  margin-bottom: 0;
 }
 
 section {
@@ -36,10 +37,14 @@ section {
 }
 
 .success {
-    color: $color-light-green;
+  color: $color-light-green;
 }
 
 .disabled {
-    pointer-events: none;
-    opacity: 0.4;
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+.store, .enterprise {
+  margin-top: 60px;
 }

@@ -1,0 +1,32 @@
+ul.table {
+    margin: $spacing-s 0;
+    li {
+        border: 1px solid $color-grey;
+        padding: $spacing-xs;
+        margin-bottom: 5px;
+        cursor: pointer;
+
+        &:nth-child(2n) {
+            background-color: $color-light-grey;
+        }
+    }
+}
+
+table.legend {
+    width: 100%;
+    margin-top: $spacing-l;
+    border-spacing: $spacing-s $spacing-xs;
+    border-collapse: collapse;
+
+    thead td, .thead {
+        font-weight: $weight-medium;
+        background-color: $color-light-grey;
+    }
+
+    td {
+        border: 1px solid $color-grey;
+        box-sizing: border-box;
+        padding: $spacing-xs;
+        @include text-break();
+    }
+}
