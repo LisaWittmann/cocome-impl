@@ -16,10 +16,9 @@ import { StoreReportsComponent } from './reports/reports.component';
 import { StoreStateService } from './store.service';
 import { SharedModule } from '../shared/shared.module';
 import { AuthorizeService } from '../api-authorization/authorize.service';
-import { StoreGuard } from './store.guard';
+import { StoreGuard } from '../api-authorization/authorize.guard';
 
 const storeRoutes: Routes = [
-  { path: 'auswahl', component: StoreSelectComponent },
   { path: 'home', component: StoreDashboardComponent, canActivate: [StoreGuard] },
   { path: 'sortiment', component: StoreProductsComponent, canActivate: [StoreGuard] },
   { path: 'sortiment/:id', component: StoreProductComponent, canActivate: [StoreGuard] },

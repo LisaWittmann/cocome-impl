@@ -31,7 +31,6 @@ namespace CocomeStore.Controllers
             _jwtHandler = jwtHandler;
         }
 
-
         [HttpGet]
         public async Task<ActionResult> CreateDefaultUsers()
         {
@@ -64,7 +63,6 @@ namespace CocomeStore.Controllers
 
                 await _userManager.CreateAsync(user_Admin, "MySecr3t$");
 
-                await _userManager.AddToRoleAsync(user_Admin, role_Manager);
                 await _userManager.AddToRoleAsync(user_Admin, role_Administrator);
                 await _userManager.AddClaimsAsync(user_Admin, await _jwtHandler.GetClaims(user_Admin));
 
@@ -74,7 +72,7 @@ namespace CocomeStore.Controllers
                 addedUserList.Add(user_Admin);
             }
 
-            Store testStore = new Store()
+            var testStore = new Store()
             {
                 Name = "Filiale Mustermann",
                 City = "Mustertadt",

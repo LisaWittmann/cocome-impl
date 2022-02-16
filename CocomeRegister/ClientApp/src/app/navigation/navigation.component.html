@@ -1,14 +1,14 @@
 <div class="navigation">
     <div class="container">
         <nav>
-            <a [routerLink]="['/authentication/profile']">{{ userName }}</a>
-            <ul *ngIf="userName">
+            <a [routerLink]="['/authentication/profile']">{{ userName | async }}</a>
+            <ul *ngIf="isAuthenticated">
                 <li *ngIf="isAdmin"><a [routerLink]="['/admin/home']">Admin</a></li>
                 <li *ngIf="isManager"><a [routerLink]="['/filiale/home']">Filiale</a></li>
                 <li *ngIf="isCashier"><a [routerLink]="['/kasse/home']">Kasse</a></li>
             </ul>
-            <ul *ngIf="!userName">
-                <li><a [routerLink]="['/authentication/register']">Register</a></li>
+            <ul *ngIf="!isAuthenticated">
+                <li><a [routerLink]="['/authentication/register']">Registrieren</a></li>
                 <li><a [routerLink]="['/authentication/login']">Login</a></li>
             </ul>
         </nav>

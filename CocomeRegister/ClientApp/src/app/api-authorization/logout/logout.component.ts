@@ -51,6 +51,7 @@ export class LogoutComponent implements OnInit {
         case AuthenticationResultStatus.Redirect:
           break;
         case AuthenticationResultStatus.Success:
+          sessionStorage.clear();
           await this.navigateToReturnUrl(returnUrl);
           break;
         case AuthenticationResultStatus.Fail:

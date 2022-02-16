@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LoginComponent } from './login/login.component';
 import { LogoutComponent } from './logout/logout.component';
-import { LoginMenuComponent } from './login-menu/login-menu.component';
 import { RouterModule } from '@angular/router';
 import { ApplicationPaths } from './api-authorization.constants';
 import { HttpClientModule } from '@angular/common/http';
@@ -24,7 +23,7 @@ import { HttpClientModule } from '@angular/common/http';
       ]
     )
   ],
-  declarations: [LoginComponent, LogoutComponent, LoginMenuComponent],
-  exports: [LoginComponent, LogoutComponent, LoginMenuComponent]
+  declarations: [LoginComponent, LogoutComponent],
+  exports: [LoginComponent, LogoutComponent]
 })
 export class ApiAuthorizationModule { }

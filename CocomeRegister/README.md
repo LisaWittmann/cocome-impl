@@ -2,15 +2,15 @@
 
 ## admin
 
-email: admin@mail.de
+email: admin@mail.com
 password: MySecr3t$
 
 ## manager
 
-email: manager@mail.de
+email: manager@mail.com
 password: MySecr3t$
 
 ## cashier
 
-email: kassierer@mail.de
+email: kassierer@mail.com
 password: MySecr3t$

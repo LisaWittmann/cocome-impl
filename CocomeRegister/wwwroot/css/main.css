@@ -60,12 +60,27 @@ button, .button {
     width: 300px;
 }
 
+.close {
+    width: auto;
+    margin: 0;
+}
+
 .text-button {
     width: auto;
     padding: 0;
     background-color: transparent;
     border: 0;
-}  
+}
+
+.wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.form {
+    width: 300px;
+}
 
 .input-wrapper {
     position: relative;

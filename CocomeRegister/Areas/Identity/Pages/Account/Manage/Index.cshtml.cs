@@ -34,7 +34,7 @@ namespace CocomeStore.Areas.Identity.Pages.Account.Manage
         public class InputModel
         {
             [Phone]
-            [Display(Name = "Phone number")]
+            [Display(Name = "Mobilnummer")]
             public string PhoneNumber { get; set; }
         }
 
@@ -56,7 +56,7 @@ namespace CocomeStore.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'");
             }
 
             await LoadAsync(user);
@@ -68,7 +68,7 @@ namespace CocomeStore.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'");
             }
 
             if (!ModelState.IsValid)
@@ -83,13 +83,13 @@ namespace CocomeStore.Areas.Identity.Pages.Account.Manage
                 var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
                 if (!setPhoneResult.Succeeded)
                 {
-                    StatusMessage = "Unexpected error when trying to set phone number.";
+                    StatusMessage = "Ein unerwarteter Fehler ist aufgetreten";
                     return RedirectToPage();
                 }
             }
 
             await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Your profile has been updated";
+            StatusMessage = "Dein Profil wurde aktualsiert";
             return RedirectToPage();
         }
     }

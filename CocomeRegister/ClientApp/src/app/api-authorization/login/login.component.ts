@@ -3,6 +3,8 @@ import { AuthorizeService, AuthenticationResultStatus } from '../authorize.servi
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { LoginActions, QueryParameterNames, ApplicationPaths, ReturnUrlType } from '../api-authorization.constants';
+import { tap } from 'rxjs/operators';
+import { map } from 'd3';
 
 @Component({
   selector: 'app-login',

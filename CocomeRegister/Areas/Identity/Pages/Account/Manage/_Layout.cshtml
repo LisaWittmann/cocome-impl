@@ -9,27 +9,33 @@
     }
 }
 
-<div class="center-content">
+<section class="container">
     <div>
         <section>
-            <h2>Manage your account</h2>
+            <h2>Mein Profil</h2>
         </section>
         <section>
-            <h4>Change your account settings</h4>
+            <h4>Einstellungen bearbeiten</h4>
             <hr />
+        </section>
+        <section>
             <div class="row">
                 <div class="col-md-3">
-                    <partial name="_ManageNav" />
+                    <section>
+                        <partial name="_ManageNav" />
+                    </section>
                 </div>
-                <div class="col-md-9 center-content">
-                    <div>
-                        @RenderBody()
+                <div class="col-md-9 wrapper">
+                    <div class="form">
+                        <section>
+                            @RenderBody()
+                        </section>
                     </div>
                 </div>
             </div>
         </section>
     </div>
-</div>
+</section>
 
 @section Scripts {
     @RenderSection("Scripts", required: false)
