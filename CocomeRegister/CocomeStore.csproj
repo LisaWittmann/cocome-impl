@@ -52,6 +52,7 @@
     <None Remove="Services\Authorization\" />
     <None Remove="Services\Mapping\" />
     <None Remove="Services\Statistics\" />
+    <None Remove="Services\CashDesk\Printer\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\" />

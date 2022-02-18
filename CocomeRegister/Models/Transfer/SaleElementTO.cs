@@ -9,5 +9,16 @@ namespace CocomeStore.Models.Transfer
 
         [Required]
         public int Amount { get; set; }
+
+        [Required]
+        public PaymentMethod PaymentMethod { get; set; }
+
+        public int HandedCash { get; set; }
+    }
+
+    public enum PaymentMethod
+    {
+        Cash,
+        Card
     }
 }

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 using CocomeStore.Models;
 using CocomeStore.Models.Authorization;
+using CocomeStore.Models.Database;
 
 namespace CocomeStore.Controllers
 {
@@ -34,18 +35,15 @@ namespace CocomeStore.Controllers
         [HttpGet]
         public async Task<ActionResult> CreateDefaultUsers()
         {
-            string role_Administrator = "Administrator";
-            string role_Cashier = "Kassierer";
-            string role_Manager = "Filialleiter";
 
-            if (await _roleManager.FindByNameAsync(role_Administrator) == null)
-                await _roleManager.CreateAsync(new IdentityRole(role_Administrator));
+            if (await _roleManager.FindByNameAsync(ApplicationRoles.Admin) == null)
+                await _roleManager.CreateAsync(new IdentityRole(ApplicationRoles.Admin));
 
-            if (await _roleManager.FindByNameAsync(role_Cashier) == null)
-                await _roleManager.CreateAsync(new IdentityRole(role_Cashier));
+            if (await _roleManager.FindByNameAsync(ApplicationRoles.Manager) == null)
+                await _roleManager.CreateAsync(new IdentityRole(ApplicationRoles.Manager));
 
-            if (await _roleManager.FindByNameAsync(role_Manager) == null)
-                await _roleManager.CreateAsync(new IdentityRole(role_Manager));
+            if (await _roleManager.FindByNameAsync(ApplicationRoles.Cashier) == null)
+                await _roleManager.CreateAsync(new IdentityRole(ApplicationRoles.Cashier));
 
             var addedUserList = new List<ApplicationUser>();
 
@@ -63,7 +61,7 @@ namespace CocomeStore.Controllers
 
                 await _userManager.CreateAsync(user_Admin, "MySecr3t$");
 
-                await _userManager.AddToRoleAsync(user_Admin, role_Administrator);
+                await _userManager.AddToRoleAsync(user_Admin, ApplicationRoles.Admin);
                 await _userManager.AddClaimsAsync(user_Admin, await _claimManager.GetClaims(user_Admin));
 
 
@@ -93,7 +91,7 @@ namespace CocomeStore.Controllers
                 };
                 await _userManager.CreateAsync(user_Manager, "MySecr3t$");
 
-                await _userManager.AddToRoleAsync(user_Manager, role_Manager);
+                await _userManager.AddToRoleAsync(user_Manager, ApplicationRoles.Manager);
                 await _userManager.AddClaimsAsync(user_Manager, await _claimManager.GetClaims(user_Manager));;
 
                 user_Manager.EmailConfirmed = true;
@@ -116,7 +114,7 @@ namespace CocomeStore.Controllers
                 };
                 await _userManager.CreateAsync(user_Cashier, "MySecr3t$");
 
-                await _userManager.AddToRoleAsync(user_Cashier, role_Cashier);
+                await _userManager.AddToRoleAsync(user_Cashier, ApplicationRoles.Cashier);
                 await _userManager.AddClaimsAsync(user_Cashier, await _claimManager.GetClaims(user_Cashier));
 
                 user_Cashier.EmailConfirmed = true;

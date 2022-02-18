@@ -1,6 +1,6 @@
-﻿using System;
-using Microsoft.AspNetCore.Identity;
-namespace CocomeStore.Models
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace CocomeStore.Models.Authorization
 {
     public class ApplicationUser : IdentityUser
     {

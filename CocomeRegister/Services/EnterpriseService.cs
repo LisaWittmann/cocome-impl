@@ -4,6 +4,8 @@ using CocomeStore.Exceptions;
 using CocomeStore.Models;
 using Microsoft.EntityFrameworkCore;
 using CocomeStore.Models.Transfer;
+using CocomeStore.Models.Database;
+using CocomeStore.Services.Mapping;
 
 namespace CocomeStore.Services
 {

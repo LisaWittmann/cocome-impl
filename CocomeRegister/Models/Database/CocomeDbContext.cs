@@ -1,9 +1,10 @@
-﻿using IdentityServer4.EntityFramework.Options;
+﻿using CocomeStore.Models.Authorization;
+using IdentityServer4.EntityFramework.Options;
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
-namespace CocomeStore.Models
+namespace CocomeStore.Models.Database
 {
     public class CocomeDbContext : ApiAuthorizationDbContext<ApplicationUser>
     {

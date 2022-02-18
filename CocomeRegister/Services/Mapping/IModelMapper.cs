@@ -2,7 +2,7 @@
 using CocomeStore.Models;
 using CocomeStore.Models.Transfer;
 
-namespace CocomeStore.Services
+namespace CocomeStore.Services.Mapping
 {
     public interface IModelMapper
     {

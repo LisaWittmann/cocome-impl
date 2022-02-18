@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using CocomeStore.Models;
 using Microsoft.EntityFrameworkCore;
 using CocomeStore.Exceptions;
+using CocomeStore.Models.Database;
 
-namespace CocomeStore.Services
+namespace CocomeStore.Services.Statsistics
 {
     public class DatabaseStatistics : IDatabaseStatistics
     {

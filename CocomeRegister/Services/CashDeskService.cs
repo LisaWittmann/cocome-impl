@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using CocomeStore.Exceptions;
 using CocomeStore.Models;
+using CocomeStore.Models.Database;
 using CocomeStore.Models.Transfer;
+using CocomeStore.Services.Mapping;
 
 namespace CocomeStore.Services
 {

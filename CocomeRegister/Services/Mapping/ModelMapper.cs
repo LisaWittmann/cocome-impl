@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using CocomeStore.Models;
 using CocomeStore.Models.Transfer;
 
-namespace CocomeStore.Services
+namespace CocomeStore.Services.Mapping
 {
     public class ModelMapper : IModelMapper
     {
