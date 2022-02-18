@@ -67,7 +67,7 @@ export class EnterpriseStateService extends StateService<EnterpriseState> {
       this.http.get<User[]>(
         `${this.api}/user`
       ).subscribe(result => {
-        this.setState({ stores: result });
+        this.setState({ users: result });
       }, error => console.error(error));
     }
 
