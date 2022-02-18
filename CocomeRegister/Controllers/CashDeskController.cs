@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using CocomeStore.Exceptions;
+using CocomeStore.Models;
 using CocomeStore.Models.Transfer;
 using CocomeStore.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -18,7 +19,8 @@ namespace CocomeStore.Controllers
         private readonly ICashDeskService _service;
 
         // testData
-        private bool inExpressMode = true;
+        private bool inExpressMode = false;
+        private Dictionary<Sale, int> lastSales = new Dictionary<Sale, int>();
 
         public CashDeskController(
             ILogger<CashDeskController> logger,
@@ -53,7 +55,13 @@ namespace CocomeStore.Controllers
             try
             {
                 _logger.LogInformation("confirm checkout");
-                _service.CreateSale(id, elements);
+                Sale currentSale = _service.CreateSale(id, elements);
+                int numberOfElements = 0;
+                foreach (SaleElementTO element in elements)
+                {
+                    numberOfElements++;
+                }
+                UpdateExpressMode(currentSale, numberOfElements);
                 return true;
             }
             catch (ItemNotAvailableException ex)
@@ -66,6 +74,26 @@ namespace CocomeStore.Controllers
                 _logger.LogError(ex.Message);
                 return BadRequest();
             }
+        }
+
+        private void UpdateExpressMode(Sale sale, int numberOfSaleItems)
+        {
+            lastSales.Add(sale, numberOfSaleItems);
+            DateTime lastHour = DateTime.Now.AddHours(-1);
+            int validSales = 0;
+            foreach (KeyValuePair<Sale, int> saleEntry in lastSales)
+            {
+                if(saleEntry.Key.TimeStamp < lastHour)
+                {
+                    lastSales.Remove(saleEntry.Key);
+                } else if (saleEntry.Value < 9)
+                {
+                    validSales++;
+                }
+            }
+
+            if (validSales * 2 >= lastSales.Count) { inExpressMode = true; }
+
         }
 
     }

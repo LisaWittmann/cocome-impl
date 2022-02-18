@@ -1,0 +1,132 @@
+<div class="page-container">
+  <!--{{ users | json }}<br />-->
+  <ul>
+    <li *ngFor="let user of users">
+      Username: {{user.userName}}<br />
+      Store: {{user.store}}<br /><br />
+    </li>
+  </ul>
+</div>
+<!--<div class="users page-container">
+  <div class="container">
+    <section>
+      <h1>Nutzer</h1>
+    </section>
+    <section>
+      <app-accordion *ngFor="let user of users"
+                     [header]="user.lastName">
+        <div class="user-detail">
+          <div>
+            <div class="input-wrapper">
+              <label for="id">Id</label>
+              <input name="id"
+                     readonly="readonly"
+                     [(ngModel)]="user.id"
+                     class="input--labeled">
+            </div>
+            <div class="input-wrapper">
+              <label for="userName">Nutzername</label>
+              <input name="userName"
+                     type="text"
+                     [(ngModel)]="user.userName"
+                     class="input--labeled">
+            </div>
+            <div class="input-wrapper">
+              <label for="firstName">Vorname</label>
+              <input name="firstName"
+                     type="text"
+                     [(ngModel)]="user.firstName"
+                     class="input--labeled">
+            </div>
+            <div class="input-wrapper">
+              <label for="lastName">Nachname</label>
+              <input name="lastName"
+                     type="text"
+                     [(ngModel)]="user.lastName"
+                     class="input--labeled">
+            </div>
+          </div>
+          <div>
+            <div class="input-wrapper">
+              <label for="email">E-Mail</label>
+              <input name="email"
+                     type="text"
+                     [(ngModel)]="user.email"
+                     class="input--labeled">
+            </div>
+            <div class="input-wrapper">
+              <label for="store">Filiale</label>
+              <input name="store"
+                     type="text"
+                     [(ngModel)]="user.store"
+                     class="input--labeled">
+            </div>
+            <button class="button__form"
+                    (click)="saveChanges(user)">
+              Speichern
+            </button>
+          </div>
+        </div>
+      </app-accordion>
+    </section>
+    <section>
+      <h2>Neuen Nutzer hinzufügen</h2>
+      <div class="user-detail" (submit)="submitUser(newUser, role, password)">
+        <div>
+          <div class="input-wrapper">
+            <label for="userName">Nutzername</label>
+            <input name="userName"
+                   type="text"
+                   [(ngModel)]="newUser.userName"
+                   class="input--labeled">
+          </div>
+          <div class="input-wrapper">
+            <label for="firstName">Vorname</label>
+            <input name="firstName"
+                   type="text"
+                   [(ngModel)]="newUser.firstName"
+                   class="input--labeled">
+          </div>
+          <div class="input-wrapper">
+            <label for="lastName">Nachname</label>
+            <input name="lastName"
+                   type="text"
+                   [(ngModel)]="newUser.lastName"
+                   class="input--labeled">
+          </div>
+            <div class="input-wrapper">
+            <label for="role">Rolle</label>
+            <input name="role"
+                   type="text"
+                   [(ngModel)]="newUserRole"
+                   class="input--labeled">
+          </div>
+        </div>
+        <div>
+          <div class="input-wrapper">
+            <label for="email">E-Mail</label>
+            <input name="email"
+                   type="text"
+                   [(ngModel)]="newUser.email"
+                   class="input--labeled">
+          </div>
+          <div class="input-wrapper">
+            <label for="store">Filiale</label>
+            <input name="store"
+                   type="text"
+                   [(ngModel)]="newUser.store"
+                   class="input--labeled">
+          </div>
+          <div class="input-wrapper">
+            <label for="password">Passwort</label>
+            <input name="password"
+                   type="text"
+                   [(ngModel)]="newUserPassword"
+                   class="input--labeled">
+          </div>
+          <button class="button__form" type="submit">Speichern</button>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>-->

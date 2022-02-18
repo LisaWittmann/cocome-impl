@@ -20,6 +20,8 @@ import { EnterpriseStateService } from './enterprise.service';
 import { AuthorizeService } from '../api-authorization/authorize.service';
 import { EnterpriseGuard } from '../api-authorization/authorize.guard';
 
+import { EnterpriseUsersComponent } from './users/users.component';
+
 const enterpriseRoutes: Routes = [
   { path: 'home', component: EnterpriseHomeComponent, canActivate: [EnterpriseGuard] },
   { path: 'produkte', component: EnterpriseProductsComponent, canActivate: [EnterpriseGuard] },
@@ -28,6 +30,7 @@ const enterpriseRoutes: Routes = [
   { path: 'filialen', component: EnterpriseStoresComponent, canActivate: [EnterpriseGuard] },
   { path: 'lieferanten', component: EnterpriseProvidersComponent, canActivate: [EnterpriseGuard] },
   { path: 'statistik', component: EnterpriseReportsComponent, canActivate: [EnterpriseGuard] },
+  { path: 'nutzer', component: EnterpriseUsersComponent, canActivate: [EnterpriseGuard]  }
 ];
 @NgModule({
   imports: [
@@ -46,6 +49,7 @@ const enterpriseRoutes: Routes = [
     EnterpriseCreateProductComponent,
     EnterpriseProvidersComponent,
     EnterpriseReportsComponent,
+    EnterpriseUsersComponent
   ],
   exports: [EnterpriseComponent],
   providers: [

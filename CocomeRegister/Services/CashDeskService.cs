@@ -22,7 +22,7 @@ namespace CocomeStore.Services
             _mapper = mapper;
         }
 
-        public void CreateSale(int storeId, IEnumerable<SaleElementTO> elements)
+        public Sale CreateSale(int storeId, IEnumerable<SaleElementTO> elements)
         {
             Sale sale = new() { StoreId = storeId, TimeStamp = DateTime.Now };
 
@@ -42,6 +42,8 @@ namespace CocomeStore.Services
             }
 
             _context.SaveChanges();
+            return sale;
         }
+
     }
 }

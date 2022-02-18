@@ -2,19 +2,21 @@ import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { Product, Store, Provider, Statistic } from 'src/services/Models';
+import { Product, Store, Provider, Statistic, User } from 'src/services/Models';
 import { StateService } from 'src/services/StateService';
 
 interface EnterpriseState {
     products: Product[];
     stores: Store[],
     providers: Provider[],
+    users: User[],
 }
 
 const initialState: EnterpriseState = {
     products: [],
     stores: [],
-    providers: []
+    providers: [],
+    users: []
 };
 
 @Injectable({providedIn: 'root'})
@@ -22,6 +24,7 @@ export class EnterpriseStateService extends StateService<EnterpriseState> {
     products$: Observable<Product[]> = this.select(state => state.products);
     stores$: Observable<Store[]> = this.select(state => state.stores);
     providers$: Observable<Provider[]> = this.select(state => state.providers);
+    users$: Observable<User[]> = this.select(state => state.users);
     api: string;
 
     constructor(
@@ -58,6 +61,14 @@ export class EnterpriseStateService extends StateService<EnterpriseState> {
         ).subscribe(result => {
             this.setState({ stores: result });
         }, error => console.error(error));
+    }
+
+    private fetchUsers() {
+      this.http.get<User[]>(
+        `${this.api}/user`
+      ).subscribe(result => {
+        this.setState({ stores: result });
+      }, error => console.error(error));
     }
 
     addProduct(product: Product) {
@@ -141,4 +152,22 @@ export class EnterpriseStateService extends StateService<EnterpriseState> {
             `${this.api}/create-stock/${storeId}`, product
         );
     }
+
+    addUser(newUser: User, role: string, password: string) {
+      this.http.post<User[]>(
+        `${this.api}/user`,
+        [newUser, role, password]
+      ).subscribe(result => {
+        this.setState({ users: result });
+      }, error => console.error(error));
+    }
+
+    updateUserRole(user: User, role: string) {
+      this.http.post<User[]>(
+        `${this.api}/role/`,
+        [user, role]
+      ).subscribe(result => {
+        this.setState({ users: result });
+      }, error => console.error(error));
+  }
 }
