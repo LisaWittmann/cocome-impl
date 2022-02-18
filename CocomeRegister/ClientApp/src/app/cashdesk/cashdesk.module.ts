@@ -12,7 +12,6 @@ import { CashDeskShoppingCardComponent } from './shopping-card/shopping-card.com
 import { ProductListComponent } from '../shared/product-list/product-list.component';
 import { ProductCardComponent } from '../shared/product-card/product-card.component';
 import { CashDeskStateService } from './cashdesk.service';
-import { StoreStateService } from '../store/store.service';
 
 import { AuthorizeService } from '../api-authorization/authorize.service';
 import { CashDeskGuard } from '../api-authorization/authorize.guard';
@@ -40,9 +39,7 @@ export const cashdeskRoutes: Routes = [
   ],
   exports: [CashDeskComponent],
   providers: [
-    CashDeskStateService,
-    StoreStateService,
-    AuthorizeService
+    CashDeskStateService
   ],
   bootstrap: [CashDeskComponent]
 })

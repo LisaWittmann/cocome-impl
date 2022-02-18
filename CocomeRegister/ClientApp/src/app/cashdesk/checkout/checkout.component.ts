@@ -1,5 +1,4 @@
-import { Component } from '@angular/core';
-import { StoreStateService } from 'src/app/store/store.service';
+import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { Product } from 'src/services/Models';
 import { CashDeskStateService } from '../cashdesk.service';
 
@@ -8,29 +7,43 @@ import { CashDeskStateService } from '../cashdesk.service';
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.scss'],
 })
-export class CashDeskCheckoutComponent {
-    expressMode: boolean;
-    discount: number;
-    products: Product[];
+export class CashDeskCheckoutComponent implements AfterViewInit {
+  @ViewChild('barcodeInput', { static: false }) barcodeInput: ElementRef<HTMLInputElement>;
+  expressMode: boolean;
+  discount: number;
+  products: Product[];
+  barcode: string;
 
-    constructor(
-      private cashdeskState: CashDeskStateService,
-      private storeState: StoreStateService,
-    ) {
-      this.cashdeskState.expressMode$.subscribe(mode => {
-        this.expressMode = mode;
-        this.discount = this.cashdeskState.discount;
-      });
-      this.storeState.inventory$.subscribe(() => {
-        this.products = this.storeState.availableProducts;
-      });
-    }
+  constructor(private cashdeskState: CashDeskStateService) {
+    this.cashdeskState.expressMode$.subscribe(mode => {
+      this.expressMode = mode;
+      this.discount = this.cashdeskState.discount;
+    });
+    this.cashdeskState.storeProducts$.subscribe(storeProducts => {
+      this.products = storeProducts;
+    });
+  }
 
-    addToCard(product: Product) {
-      this.cashdeskState.addProduct(product);
-    }
+  addToCard(product: Product) {
+    this.cashdeskState.addProduct(product);
+    this.barcodeInput.nativeElement.focus();
+  }
 
-    removeFromCard(product: Product) {
-      this.cashdeskState.removeProduct(product);
+  removeFromCard(product: Product) {
+    this.cashdeskState.removeProduct(product);
+    this.barcodeInput.nativeElement.focus();
+  }
+
+  onSubmit() {
+    const product = this.products.find(p => p.id == Number(this.barcode));
+    if (product) {
+      this.addToCard(product);
+      this.barcode = undefined;
     }
+    this.barcodeInput.nativeElement.focus();
+  }
+
+  ngAfterViewInit() {
+    this.barcodeInput.nativeElement.focus();
+  }
 }

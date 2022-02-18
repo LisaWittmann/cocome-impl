@@ -60,6 +60,6 @@ export class CashDeskPaymentComponent {
 
   confirmPayment() {
     this.cashdeskState.confirmCheckout();
-    this.router.navigate(['kasse']);
+    this.router.navigate(['/kasse/home']);
   }
 }

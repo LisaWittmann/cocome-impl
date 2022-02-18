@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CocomeStore.Controllers
 {
     [ApiController]
-    [Authorize(Policy = "store")]
+    [Authorize]
     [Route("api/[controller]")]
     public class FileUploadController : Controller
     {

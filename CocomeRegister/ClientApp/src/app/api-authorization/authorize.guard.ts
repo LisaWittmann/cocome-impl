@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { AuthorizeService } from './authorize.service';
 import { tap } from 'rxjs/operators';
 import { ApplicationPaths, QueryParameterNames } from './api-authorization.constants';
-import { StoreStateService } from '../store/store.service';
 
 @Injectable({
   providedIn: 'root'

@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { StateService } from 'src/services/StateService';
 import { Product, StockItem, Store, Order, OrderElement, Statistic } from 'src/services/Models';
 import { AuthorizeService } from '../api-authorization/authorize.service';
-import { map, tap } from 'rxjs/operators';
 
 interface StoreState {
   store: Store;
@@ -29,18 +28,16 @@ export class StoreStateService extends StateService<StoreState> {
   api: string;
 
   constructor(
-    private authServide: AuthorizeService,
     private http: HttpClient,
+    private authService: AuthorizeService,
     @Inject('BASE_URL') baseUrl: string
   ) {
     super(initialState);
     this.api = baseUrl + "api/store";
+    this.authService.getUser().subscribe(user => {
+      this.fetchStore(user.store);
+    });
     this.getSession();
-    this.authServide.getUser().pipe(tap(user => this.fetchStore(user.store)));
-  }
-
-  isInitialized(): Observable<boolean> {
-    return this.store$.pipe(map(u => !!u));
   }
 
   fetchStore(id: string) {
@@ -65,10 +62,6 @@ export class StoreStateService extends StateService<StoreState> {
     ).subscribe(result => {
       this.setState({ orders: result });
     }, error => console.error(error));
-  }
-
-  get availableProducts() {
-    return this.state.inventory.filter(item => item.stock > 0).map(item => item.product);
   }
 
   get runningOutOfStock() {

@@ -29,11 +29,6 @@ export class StoreReportsComponent implements OnInit {
     this.storeStateService.inventory$.subscribe(inventory => {
       this.inventory = inventory;
     });
-    this.storeStateService.getProfits().subscribe(profits => {
-      this.salesData = profits;
-      this.initSalesChart();
-      this.initInventoryChart();
-    })
   }
 
   get date() {
@@ -83,12 +78,11 @@ export class StoreReportsComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.salesData && !this.salesChart) {
+    this.storeStateService.getProfits().subscribe(profits => {
+      this.salesData = profits;
       this.initSalesChart();
-    }
-    if (this.inventory && !this.inventoryChart) {
       this.initInventoryChart();
-    }
+    });
   }
 
   async generatePDFSection(elementId: string, pdf: jsPDF) {

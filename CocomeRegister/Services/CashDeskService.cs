@@ -6,6 +6,7 @@ using CocomeStore.Models;
 using CocomeStore.Models.Database;
 using CocomeStore.Models.Transfer;
 using CocomeStore.Services.Mapping;
+using Microsoft.EntityFrameworkCore;
 
 namespace CocomeStore.Services
 {
@@ -44,6 +45,14 @@ namespace CocomeStore.Services
             }
 
             _context.SaveChanges();
+        }
+
+        public IEnumerable<Product> GetAvailableProducts(int storeId)
+        {
+            return _context.StockItems
+                .Include(item => item.Product)
+                .Where(item => item.StoreId == storeId)
+                .Select(item => item.Product);
         }
     }
 }

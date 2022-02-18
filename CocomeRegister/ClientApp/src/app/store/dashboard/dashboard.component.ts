@@ -3,7 +3,6 @@ import { Chart } from 'chart.js';
 import { monthValues } from 'src/services/Month';
 import { StockItem, Store, Order, Statistic } from 'src/services/Models';
 import { StoreStateService } from '../store.service';
-
 @Component({
   selector: 'app-store-dashboard',
   templateUrl: './dashboard.component.html',
@@ -18,7 +17,8 @@ export class StoreDashboardComponent implements OnInit {
   salesChart: Chart;
   statistic: Statistic;
 
-  constructor(private storeStateService: StoreStateService) {
+  constructor(
+    private storeStateService: StoreStateService) {
     this.storeStateService.store$.subscribe(store => {
       this.store = store;
     });
@@ -27,10 +27,6 @@ export class StoreDashboardComponent implements OnInit {
     });
     this.storeStateService.orders$.subscribe(orders => {
       this.orders = orders;
-    });
-    this.storeStateService.getLatestProfits().subscribe(profits => {
-      this.statistic = profits;
-      this.initChart();
     });
   }
 
@@ -59,8 +55,9 @@ export class StoreDashboardComponent implements OnInit {
   }
 
   ngOnInit(){
-    if (this.statistic && !this.salesChart) {
+    this.storeStateService.getLatestProfits().subscribe(profits => {
+      this.statistic = profits;
       this.initChart();
-    }
+    });
   }
 }

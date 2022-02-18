@@ -15,6 +15,7 @@ using Microsoft.Extensions.Logging;
 using CocomeStore.Models;
 using CocomeStore.Models.Authorization;
 using System.Security.Claims;
+using CocomeStore.Models.Database;
 
 namespace CocomeStore.Areas.Identity.Pages.Account
 {

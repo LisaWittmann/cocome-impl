@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using CocomeStore.Exceptions;
+using CocomeStore.Models;
 using CocomeStore.Models.Transfer;
 using CocomeStore.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -37,6 +39,13 @@ namespace CocomeStore.Controllers
             return inExpressMode;
         }
 
+        [HttpGet]
+        [Route("products/{storeId}")]
+        public ActionResult<IEnumerable<Product>> GetProducts(int storeId)
+        {
+            return _service.GetAvailableProducts(storeId).ToArray();
+        }
+
         [HttpPost]
         [Route("update-express/{id}")]
         public bool EndExpressMode(int id, bool expressMode)
@@ -47,14 +56,14 @@ namespace CocomeStore.Controllers
         }
 
         [HttpPost]
-        [Route("checkout/{id}")]
-        public ActionResult<bool> ConfirmCheckout(int id, IEnumerable<SaleElementTO> elements)
+        [Route("checkout/{storeId}")]
+        public ActionResult<IEnumerable<Product>> ConfirmCheckout(int storeId, IEnumerable<SaleElementTO> elements)
         {
             try
             {
                 _logger.LogInformation("confirm checkout");
-                _service.CreateSale(id, elements);
-                return true;
+                _service.CreateSale(storeId, elements);
+                return _service.GetAvailableProducts(storeId).ToArray();
             }
             catch (ItemNotAvailableException ex)
             {

@@ -3,18 +3,20 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Product, SaleElement } from 'src/services/Models';
 import { StateService } from 'src/services/StateService';
-import { StoreStateService } from '../store/store.service';
+import { AuthorizeService } from '../api-authorization/authorize.service';
 
 interface CashDeskState {
     id: number;
     storeId: number;
     expressMode: boolean;
+    storeProducts: Product[];
     shoppingCard: SaleElement[];
 }
 
 const initialState: CashDeskState = {
     id: undefined,
     storeId: undefined,
+    storeProducts: [],
     expressMode: true,
     shoppingCard: [],
 };
@@ -26,19 +28,31 @@ const expressModeMaxItems = 8;
 export class CashDeskStateService extends StateService<CashDeskState> {
     expressMode$: Observable<boolean> = this.select(state => state.expressMode);
     shoppingCard$: Observable<SaleElement[]> = this.select(state => state.shoppingCard);
+    storeProducts$: Observable<Product[]> = this.select(state => state.storeProducts);
     api: string;
 
   constructor(
-    private storeStateService: StoreStateService,
     private http: HttpClient,
+    private authService: AuthorizeService,
     @Inject('BASE_URL') baseUrl: string
   ) {
         super(initialState);
-        this.storeStateService.store$.subscribe(store => {
-            this.state.storeId = store.id
-        });
         this.api = baseUrl + "api/cashdesk";
-        this.fetchExpressMode();
+        this.authService.getUser().subscribe(user => {
+            this.setState({ storeId: Number(user.store) });
+            this.fetchStoreProducts();
+        });
+        if (this.state.id) {
+            this.fetchExpressMode();
+        }
+    }
+
+    private fetchStoreProducts() {
+        this.http.get<Product[]>(
+            `${this.api}/products/${this.state.storeId}`
+        ).subscribe(result => {
+            this.setState({ storeProducts: result});
+        }, error => console.error(error));
     }
 
     private fetchExpressMode() {
@@ -84,7 +98,6 @@ export class CashDeskStateService extends StateService<CashDeskState> {
             `${this.api}/checkout/${this.state.storeId}`,
             this.state.shoppingCard,
         ).subscribe(() => {
-            this.storeStateService.fetchInventory();
             this.setState({ shoppingCard: [] });
         }, error => console.error(error));
     }

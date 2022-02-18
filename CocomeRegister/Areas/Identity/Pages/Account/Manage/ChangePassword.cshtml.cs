@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using CocomeStore.Models;
+using CocomeStore.Models.Authorization;
+
 namespace CocomeStore.Areas.Identity.Pages.Account.Manage
 {
     public class ChangePasswordModel : PageModel

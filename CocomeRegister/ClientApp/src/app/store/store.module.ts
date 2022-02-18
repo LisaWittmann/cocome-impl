@@ -48,7 +48,6 @@ const storeRoutes: Routes = [
   exports: [StoreComponent],
   providers: [
     StoreStateService,
-    AuthorizeService
   ],
   bootstrap: [StoreComponent],
 })
