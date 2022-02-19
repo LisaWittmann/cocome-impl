@@ -13,7 +13,7 @@ export class StoreOrderDetailComponent {
     constructor(private storeStateService: StoreStateService) {}
 
     close() {
-        this.storeStateService.closeOrder(this.order.id);
+        this.storeStateService.closeOrder(this.order);
     }
 
     getElementPrice(element: OrderElement) {
@@ -21,9 +21,9 @@ export class StoreOrderDetailComponent {
     }
 
     get status() {
-        if (this.order.delivered) {
+        if (this.order.closed) {
             return `Geliefert am ${new Date(this.order.deliveringDate).toLocaleDateString('de-DE')}`;
-        } else if (!this.order.closed) {
+        } else {
             return 'In Bearbeitung';
         }
     }

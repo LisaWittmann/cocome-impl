@@ -33,7 +33,6 @@ export interface Order {
     provider: Provider;
     placingDate: Date;
     deliveringDate: Date | undefined;
-    delivered: boolean;
     closed: boolean;
 }
 

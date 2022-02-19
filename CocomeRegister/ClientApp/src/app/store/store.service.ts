@@ -111,15 +111,16 @@ export class StoreStateService extends StateService<StoreState> {
       `${this.api}/create-order/${this.state.store.id}`, 
       this.state.currentOrder
     ).subscribe(result => {
-      this.setState({ orders: result });
+      console.log(result);
       this.setState({ currentOrder: [] });
+      this.setState({ orders: result });
     }, error => console.error(error));
   }
 
-  closeOrder(orderId: number) {
+  closeOrder(order: Order) {
     this.http.post<Order[]>(
       `${this.api}/close-order/${this.state.store.id}`,
-      orderId
+      order
     ).subscribe(result => {
       this.setState({ orders: result });
       this.fetchInventory();

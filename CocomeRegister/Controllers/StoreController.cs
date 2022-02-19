@@ -104,12 +104,12 @@ namespace CocomeStore.Controllers
 
         [HttpPost]
         [Route("close-order/{id}")]
-        public ActionResult<IEnumerable<OrderTO>> CloseOrder(int id, int orderId)
+        public ActionResult<IEnumerable<OrderTO>> CloseOrder(int id, OrderTO orderTO)
         {
             try
             {
-                _logger.LogInformation("close order with id {} for store {}", orderId, id);
-                _service.CloseOrder(id, orderId);
+                _logger.LogInformation("close order with id {} for store {}", orderTO.Id, id);
+                _service.CloseOrder(id, orderTO.Id);
                 return _service.GetOrders(id).ToArray();
             }
             catch (EntityNotFoundException ex)

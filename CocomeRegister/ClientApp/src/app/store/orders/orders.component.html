@@ -4,19 +4,9 @@
             <h1>Bestellungen</h1>
         </section>
         <section *ngIf="openOrders.length">
-            <h2>Offene Bestellungen</h2>
-            <app-accordion 
-                *ngFor="let order of openOrders"
-                [header]="title(order)"
-            >
-                <app-store-order-detail [order]="order">
-                </app-store-order-detail>
-            </app-accordion>
-        </section>
-        <section *ngIf="pendingOrders.length">
             <h2>Ausstehende Bestellungen</h2>
             <app-accordion 
-                *ngFor="let order of pendingOrders"
+                *ngFor="let order of openOrders"
                 [header]="title(order)"
             >
                 <app-store-order-detail [order]="order">

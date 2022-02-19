@@ -44,9 +44,5 @@ namespace CocomeStore.Models
         public DateTime PlacingDate { get; set; }
 
         public DateTime DeliveringDate { get; set; }
-
-        public bool Delivered { get; set; }
-
-        public bool Closed { get; set; }
     }
 }

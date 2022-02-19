@@ -21,7 +21,7 @@ namespace CocomeStore.Models.Database
 
         public DbSet<Provider> Providers { get; set; }
 
-        public DbSet<OrderElement> OrderElements { get; set; } 
+        public DbSet<OrderElement> OrderElements { get; set; }
 
         public DbSet<Order> Orders { get; set; }
 

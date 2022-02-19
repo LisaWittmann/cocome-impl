@@ -9,23 +9,15 @@ import { StoreStateService } from '../store.service';
 })
 export class StoreOrdersComponent {
     orders: Order[];
+    openOrders: Order[];
+    closedOrders: Order[];
 
     constructor(private storeState: StoreStateService) {
         this.storeState.orders$.subscribe(orders => {
             this.orders = orders;
+            this.closedOrders = orders.filter(order => order.closed);
+            this.openOrders = orders.filter(order => !order.closed);
         });
-    }
-
-    get closedOrders() {
-        return this.orders.filter(order => order.closed);
-    }
-
-    get pendingOrders() {
-        return this.orders.filter(order => (order.delivered && !order.closed));
-    }
-
-    get openOrders() {
-        return this.orders.filter(order => !order.delivered);
     }
 
     title = (order: Order) => {

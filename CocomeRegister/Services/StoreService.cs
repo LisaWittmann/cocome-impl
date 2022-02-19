@@ -80,13 +80,12 @@ namespace CocomeStore.Services
                 item.Stock += element.Amount;
             };
 
-            order.Closed = true;
+            order.DeliveringDate = DateTime.Now;
             _context.SaveChanges();
         }
 
         public void PlaceOrder(int storeId, IEnumerable<OrderElementTO> elements)
         {
-
             DateTime dateTime = DateTime.Now;
             Store store = GetStore(storeId);
             if (store == null)
@@ -102,9 +101,7 @@ namespace CocomeStore.Services
                     ProviderId = element.Key,
                     StoreId = storeId,
                     PlacingDate = dateTime,
-                    DeliveringDate = dateTime,
-                    Delivered = false,
-                    Closed = false,
+                    DeliveringDate = DateTime.MinValue
                 };
                 
                 var orderElements = element.ToArray()

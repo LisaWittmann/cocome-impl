@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using CocomeStore.Models;
 using CocomeStore.Models.Transfer;
@@ -35,8 +36,6 @@ namespace CocomeStore.Services.Mapping
                 StoreId = orderTO.Store.Id,
                 ProviderId = orderTO.Provider.Id,
                 PlacingDate = orderTO.PlacingDate,
-                Delivered = orderTO.Delivered,
-                Closed = orderTO.Closed,
             };
             return order;
         }
@@ -54,10 +53,9 @@ namespace CocomeStore.Services.Mapping
                 OrderElements = elements,
                 Store = order.Store,
                 Provider = order.Provider,
-                Closed = order.Closed,
-                Delivered = order.Delivered,
                 PlacingDate = order.PlacingDate,
                 DeliveringDate = order.DeliveringDate,
+                Closed = (order.DeliveringDate != DateTime.MinValue)
             };
             return orderTO;
         }

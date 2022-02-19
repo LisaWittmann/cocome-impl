@@ -84,7 +84,7 @@ namespace CocomeStore.Services.Statsistics
             }
 
             var dataset = _context.Orders
-                .Where(order => order.Provider.Id == providerId && order.Delivered)
+                .Where(order => order.Provider.Id == providerId && order.DeliveringDate != DateTime.MinValue)
                 .OrderBy(order => order.PlacingDate)
                 .Select(order => (order.DeliveringDate - order.PlacingDate).TotalDays);
 

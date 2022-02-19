@@ -22,8 +22,6 @@ namespace CocomeStore.Models.Transfer
 
         public DateTime DeliveringDate { get; set; }
 
-        public bool Delivered { get; set; }
-
         public bool Closed { get; set; }
     }
 }

@@ -23,10 +23,10 @@
             </ul>
             <a [routerLink]="'/filiale/sortiment'">Alle Produkte</a>
         </section>
-        <section *ngIf="pendingOrders.length">
+        <section *ngIf="openOrders.length">
             <h2>Ausstehende Bestellungen</h2>
             <app-accordion 
-                *ngFor="let order of pendingOrders"
+                *ngFor="let order of openOrders"
                 [header]="title(order)"
             >
                 <app-store-order-detail [order]="order">

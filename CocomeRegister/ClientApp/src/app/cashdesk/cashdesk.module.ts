@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 
 import { CashDeskComponent } from './cashdesk.component';
 import { CashDeskHomeComponent } from './home/home.component';
+import { CashDeskDisplayComponent } from './display/display.component';
 import { CashDeskCheckoutComponent } from './checkout/checkout.component';
 import { CashDeskPaymentComponent } from './payment/payment.component';
 import { CashDeskShoppingCardComponent } from './shopping-card/shopping-card.component';
@@ -19,6 +20,7 @@ export const cashdeskRoutes: Routes = [
   { path: 'home', component: CashDeskHomeComponent, canActivate: [CashDeskGuard] },
   { path: 'checkout', component: CashDeskCheckoutComponent, canActivate: [CashDeskGuard] },
   { path: 'payment', component: CashDeskPaymentComponent, canActivate: [CashDeskGuard] },
+  { path: 'display', component: CashDeskDisplayComponent },
 ];
 
 @NgModule({
@@ -30,6 +32,7 @@ export const cashdeskRoutes: Routes = [
   declarations: [
     CashDeskComponent,
     CashDeskHomeComponent,
+    CashDeskDisplayComponent,
     CashDeskCheckoutComponent,
     CashDeskShoppingCardComponent,
     CashDeskPaymentComponent,

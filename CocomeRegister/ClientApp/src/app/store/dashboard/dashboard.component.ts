@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component } from '@angular/core';
 import { Chart } from 'chart.js';
 import { monthValues } from 'src/services/Month';
 import { StockItem, Store, Order, Statistic } from 'src/services/Models';
@@ -8,7 +8,7 @@ import { StoreStateService } from '../store.service';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
 })
-export class StoreDashboardComponent implements OnInit {
+export class StoreDashboardComponent implements AfterViewInit {
   store: Store;
   runningOutOfStock: StockItem[];
   orders: Order[];
@@ -30,8 +30,8 @@ export class StoreDashboardComponent implements OnInit {
     });
   }
 
-  get pendingOrders() {
-    return this.orders.filter(order => order.delivered && !order.closed);
+  get openOrders() {
+    return this.orders.filter(order => !order.closed);
   }
 
   title = (order: Order) => {
@@ -54,7 +54,7 @@ export class StoreDashboardComponent implements OnInit {
     });
   }
 
-  ngOnInit(){
+  ngAfterViewInit() {
     this.storeStateService.getLatestProfits().subscribe(profits => {
       this.statistic = profits;
       this.initChart();

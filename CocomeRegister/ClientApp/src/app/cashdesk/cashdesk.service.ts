@@ -17,7 +17,7 @@ const initialState: CashDeskState = {
     id: 1,
     storeId: undefined,
     storeProducts: [],
-    expressMode: true,
+    expressMode: false,
     shoppingCard: [],
 };
 
