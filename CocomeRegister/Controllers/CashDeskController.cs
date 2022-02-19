@@ -57,12 +57,12 @@ namespace CocomeStore.Controllers
 
         [HttpPost]
         [Route("checkout/{storeId}")]
-        public ActionResult<IEnumerable<Product>> ConfirmCheckout(int storeId, IEnumerable<SaleElementTO> elements)
+        public ActionResult<IEnumerable<Product>> ConfirmCheckout(int storeId, SaleTO saleTO)
         {
             try
             {
                 _logger.LogInformation("confirm checkout");
-                _service.CreateSale(storeId, elements);
+                _service.CreateSale(storeId, saleTO);
                 return _service.GetAvailableProducts(storeId).ToArray();
             }
             catch (ItemNotAvailableException ex)

@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Product, SaleElement } from 'src/services/Models';
+import { PaymentMethod, Product, Sale, SaleElement } from 'src/services/Models';
 import { StateService } from 'src/services/StateService';
 import { AuthorizeService } from '../api-authorization/authorize.service';
 
@@ -14,7 +14,7 @@ interface CashDeskState {
 }
 
 const initialState: CashDeskState = {
-    id: undefined,
+    id: 1,
     storeId: undefined,
     storeProducts: [],
     expressMode: true,
@@ -77,11 +77,17 @@ export class CashDeskStateService extends StateService<CashDeskState> {
             this.getCardItems() >= expressModeMaxItems) {
             return;
         }
-        const shoppingCard = this.state.shoppingCard;
-        const cardItem = shoppingCard.find(item => item.product.id == product.id);
+        const cardItem = this.state.shoppingCard.find(item => item.product.id == product.id);
         if (cardItem) {
+            const index = this.state.shoppingCard.indexOf(cardItem);
             cardItem.amount++;
-            this.setState({ shoppingCard: shoppingCard });
+            this.setState({ shoppingCard: 
+                [
+                    ...this.state.shoppingCard.slice(undefined, index), 
+                    cardItem,
+                    ...this.state.shoppingCard.slice(index + 1, undefined)
+                ]
+            });
         } else {
             this.setState({ shoppingCard: [...this.state.shoppingCard, {product: product, amount: 1}] });
         }
@@ -93,13 +99,16 @@ export class CashDeskStateService extends StateService<CashDeskState> {
         )});
     }
 
-    confirmCheckout() {
-        this.http.post(
-            `${this.api}/checkout/${this.state.storeId}`,
-            this.state.shoppingCard,
-        ).subscribe(() => {
-            this.setState({ shoppingCard: [] });
-        }, error => console.error(error));
+    confirmCheckout(paymentMethod: PaymentMethod, handedCash?: number) {
+        const sale: Sale = {
+            saleElements: this.state.shoppingCard,
+            paymentMethod: paymentMethod,
+            handedCash: handedCash
+        }
+        return this.http.post<Product[]>(
+            `${this.api}/checkout/${this.state.storeId}`, sale
+        ).toPromise().then(response => this.setState({ storeProducts: response }));
+
     }
 
     get discount() {

@@ -191,7 +191,7 @@ namespace CocomeStore.Controllers
             try
             {
                 _logger.LogInformation("adding product {} to store {}", product.Id, id);
-                _service.addToStock(id, product.Id);
+                _service.AddToStock(id, product.Id);
                 return _service.GetStores(product.Id).ToArray();
             }
             catch (EntityNotFoundException ex)

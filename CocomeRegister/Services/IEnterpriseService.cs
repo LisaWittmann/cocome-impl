@@ -22,6 +22,6 @@ namespace CocomeStore.Services
         void UpdateProvider(int providerId, Provider providerTO);
 
         IEnumerable<Store> GetStores(int productId);
-        void addToStock(int storeId, int productId);
+        void AddToStock(int storeId, int productId);
     }
 }

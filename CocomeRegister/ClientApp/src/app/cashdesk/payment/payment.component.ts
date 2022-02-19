@@ -1,10 +1,7 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { PaymentMethod } from 'src/services/Models';
 import { CashDeskStateService } from '../cashdesk.service';
-
-enum PaymentMethod {
-  CASH, CARD,
-}
 
 @Component({
   selector: 'app-cashdesk-payment',
@@ -18,7 +15,10 @@ export class CashDeskPaymentComponent {
   totalPrice = 0;
   handedCash = 0;
 
-  constructor(private router: Router, private cashdeskState: CashDeskStateService) {
+  constructor(
+    private router: Router,
+    private cashdeskState: CashDeskStateService
+  ) {
     this.cashdeskState.expressMode$.subscribe(mode => {
       this.expressMode = mode;
     });
@@ -59,7 +59,11 @@ export class CashDeskPaymentComponent {
   }
 
   confirmPayment() {
-    this.cashdeskState.confirmCheckout();
-    this.router.navigate(['/kasse/home']);
+    this.cashdeskState.confirmCheckout(
+      this.paymentMethod,
+      this.handedCash
+    ).then(() => {
+      this.router.navigate(['/kasse/home']);
+    }).catch(error => console.error(error));
   }
 }

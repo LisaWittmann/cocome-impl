@@ -11,7 +11,7 @@ import { StoreStateService } from '../store.service';
 })
 export class StoreShoppingCardComponent {
   @Output() closeShoppingCardEvent = new EventEmitter<Boolean>();
-  shoppingCard: OrderElement[];
+  shoppingCard: OrderElement[] = [];
 
   constructor(private storeStateService: StoreStateService, private router: Router) {
     this.storeStateService.currentOrder$.subscribe(currentOrder => {

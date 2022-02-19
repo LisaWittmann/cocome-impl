@@ -132,7 +132,7 @@ namespace CocomeStore.Services
                 .ToHashSet();
         }
 
-        public void addToStock(int storeId, int productId)
+        public void AddToStock(int storeId, int productId)
         {
             Store store = _context.Stores.Find(storeId);
             Product product = _context.Products.Find(productId);

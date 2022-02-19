@@ -45,17 +45,20 @@ export interface StockItem {
     minimum: number | undefined;
 }
 
+export enum PaymentMethod {
+    CASH, CARD
+}
 export interface SaleElement {
     product: Product;
     amount: number;
 }
 
 export interface Sale {
-    id: number;
-    store: Store;
     saleElements: SaleElement[];
-    timeStamp: Date;
+    paymentMethod: PaymentMethod;
+    handedCash: number | undefined;
 }
+
 export interface Statistic {
     label: string;
     dataset: number[];

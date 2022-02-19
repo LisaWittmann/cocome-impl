@@ -25,11 +25,11 @@ namespace CocomeStore.Services
             _mapper = mapper;
         }
 
-        public void CreateSale(int storeId, IEnumerable<SaleElementTO> elements)
+        public void CreateSale(int storeId, SaleTO saleTO)
         {
-            Sale sale = new() { StoreId = storeId, TimeStamp = DateTime.Now };
+            Sale sale = new() { StoreId = storeId, TimeStamp = DateTime.Now, PaymentMethod = saleTO.PaymentMethod };
 
-            foreach (var element in elements)
+            foreach (var element in saleTO.SaleElements)
             {
                 StockItem item = _context.StockItems
                     .Where(item => item.StoreId == storeId && item.ProductId == element.Product.Id)
@@ -51,7 +51,7 @@ namespace CocomeStore.Services
         {
             return _context.StockItems
                 .Include(item => item.Product)
-                .Where(item => item.StoreId == storeId)
+                .Where(item => item.StoreId == storeId && item.Stock > 0)
                 .Select(item => item.Product);
         }
     }

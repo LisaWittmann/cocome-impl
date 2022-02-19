@@ -40,5 +40,7 @@ namespace CocomeStore.Models
         [Required]
         public DateTime TimeStamp { get; set; }
 
+        [Required]
+        public PaymentMethod PaymentMethod { get; set; }
     }
 }
