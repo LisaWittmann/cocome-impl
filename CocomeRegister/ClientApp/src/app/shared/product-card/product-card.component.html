@@ -1,6 +1,7 @@
 <div class="product-card">
     <div class="product-card__image">
         <img
+            loading="lazy"
             *ngIf="product.imageUrl"
             [src]="product.imageUrl"
             [alt]="product.name"
