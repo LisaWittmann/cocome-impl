@@ -4,6 +4,24 @@
             <h1>Lieferanten</h1>
         </section>
         <section>
+            <h2>Neuen Lieferanten hinzufügen</h2>
+            <form class="provider-detail" (submit)="submitProvider()">
+                <div class="input-wrapper">
+                    <label for="name">Name</label>
+                    <input 
+                        name="name"
+                        class="input--labeled"
+                        type="text"
+                        [(ngModel)]="newProvider.name"
+                    >
+                </div>
+                <div>
+                    <button class="button__form" type="submit">Speichern</button>
+                </div>
+            </form>
+        </section>
+        <section>
+            <h2>Alle Lieferanten</h2>
             <app-accordion
                 *ngFor="let provider of providers"
                 [header]="provider.name"
@@ -48,23 +66,6 @@
                     </ul>
                 </div>
             </app-accordion>
-        </section>
-        <section>
-            <h2>Neuen Lieferanten hinzufügen</h2>
-            <form class="provider-detail" (submit)="submitProvider()">
-                <div class="input-wrapper">
-                    <label for="name">Name</label>
-                    <input 
-                        name="name"
-                        class="input--labeled"
-                        type="text"
-                        [(ngModel)]="newProvider.name"
-                    >
-                </div>
-                <div>
-                    <button class="button__form" type="submit">Speichern</button>
-                </div>
-            </form>
         </section>
     </div>
 </div>

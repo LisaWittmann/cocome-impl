@@ -19,9 +19,13 @@
     &__products {
         width: 70%;
         position: relative;
-        overflow-y: auto;
-        overflow-x: hidden;
+        overflow: hidden;
         @include flex-center(flex-start, column);
+    }
+
+    &__product-list {
+        overflow-y: auto;
+        margin-bottom: auto;
     }
 
     &__barcode {

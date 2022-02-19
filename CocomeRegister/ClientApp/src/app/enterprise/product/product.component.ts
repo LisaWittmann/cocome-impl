@@ -9,7 +9,7 @@ import { EnterpriseStateService } from '../enterprise.service';
   templateUrl: './product.component.html',
 })
 export class EnterpriseProductComponent {
-  product: Product;
+  product = {} as Product;
   providers: Provider[];
   stores: Store[];
   availableStores: Store[];

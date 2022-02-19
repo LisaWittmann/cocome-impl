@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using CocomeStore.Exceptions;
 using CocomeStore.Models;
 using CocomeStore.Models.Transfer;
+using CocomeStore.Models.Transfer.Pagination;
 using CocomeStore.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -39,13 +41,6 @@ namespace CocomeStore.Controllers
             return inExpressMode;
         }
 
-        [HttpGet]
-        [Route("products/{storeId}")]
-        public ActionResult<IEnumerable<Product>> GetProducts(int storeId)
-        {
-            return _service.GetAvailableProducts(storeId).ToArray();
-        }
-
         [HttpPost]
         [Route("update-express/{id}")]
         public bool EndExpressMode(int id, bool expressMode)
@@ -55,15 +50,24 @@ namespace CocomeStore.Controllers
             return inExpressMode;
         }
 
+        [HttpGet]
+        [Route("products/{storeId}")]
+        public ActionResult<PagedResponse<Product>> GetProducts(int storeId, [FromQuery] PaginationFilter filter)
+        {
+            var responseBuilder = new ResponseBuilder<Product>();
+            return responseBuilder.PaginateData(_service.GetAvailableProducts(storeId), filter);
+        }
+
         [HttpPost]
         [Route("checkout/{storeId}")]
-        public ActionResult<IEnumerable<Product>> ConfirmCheckout(int storeId, SaleTO saleTO)
+        public ActionResult<bool> ConfirmCheckout(int storeId, SaleTO saleTO)
         {
             try
             {
                 _logger.LogInformation("confirm checkout");
                 _service.CreateSale(storeId, saleTO);
-                return _service.GetAvailableProducts(storeId).ToArray();
+                return true;
+                
             }
             catch (ItemNotAvailableException ex)
             {

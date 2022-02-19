@@ -7,8 +7,15 @@
                 <li><a [routerLink]="'/filiale/bestellungen'">Bestellungen</a></li>
                 <li><a [routerLink]="'/filiale/berichte'">Reports</a></li>
                 <li>
-                    <button class="card__button" (click)="openShoppingCard()">
-                        <img src="assets/svg/shopping-basket-solid.svg">
+                    <button 
+                        name="Warenkorb öffnen"
+                        class="card__button"
+                        (click)="openShoppingCard()"
+                    >
+                        <img 
+                            src="assets/svg/shopping-basket-solid.svg"
+                            alt="Warenkorb"
+                        >
                         <span class="card__label" *ngIf="shoppingCardItems > 0">
                             {{ shoppingCardItems }}
                         </span>

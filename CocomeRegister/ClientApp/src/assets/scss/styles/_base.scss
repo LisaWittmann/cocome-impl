@@ -14,7 +14,11 @@ body {
     font-family: $font-family;
     color: $color-black;
   }
-} 
+}
+
+h2 {
+  margin-bottom: $spacing-m;
+}
 
 button, a, i {
   cursor: pointer;

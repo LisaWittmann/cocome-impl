@@ -1,6 +1,6 @@
 <div class="store-dashboard page-container">
     <div class="container">
-        <section>
+        <section *ngIf="store">
             <h1>{{ store.name }}</h1>
             <p>
                 Geschäftstelle {{ store.id }}<br>

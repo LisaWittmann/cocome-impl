@@ -53,6 +53,7 @@
     <None Remove="Services\Mapping\" />
     <None Remove="Services\Statistics\" />
     <None Remove="Services\CashDesk\Printer\" />
+    <None Remove="Models\Transfer\Pagination\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\" />
@@ -65,6 +66,7 @@
     <Folder Include="Services\Authorization\" />
     <Folder Include="Services\Mapping\" />
     <Folder Include="Services\Statistics\" />
+    <Folder Include="Models\Transfer\Pagination\" />
   </ItemGroup>
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
     <!-- Ensure Node.js is installed -->

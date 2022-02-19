@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { PaymentMethod, Product, Sale, SaleElement } from 'src/services/Models';
+import { PagedResponse, PaymentMethod, Product, Sale, SaleElement } from 'src/services/Models';
 import { StateService } from 'src/services/StateService';
 import { AuthorizeService } from '../api-authorization/authorize.service';
 
@@ -9,14 +9,12 @@ interface CashDeskState {
     id: number;
     storeId: number;
     expressMode: boolean;
-    storeProducts: Product[];
     shoppingCard: SaleElement[];
 }
 
 const initialState: CashDeskState = {
     id: 1,
     storeId: undefined,
-    storeProducts: [],
     expressMode: false,
     shoppingCard: [],
 };
@@ -28,10 +26,9 @@ const expressModeMaxItems = 8;
 export class CashDeskStateService extends StateService<CashDeskState> {
     expressMode$: Observable<boolean> = this.select(state => state.expressMode);
     shoppingCard$: Observable<SaleElement[]> = this.select(state => state.shoppingCard);
-    storeProducts$: Observable<Product[]> = this.select(state => state.storeProducts);
     api: string;
 
-  constructor(
+    constructor(
     private http: HttpClient,
     private authService: AuthorizeService,
     @Inject('BASE_URL') baseUrl: string
@@ -40,19 +37,10 @@ export class CashDeskStateService extends StateService<CashDeskState> {
         this.api = baseUrl + "api/cashdesk";
         this.authService.getUser().subscribe(user => {
             this.setState({ storeId: Number(user.store) });
-            this.fetchStoreProducts();
         });
         if (this.state.id) {
             this.fetchExpressMode();
         }
-    }
-
-    private fetchStoreProducts() {
-        this.http.get<Product[]>(
-            `${this.api}/products/${this.state.storeId}`
-        ).subscribe(result => {
-            this.setState({ storeProducts: result});
-        }, error => console.error(error));
     }
 
     private fetchExpressMode() {
@@ -99,7 +87,7 @@ export class CashDeskStateService extends StateService<CashDeskState> {
         )});
     }
 
-    confirmCheckout(paymentMethod: PaymentMethod, handedCash?: number) {
+    async confirmCheckout(paymentMethod: PaymentMethod, handedCash?: number) {
         const sale: Sale = {
             saleElements: this.state.shoppingCard,
             paymentMethod: paymentMethod,
@@ -107,8 +95,14 @@ export class CashDeskStateService extends StateService<CashDeskState> {
         }
         return this.http.post<Product[]>(
             `${this.api}/checkout/${this.state.storeId}`, sale
-        ).toPromise().then(response => this.setState({ storeProducts: response }));
+        ).toPromise();
 
+    }
+
+    getProducts(page: number, size = 10) {
+        return this.http.get<PagedResponse<Product[]>>(
+            `${this.api}/products/${this.state.storeId}?pageNumber=${page}&pageSize=${size}`
+        );
     }
 
     get discount() {

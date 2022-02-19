@@ -10,7 +10,7 @@ import { StoreStateService } from '../store.service';
   styleUrls: ['./product.component.scss']
 })
 export class StoreProductComponent {
-  product: Product;
+  product = {} as Product;
 
   constructor(
     private storeStateService: StoreStateService,

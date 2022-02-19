@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Product } from 'src/services/Models';
 import { CashDeskStateService } from '../cashdesk.service';
 
@@ -7,20 +7,22 @@ import { CashDeskStateService } from '../cashdesk.service';
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.scss'],
 })
-export class CashDeskCheckoutComponent implements AfterViewInit {
+export class CashDeskCheckoutComponent implements AfterViewInit, OnInit {
   @ViewChild('barcodeInput', { static: false }) barcodeInput: ElementRef<HTMLInputElement>;
+  @ViewChild('productList', { static: false }) productList: ElementRef<HTMLElement>;
   expressMode: boolean;
   discount: number;
-  products: Product[];
   barcode: string;
+
+  products: Product[] = [];
+  pageIndex = 1;
+  lastPageIndex = 1;
+  pageSize = 18;
 
   constructor(private cashdeskState: CashDeskStateService) {
     this.cashdeskState.expressMode$.subscribe(mode => {
       this.expressMode = mode;
       this.discount = this.cashdeskState.discount;
-    });
-    this.cashdeskState.storeProducts$.subscribe(storeProducts => {
-      this.products = storeProducts;
     });
   }
 
@@ -43,7 +45,27 @@ export class CashDeskCheckoutComponent implements AfterViewInit {
     this.barcodeInput.nativeElement.focus();
   }
 
+  updateProductList() {
+    this.cashdeskState.getProducts(this.pageIndex, this.pageSize).subscribe(result => {
+      this.products = [...this.products, ...result.data];
+      this.pageIndex = result.pageNumber + 1;
+      this.lastPageIndex = result.totalPages;
+    }, error => console.error(error));
+  }
+
+  ngOnInit() {
+    this.updateProductList();
+  }
+
   ngAfterViewInit() {
     this.barcodeInput.nativeElement.focus();
+    this.productList.nativeElement.addEventListener('scroll', (event) => {
+      const container = event.target as HTMLElement;
+      const reachedEnd = container.offsetHeight + container.scrollTop >= container.scrollHeight
+      const reachedLastPage = this.pageIndex > this.lastPageIndex;
+      if (reachedEnd && !reachedLastPage) {
+        this.updateProductList();
+      }
+    });
   }
 }
