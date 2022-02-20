@@ -11,6 +11,10 @@ namespace CocomeStore.Models.Transfer
         [Required]
         public PaymentMethod PaymentMethod { get; set; }
 
-        public float HandedCash { get; set; }
+        public float Payed { get; set; }
+
+        public float Total { get; set; }
+
+        public Store Store { get; set; }
     }
 }

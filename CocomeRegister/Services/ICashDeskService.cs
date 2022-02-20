@@ -6,7 +6,7 @@ namespace CocomeStore.Services
 {
     public interface ICashDeskService
     {
-        void CreateSale(int storeId, SaleTO saleTO);
+        SaleTO CreateSale(int storeId, SaleTO saleTO);
         IEnumerable<Product> GetAvailableProducts(int storeId);
     }
 }

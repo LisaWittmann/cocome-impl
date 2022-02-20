@@ -12,6 +12,7 @@
                         name="name"
                         class="input--labeled"
                         type="text"
+                        required
                         [(ngModel)]="newProvider.name"
                     >
                 </div>
@@ -26,7 +27,7 @@
                 *ngFor="let provider of providers"
                 [header]="provider.name"
             >
-                <div class="provider__detail">
+                <form class="provider__detail" (submit)="saveChanges(provider)">
                     <div class="input-wrapper">
                         <label for="id">Id</label>
                         <input 
@@ -48,12 +49,12 @@
                         </div>
                         <button 
                             class="button__form"
-                            (click)="saveChanges(provider)"
+                            type="submit"
                         >
                             Speichern
                         </button>
                     </div>
-                </div>
+                </form>
                 <div class="provider__products" *ngIf="getProducts(provider).length">
                     <p>Belieferte Produkte:</p>
                     <ul class="table">

@@ -87,16 +87,16 @@ export class CashDeskStateService extends StateService<CashDeskState> {
         )});
     }
 
-    async confirmCheckout(paymentMethod: PaymentMethod, handedCash?: number) {
+    async confirmCheckout(paymentMethod: PaymentMethod, payed: number) {
         const sale: Sale = {
             saleElements: this.state.shoppingCard,
             paymentMethod: paymentMethod,
-            handedCash: handedCash
+            payed: payed
         }
-        return this.http.post<Product[]>(
-            `${this.api}/checkout/${this.state.storeId}`, sale
+        return this.http.post(
+            `${this.api}/checkout/${this.state.storeId}`, sale,
+            { responseType: 'blob' }
         ).toPromise();
-
     }
 
     getProduct(id: number) {

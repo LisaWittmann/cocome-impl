@@ -1,13 +1,15 @@
 using System.IO;
 using System.Security.Claims;
-using CocomeStore.Models;
 using CocomeStore.Models.Authorization;
 using CocomeStore.Models.Database;
 using CocomeStore.Services;
 using CocomeStore.Services.Authorization;
 using CocomeStore.Services.Mapping;
 using CocomeStore.Services.Pagination;
+using CocomeStore.Services.Documents;
 using CocomeStore.Services.Statsistics;
+using DinkToPdf;
+using DinkToPdf.Contracts;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -20,6 +22,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using RazorLight;
 
 namespace CocomeRegister
 {
@@ -69,12 +72,11 @@ namespace CocomeRegister
             services.AddTransient<ICashDeskService, CashDeskService>();
             services.AddTransient<IEnterpriseService, EnterpriseService>();
             services.AddTransient<IStoreService, StoreService>();
-
             services.AddTransient<IModelMapper, ModelMapper>();
             services.AddTransient<IDatabaseStatistics, DatabaseStatistics>();
             services.AddTransient<ClaimManager>();
 
-            services.AddHttpContextAccessor();
+            services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
             services.AddSingleton<IUriService>(o =>
             {
                 var accessor = o.GetRequiredService<IHttpContextAccessor>();
@@ -83,6 +85,17 @@ namespace CocomeRegister
                 return new UriService(uri);
             });
 
+            services.AddScoped<IRazorLightEngine>(sp =>
+            {
+                var engine = new RazorLightEngineBuilder()
+                    .UseFilesystemProject(Path.Combine(Directory.GetCurrentDirectory(), "Templates"))
+                    .UseMemoryCachingProvider()
+                    .Build();
+                return engine;
+            });
+            services.AddScoped<IDocumentService, DocumentService>();
+
+            services.AddHttpContextAccessor();
             services.AddControllersWithViews();
             services.AddDirectoryBrowser();
 

@@ -61,9 +61,31 @@ export class CashDeskPaymentComponent {
   confirmPayment() {
     this.cashdeskState.confirmCheckout(
       this.paymentMethod,
-      this.handedCash
-    ).then(() => {
+      this.cardPayment ? this.totalPrice : this.handedCash
+    ).then(blob => {
       this.router.navigate(['/kasse/home']);
+      
+      const fileUrl = URL.createObjectURL(blob);
+      console.log(fileUrl);
+      const a = document.createElement("a");
+      a.href = fileUrl;
+      a.download = "billing.pdf";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      /*const frame = document.createElement('iframe');
+      document.body.appendChild(frame);
+      frame.style.display = 'none';
+      frame.src = fileUrl;
+      frame.onload = () => {
+        setTimeout(() => {
+          frame.focus();
+          frame.contentWindow.print();
+        }, 1);
+      }*/
+
+
+      
     }).catch(error => console.error(error));
   }
 }

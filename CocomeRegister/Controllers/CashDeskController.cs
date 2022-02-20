@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using CocomeStore.Exceptions;
 using CocomeStore.Models;
 using CocomeStore.Models.Transfer;
 using CocomeStore.Models.Transfer.Pagination;
 using CocomeStore.Services;
 using CocomeStore.Services.Pagination;
+using CocomeStore.Services.Documents;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -19,6 +21,7 @@ namespace CocomeStore.Controllers
     {
         private readonly ILogger<CashDeskController> _logger;
         private readonly IUriService _uriService;
+        private readonly IDocumentService _documentService;
         private readonly ICashDeskService _service;
 
         // testData
@@ -27,12 +30,14 @@ namespace CocomeStore.Controllers
         public CashDeskController(
             ILogger<CashDeskController> logger,
             IUriService uriService,
-            ICashDeskService service
+            ICashDeskService service,
+            IDocumentService documentService
         )
         {
             _logger = logger;
             _service = service;
             _uriService = uriService;
+            _documentService = documentService;
         }
 
         [HttpGet]
@@ -85,19 +90,25 @@ namespace CocomeStore.Controllers
 
         [HttpPost]
         [Route("checkout/{storeId}")]
-        public ActionResult<bool> ConfirmCheckout(int storeId, SaleTO saleTO)
+        public async Task<IActionResult> ConfirmCheckout(int storeId, SaleTO saleTO)
         {
             try
             {
                 _logger.LogInformation("confirm checkout");
                 _service.CreateSale(storeId, saleTO);
-                return true;
+                var billing = await _documentService.CreateBill(_service.CreateSale(storeId, saleTO));
+                return File(billing, "application/pdf");
                 
             }
             catch (ItemNotAvailableException ex)
             {
                 _logger.LogError(ex.Message);
                 return Conflict();
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _logger.LogError(ex.Message);
+                return NotFound();
             }
             catch (Exception ex)
             {

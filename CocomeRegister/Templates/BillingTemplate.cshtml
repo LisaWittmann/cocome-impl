@@ -1,0 +1,99 @@
+﻿@model CocomeStore.Models.Transfer.SaleTO
+@{
+    Layout = null;
+}
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Billing</title>
+    <style>
+        html {
+            width: 57mm;
+        }
+        body {
+            font-family: "Arial";
+            font-size: 10px;
+        }
+        td:last-of-type {
+            text-align: right;
+        }
+        .right {
+            text-align: right;
+        }
+        .uppercase {
+            text-transform: uppercase;
+        }
+        .center {
+            text-align: center;
+        }
+        .spacing-top {
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <section>
+        <p class="center">
+            <strong class="uppercase">@Model.Store.Name</strong><br />
+            <span>@Model.Store.PostalCode</span>
+            <span> @Model.Store.City</span>
+        </p>
+    </section>
+    <section class="spacing-top">
+        <table width="100%">
+            <thead>
+                <tr>
+                    <td></td>
+                    <td><strong>EUR</strong></td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.SaleElements)
+                {
+                    <tr>
+                        <td>
+                            <span>@item.Product.Name </span>
+                            @if (item.Amount > 1)
+                            {
+                                <span>@item.Amount</span>
+                                <span>x</span>
+                            }
+
+                        </td>
+                        @{ var price = item.Product.SalePrice * item.Amount; }
+                        <td>@price.ToString("F2")</td>
+                    </tr>
+                }
+                <tr>
+                    <td colspan="2" style="height: 2px; border-bottom: 1px dotted black;"></td>
+                </tr>
+                <tr>
+                    <td class="spacing-top">
+                        <strong>SUMME</strong>
+                    </td>
+                    <td class="spacing-top">
+                        <strong>@Model.Total.ToString("F2")</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="height: 2px; border-top: 1px dotted black;"></td>
+                </tr>
+                <tr>
+                    @{ var methodString = Model.PaymentMethod == CocomeStore.Models.PaymentMethod.Card ? "Girocard" : "Bar"; }
+                    <td>@methodString</td>
+                    <td>@Model.Payed.ToString("F2")</td>
+                </tr>
+                @if (Model.Payed > Model.Total)
+                {
+                    <tr>
+                        <td>Rückgeld</td>
+                        @{ var cashBack = Model.Total - Model.Payed; }
+                        <td>@cashBack.ToString("F2")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </section>
+</body>
+</html>

@@ -55,7 +55,7 @@ export interface SaleElement {
 export interface Sale {
     saleElements: SaleElement[];
     paymentMethod: PaymentMethod;
-    handedCash: number | undefined;
+    payed: number;
 }
 
 export interface Statistic {

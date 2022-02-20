@@ -15,7 +15,6 @@ namespace CocomeStore.Services
         private readonly CocomeDbContext _context;
         private readonly IModelMapper _mapper;
 
-
         public CashDeskService(
             CocomeDbContext context,
             IModelMapper mapper
@@ -25,9 +24,16 @@ namespace CocomeStore.Services
             _mapper = mapper;
         }
 
-        public void CreateSale(int storeId, SaleTO saleTO)
+        public SaleTO CreateSale(int storeId, SaleTO saleTO)
         {
+            var store = _context.Stores.Find(storeId);
+            if (store == null)
+            {
+                throw new EntityNotFoundException();
+            }
+
             Sale sale = new() { StoreId = storeId, TimeStamp = DateTime.Now, PaymentMethod = saleTO.PaymentMethod };
+            float total = 0;
 
             foreach (var element in saleTO.SaleElements)
             {
@@ -41,10 +47,14 @@ namespace CocomeStore.Services
                         "product with id " + element.Product.Id + "is not in stock of store " + storeId);
                 }
                 item.Stock -= element.Amount;
+                total += element.Amount * element.Product.SalePrice;
                 _context.SaleElements.Add(_mapper.CreateSaleElement(sale, storeId, element));
             }
 
-            _context.SaveChanges();
+            _context.SaveChangesAsync();
+            saleTO.Store = store;
+            saleTO.Total = total;
+            return saleTO;
         }
 
         public IEnumerable<Product> GetAvailableProducts(int storeId)

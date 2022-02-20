@@ -33,6 +33,7 @@
                             name="name"
                             class="input--labeled"
                             type="text"
+                            required
                             [(ngModel)]="newStore.name"
                         >
                     </div>
@@ -46,7 +47,7 @@
                 *ngFor="let store of stores"
                 [header]="store.name"
             >
-                <div class="store-detail">
+                <form class="store-detail" (submit)="saveChanges(store)">
                     <div>
                         <div class="input-wrapper">
                             <label for="id">Id</label>
@@ -62,6 +63,7 @@
                             <input 
                                 name="name"
                                 type="text"
+                                required
                                 [(ngModel)]="store.name"
                                 class="input--labeled"
                             >
@@ -88,12 +90,12 @@
                         </div>
                         <button
                             class="button__form"
-                            (click)="saveChanges(store)"
+                            type="submit"
                         >
                             Speichern
                         </button>
                     </div>
-                </div>
+                </form>
             </app-accordion>
         </section>
     </div>
