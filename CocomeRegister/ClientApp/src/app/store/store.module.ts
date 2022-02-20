@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 
 import { StoreComponent } from './store.component';
-import { StoreSelectComponent } from './select/select.component';
 import { StoreDashboardComponent } from './dashboard/dashboard.component';
 import { StoreNavigationComponent } from './navigation/navigation.component';
 import { StoreProductsComponent } from './products/products.component';
@@ -15,7 +14,6 @@ import { StoreOrderDetailComponent } from './order-detail/order-detail.component
 import { StoreReportsComponent } from './reports/reports.component';
 import { StoreStateService } from './store.service';
 import { SharedModule } from '../shared/shared.module';
-import { AuthorizeService } from '../api-authorization/authorize.service';
 import { StoreGuard } from '../api-authorization/authorize.guard';
 
 const storeRoutes: Routes = [
@@ -35,7 +33,6 @@ const storeRoutes: Routes = [
   ],
   declarations: [
     StoreComponent,
-    StoreSelectComponent,
     StoreReportsComponent,
     StoreDashboardComponent,
     StoreNavigationComponent,
