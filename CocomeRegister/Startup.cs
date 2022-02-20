@@ -6,11 +6,13 @@ using CocomeStore.Models.Database;
 using CocomeStore.Services;
 using CocomeStore.Services.Authorization;
 using CocomeStore.Services.Mapping;
+using CocomeStore.Services.Pagination;
 using CocomeStore.Services.Statsistics;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
@@ -30,7 +32,6 @@ namespace CocomeRegister
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddEntityFrameworkSqlite().AddDbContext<CocomeDbContext>(ServiceLifetime.Transient, ServiceLifetime.Singleton);
@@ -73,6 +74,15 @@ namespace CocomeRegister
             services.AddTransient<IDatabaseStatistics, DatabaseStatistics>();
             services.AddTransient<ClaimManager>();
 
+            services.AddHttpContextAccessor();
+            services.AddSingleton<IUriService>(o =>
+            {
+                var accessor = o.GetRequiredService<IHttpContextAccessor>();
+                var request = accessor.HttpContext.Request;
+                var uri = string.Concat(request.Scheme, "://", request.Host.ToUriComponent());
+                return new UriService(uri);
+            });
+
             services.AddControllersWithViews();
             services.AddDirectoryBrowser();
 
@@ -82,7 +92,6 @@ namespace CocomeRegister
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, CocomeDbContext context)
         {
             if (env.IsDevelopment())

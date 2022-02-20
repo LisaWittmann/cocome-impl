@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using CocomeStore.Exceptions;
 using CocomeStore.Models;
 using CocomeStore.Models.Transfer;
 using CocomeStore.Models.Transfer.Pagination;
 using CocomeStore.Services;
+using CocomeStore.Services.Pagination;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -19,6 +18,7 @@ namespace CocomeStore.Controllers
     public class CashDeskController : Controller
     {
         private readonly ILogger<CashDeskController> _logger;
+        private readonly IUriService _uriService;
         private readonly ICashDeskService _service;
 
         // testData
@@ -26,11 +26,13 @@ namespace CocomeStore.Controllers
 
         public CashDeskController(
             ILogger<CashDeskController> logger,
+            IUriService uriService,
             ICashDeskService service
         )
         {
             _logger = logger;
             _service = service;
+            _uriService = uriService;
         }
 
         [HttpGet]
@@ -51,11 +53,34 @@ namespace CocomeStore.Controllers
         }
 
         [HttpGet]
-        [Route("products/{storeId}")]
-        public ActionResult<PagedResponse<Product>> GetProducts(int storeId, [FromQuery] PaginationFilter filter)
+        [Route("products/{storeId}/{productId}")]
+        public ActionResult<Product> GetProduct(int storeId, int productId)
         {
+            var product = _service.GetAvailableProducts(storeId)
+                .Where(product => product.Id == productId)
+                .SingleOrDefault();
+            if (product == null)
+            {
+                return NotFound();
+            }
+            return product;
+        }
+
+        [HttpGet]
+        [Route("products/{storeId}")]
+        public ActionResult<PagedResponse<Product>> GetProducts(int storeId, [FromQuery] string q, [FromQuery] PaginationFilter filter)
+        {
+            var route = Request.Path.Value;
             var responseBuilder = new ResponseBuilder<Product>();
-            return responseBuilder.PaginateData(_service.GetAvailableProducts(storeId), filter);
+            var data = _service.GetAvailableProducts(storeId);
+            if (q != null)
+            {
+                data = data.Where(product =>
+                    product.Id.ToString().Contains(q) ||
+                    product.Name.ToLower().Contains(q.ToLower())
+                );
+            }
+            return responseBuilder.CreatePagedResponse(data, filter, _uriService, route);
         }
 
         [HttpPost]

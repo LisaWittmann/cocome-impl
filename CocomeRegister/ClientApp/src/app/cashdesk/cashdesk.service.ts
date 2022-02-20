@@ -99,9 +99,15 @@ export class CashDeskStateService extends StateService<CashDeskState> {
 
     }
 
-    getProducts(page: number, size = 10) {
+    getProduct(id: number) {
+        return this.http.get<Product>(`${this.api}/products/${this.state.storeId}/${id}`);
+    }
+
+    getProducts(page: number, size: number, searchparam?: string) {
+        let query = searchparam? `?q=${searchparam}&` : '?';
+        query += `pageNumber=${page}&pageSize=${size}`;
         return this.http.get<PagedResponse<Product[]>>(
-            `${this.api}/products/${this.state.storeId}?pageNumber=${page}&pageSize=${size}`
+            `${this.api}/products/${this.state.storeId}${query}`
         );
     }
 

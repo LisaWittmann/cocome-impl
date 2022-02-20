@@ -13,6 +13,7 @@ export class CashDeskCheckoutComponent implements AfterViewInit, OnInit {
   expressMode: boolean;
   discount: number;
   barcode: string;
+  filter: string;
 
   products: Product[] = [];
   pageIndex = 1;
@@ -37,16 +38,29 @@ export class CashDeskCheckoutComponent implements AfterViewInit, OnInit {
   }
 
   onSubmit() {
-    const product = this.products.find(p => p.id == Number(this.barcode));
-    if (product) {
+    this.cashdeskState.getProduct(Number(this.barcode)).subscribe(product => {
       this.addToCard(product);
       this.barcode = undefined;
-    }
+      this.barcodeInput.nativeElement.classList.remove('form-error');
+    }, error => {
+      this.barcodeInput.nativeElement.classList.add('form-error');
+      console.error(error);
+    });
     this.barcodeInput.nativeElement.focus();
   }
 
+  getFilteredProducts(filter: string) {
+    this.filter = filter;
+    this.pageIndex = 1;
+    this.cashdeskState.getProducts(this.pageIndex, this.pageSize, this.filter).subscribe(result => {
+      this.products = result.data;
+      this.pageIndex = result.pageNumber + 1;
+      this.lastPageIndex = result.totalPages
+    }, error => console.error(error))
+  }
+
   updateProductList() {
-    this.cashdeskState.getProducts(this.pageIndex, this.pageSize).subscribe(result => {
+    this.cashdeskState.getProducts(this.pageIndex, this.pageSize, this.filter).subscribe(result => {
       this.products = [...this.products, ...result.data];
       this.pageIndex = result.pageNumber + 1;
       this.lastPageIndex = result.totalPages;

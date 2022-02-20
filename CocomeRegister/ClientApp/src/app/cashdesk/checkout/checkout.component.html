@@ -8,7 +8,7 @@
                 [discount]="discount"
                 [products]="products"
                 (clickProductEvent)="addToCard($event)"
-                style="margin-bottom: auto;"
+                (filterEvent)="getFilteredProducts($event)"
             ></app-product-list>
         </div>
         <div class="checkout__barcode">

@@ -54,8 +54,11 @@
             background-color: $color-white;
 
             &:focus {
-                border: none;
                 outline: none;
+
+                &.form-error {
+                    border: 2px solid red;
+                }
             }
         }
     }

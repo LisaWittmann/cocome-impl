@@ -7,9 +7,9 @@
 
     &__image {
         flex-basis: 50%;
-        padding-bottom: 50%;
+        aspect-ratio: 1/1;
         position: relative;
-        background-color: $color-light-grey;
+        background-color: white;
         background-image: url('src/assets/img/default-image.jpg');
         background-size: 100% 100%;
         background-position: 50% 60%;
@@ -23,7 +23,9 @@
         }
 
         img {
-            position: absolute;
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
         }
 
         @media all and (max-width: 1000px) {

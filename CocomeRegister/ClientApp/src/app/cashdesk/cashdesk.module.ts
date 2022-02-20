@@ -40,9 +40,7 @@ export const cashdeskRoutes: Routes = [
     ProductCardComponent,
   ],
   exports: [CashDeskComponent],
-  providers: [
-    CashDeskStateService
-  ],
+  providers: [CashDeskStateService],
   bootstrap: [CashDeskComponent]
 })
 export class CashDeskModule { }
