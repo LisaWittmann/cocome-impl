@@ -148,19 +148,5 @@ namespace CocomeStore.Services
             _mapper.UpdateProduct(product, productTO);
             _context.SaveChanges();
         }
-
-        public void UpdateStock(int storeId, int productId, int stock)
-        {
-            StockItem item = _context.StockItems
-                .Where(item => item.Store.Id == storeId && item.Product.Id == productId)
-                .SingleOrDefault();
-            if (item == null)
-            {
-                throw new EntityNotFoundException(
-                    "stock item in store " + storeId + " of product " + productId + " could not be found");
-            }
-            item.Stock = stock;
-            _context.SaveChanges();
-        }
     }
 }

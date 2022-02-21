@@ -95,8 +95,9 @@ namespace CocomeStore.Controllers
             try
             {
                 _logger.LogInformation("confirm checkout");
-                _service.CreateSale(storeId, saleTO);
-                var billing = await _documentService.CreateBill(_service.CreateSale(storeId, saleTO));
+                var billing = await _documentService.CreateBill
+                    (await _service.CreateSale(storeId, saleTO)
+                );
                 return File(billing, "application/pdf");
                 
             }
@@ -110,11 +111,7 @@ namespace CocomeStore.Controllers
                 _logger.LogError(ex.Message);
                 return NotFound();
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                return BadRequest();
-            }
+            
         }
 
     }

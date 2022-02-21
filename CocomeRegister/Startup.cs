@@ -73,6 +73,7 @@ namespace CocomeRegister
             services.AddTransient<IEnterpriseService, EnterpriseService>();
             services.AddTransient<IStoreService, StoreService>();
             services.AddTransient<IModelMapper, ModelMapper>();
+            services.AddTransient<IExchangeService, ExchangeService>();
             services.AddTransient<IDatabaseStatistics, DatabaseStatistics>();
             services.AddTransient<ClaimManager>();
 

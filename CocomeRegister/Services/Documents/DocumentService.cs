@@ -40,8 +40,7 @@ namespace CocomeStore.Services.Documents
                 GlobalSettings = globalSettings,
                 Objects = { objectSettings }
             };
-            byte[] file = _converter.Convert(pdf);
-            return file;
+            return _converter.Convert(pdf);
         }
     }
 }

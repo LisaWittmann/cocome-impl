@@ -10,34 +10,31 @@ namespace CocomeStore.Services.Mapping
     {
         public OrderElement CreateOrderElement(Order order, OrderElementTO orderElementTO)
         {
-            OrderElement orderElement = new ()
+            return new ()
             {
                 ProductId = orderElementTO.Product.Id,
                 Amount = orderElementTO.Amount,
                 Order = order,
             };
-            return orderElement;
         }
 
         public OrderElementTO CreateOrderElementTO(OrderElement orderElement)
         {
-            OrderElementTO orderElementTO = new ()
+            return new ()
             {
                 Product = orderElement.Product,
                 Amount = orderElement.Amount,
             };
-            return orderElementTO;
         }
 
         public Order CreateOrder(OrderTO orderTO)
         {
-            Order order = new()
+            return new ()
             {
                 StoreId = orderTO.Store.Id,
                 ProviderId = orderTO.Provider.Id,
                 PlacingDate = orderTO.PlacingDate,
             };
-            return order;
         }
 
         public OrderTO CreateOrderTO(Order order, IEnumerable<OrderElement> orderElements)
@@ -47,7 +44,7 @@ namespace CocomeStore.Services.Mapping
                  .Select(element => CreateOrderElementTO(element))
                  .ToArray();
 
-            OrderTO orderTO = new()
+            return new ()
             {
                 Id = order.Id,
                 OrderElements = elements,
@@ -57,12 +54,11 @@ namespace CocomeStore.Services.Mapping
                 DeliveringDate = order.DeliveringDate,
                 Closed = (order.DeliveringDate != DateTime.MinValue)
             };
-            return orderTO;
         }
 
         public Product CreateProduct(ProductTO productTO)
         {
-            Product product = new()
+            return new ()
             {
                 Name = productTO.Name,
                 Price = productTO.Price,
@@ -72,12 +68,11 @@ namespace CocomeStore.Services.Mapping
                 ImageUrl = productTO.ImageUrl
 
             };
-            return product;
         }
 
         public ProductTO CreateProductTO(Product product)
         {
-            ProductTO productTO = new()
+            return new ()
             {
                 Id = product.Id,
                 Name = product.Name,
@@ -87,30 +82,44 @@ namespace CocomeStore.Services.Mapping
                 ImageUrl = product.ImageUrl,
                 Provider = product.Provider
             };
-            return productTO;
         }
 
         public SaleElement CreateSaleElement(Sale sale, int storeId, SaleElementTO saleElementTO)
         {
-            SaleElement saleElement = new()
+            return new ()
             {
                 ProductId = saleElementTO.Product.Id,
                 Amount = saleElementTO.Amount,
                 Sale = sale
             };
-            return saleElement;
         }
 
         public StockItem CreateStockItem(StockItemTO stockItemTO)
         {
-            StockItem stockItem = new()
+            return new ()
             {
                 ProductId = stockItemTO.Product.Id,
                 Stock = stockItemTO.Stock,
                 StoreId = stockItemTO.Store.Id,
                 Minimum = stockItemTO.Minimum
             };
-            return stockItem;
+        }
+
+        public StockExchangeTO CreateStockExchangeTO(
+           StockExchange stockExchange,
+           IEnumerable<ExchangeElement> exchangeElements
+       )
+        {
+            return new()
+            {
+                Id = stockExchange.Id,
+                SendingStore = stockExchange.SendingStore,
+                ReceivingStore = stockExchange.ReceivingStore,
+                ExchangeElements = exchangeElements.ToArray(),
+                PlacingDate = stockExchange.PlacingDate,
+                DeliveringDate = stockExchange.DeliveringDate,
+                Closed = stockExchange.DeliveringDate != DateTime.MinValue
+            };
         }
 
         public void UpdateProduct(Product product, ProductTO productTO)

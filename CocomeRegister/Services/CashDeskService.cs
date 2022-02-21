@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using CocomeStore.Exceptions;
 using CocomeStore.Models;
 using CocomeStore.Models.Database;
@@ -13,20 +14,23 @@ namespace CocomeStore.Services
     public class CashDeskService : ICashDeskService
     {
         private readonly CocomeDbContext _context;
+        private readonly IExchangeService _exchangeService;
         private readonly IModelMapper _mapper;
 
         public CashDeskService(
             CocomeDbContext context,
+            IExchangeService exchangeService,
             IModelMapper mapper
         )
         {
             _context = context;
+            _exchangeService = exchangeService;
             _mapper = mapper;
         }
 
-        public SaleTO CreateSale(int storeId, SaleTO saleTO)
+        public async Task<SaleTO> CreateSale(int storeId, SaleTO saleTO)
         {
-            var store = _context.Stores.Find(storeId);
+            var store = await _context.Stores.FindAsync(storeId);
             if (store == null)
             {
                 throw new EntityNotFoundException();
@@ -48,10 +52,12 @@ namespace CocomeStore.Services
                 }
                 item.Stock -= element.Amount;
                 total += element.Amount * element.Product.SalePrice;
-                _context.SaleElements.Add(_mapper.CreateSaleElement(sale, storeId, element));
+                await _context.SaleElements.AddAsync(_mapper.CreateSaleElement(sale, storeId, element));
             }
 
-            _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
+            await _exchangeService.CheckForExchanges(storeId);
+
             saleTO.Store = store;
             saleTO.Total = total;
             return saleTO;
