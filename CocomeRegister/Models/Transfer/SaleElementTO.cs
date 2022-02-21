@@ -2,6 +2,9 @@
 
 namespace CocomeStore.Models.Transfer
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class SaleElementTO
     {
         [Required]

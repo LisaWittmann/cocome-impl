@@ -6,8 +6,17 @@ using CocomeStore.Models.Transfer;
 
 namespace CocomeStore.Services.Mapping
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class ModelMapper : IModelMapper
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="order"></param>
+        /// <param name="orderElementTO"></param>
+        /// <returns></returns>
         public OrderElement CreateOrderElement(Order order, OrderElementTO orderElementTO)
         {
             OrderElement orderElement = new ()
@@ -19,6 +28,11 @@ namespace CocomeStore.Services.Mapping
             return orderElement;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="orderElement"></param>
+        /// <returns></returns>
         public OrderElementTO CreateOrderElementTO(OrderElement orderElement)
         {
             OrderElementTO orderElementTO = new ()
@@ -29,6 +43,11 @@ namespace CocomeStore.Services.Mapping
             return orderElementTO;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="orderTO"></param>
+        /// <returns></returns>
         public Order CreateOrder(OrderTO orderTO)
         {
             Order order = new()
@@ -40,6 +59,12 @@ namespace CocomeStore.Services.Mapping
             return order;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="order"></param>
+        /// <param name="orderElements"></param>
+        /// <returns></returns>
         public OrderTO CreateOrderTO(Order order, IEnumerable<OrderElement> orderElements)
         {
             var elements = orderElements
@@ -60,6 +85,11 @@ namespace CocomeStore.Services.Mapping
             return orderTO;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="productTO"></param>
+        /// <returns></returns>
         public Product CreateProduct(ProductTO productTO)
         {
             Product product = new()
@@ -75,6 +105,11 @@ namespace CocomeStore.Services.Mapping
             return product;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="product"></param>
+        /// <returns></returns>
         public ProductTO CreateProductTO(Product product)
         {
             ProductTO productTO = new()
@@ -90,6 +125,13 @@ namespace CocomeStore.Services.Mapping
             return productTO;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sale"></param>
+        /// <param name="storeId"></param>
+        /// <param name="saleElementTO"></param>
+        /// <returns></returns>
         public SaleElement CreateSaleElement(Sale sale, int storeId, SaleElementTO saleElementTO)
         {
             SaleElement saleElement = new()
@@ -101,6 +143,11 @@ namespace CocomeStore.Services.Mapping
             return saleElement;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="stockItemTO"></param>
+        /// <returns></returns>
         public StockItem CreateStockItem(StockItemTO stockItemTO)
         {
             StockItem stockItem = new()
@@ -113,6 +160,11 @@ namespace CocomeStore.Services.Mapping
             return stockItem;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="product"></param>
+        /// <param name="productTO"></param>
         public void UpdateProduct(Product product, ProductTO productTO)
         {
             product.Name = productTO.Name;
@@ -123,6 +175,11 @@ namespace CocomeStore.Services.Mapping
             product.ProviderId = productTO.Provider.Id;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="stockItem"></param>
+        /// <param name="stockItemTO"></param>
         public void UpdateStockItem(StockItem stockItem, StockItemTO stockItemTO)
         {
             stockItem.Stock = stockItemTO.Stock;

@@ -10,6 +10,9 @@ using CocomeStore.Services.Mapping;
 
 namespace CocomeStore.Services
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class StoreService : IStoreService
     {
         private readonly CocomeDbContext _context;
@@ -24,6 +27,11 @@ namespace CocomeStore.Services
             _context = context;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="storeId"></param>
+        /// <returns></returns>
         public Store GetStore(int storeId)
         {
             Store store = _context.Stores.Find(storeId);
@@ -34,11 +42,20 @@ namespace CocomeStore.Services
             return store;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<Store> GetAllStores()
         {
             return _context.Stores;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="storeId"></param>
+        /// <returns></returns>
         public IEnumerable<OrderTO> GetOrders(int storeId)
         {
             return _context.Orders
@@ -53,7 +70,11 @@ namespace CocomeStore.Services
                     (order, elements) => _mapper.CreateOrderTO(order, elements.AsEnumerable()));
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="storeId"></param>
+        /// <param name="orderId"></param>
         public void CloseOrder(int storeId, int orderId)
         {
             Order order = _context.Orders.Find(orderId);
@@ -84,6 +105,11 @@ namespace CocomeStore.Services
             _context.SaveChanges();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="storeId"></param>
+        /// <param name="elements"></param>
         public void PlaceOrder(int storeId, IEnumerable<OrderElementTO> elements)
         {
             DateTime dateTime = DateTime.Now;
@@ -114,6 +140,11 @@ namespace CocomeStore.Services
         }
 
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="storeId"></param>
+        /// <returns></returns>
         public IEnumerable<StockItem> GetInventory(int storeId)
         {
             return _context.StockItems
@@ -123,7 +154,12 @@ namespace CocomeStore.Services
                 .ThenInclude(product => product.Provider);
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="storeId"></param>
+        /// <param name="productId"></param>
+        /// <returns></returns>
         public ProductTO GetProduct(int storeId, int productId)
         {
             Product product = _context.StockItems
@@ -142,24 +178,15 @@ namespace CocomeStore.Services
             return _mapper.CreateProductTO(product);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="storeId"></param>
+        /// <param name="productTO"></param>
         public void UpdateProduct(int storeId, ProductTO productTO)
         {
             Product product = _context.Products.Find(productTO.Id);
             _mapper.UpdateProduct(product, productTO);
-            _context.SaveChanges();
-        }
-
-        public void UpdateStock(int storeId, int productId, int stock)
-        {
-            StockItem item = _context.StockItems
-                .Where(item => item.Store.Id == storeId && item.Product.Id == productId)
-                .SingleOrDefault();
-            if (item == null)
-            {
-                throw new EntityNotFoundException(
-                    "stock item in store " + storeId + " of product " + productId + " could not be found");
-            }
-            item.Stock = stock;
             _context.SaveChanges();
         }
     }

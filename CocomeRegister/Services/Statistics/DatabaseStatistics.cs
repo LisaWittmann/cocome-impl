@@ -8,6 +8,9 @@ using CocomeStore.Models.Database;
 
 namespace CocomeStore.Services.Statsistics
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class DatabaseStatistics : IDatabaseStatistics
     {
         private readonly CocomeDbContext _context;
@@ -17,6 +20,13 @@ namespace CocomeStore.Services.Statsistics
             _context = context;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="storeId"></param>
+        /// <param name="month"></param>
+        /// <param name="year"></param>
+        /// <returns></returns>
         private double GetProfitOfMonth(int storeId, int month, int year)
         {
             var saleElements = _context.SaleElements
@@ -40,6 +50,10 @@ namespace CocomeStore.Services.Statsistics
             return profit;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<Statistic> GetLatestProfit()
         {
             var profits = new List<Statistic>();
@@ -54,6 +68,12 @@ namespace CocomeStore.Services.Statsistics
             return profits;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="storeId"></param>
+        /// <param name="year"></param>
+        /// <returns></returns>
         public Statistic GetProfitOfYear(int storeId, int year)
         {
             var dataset = new List<double>();
@@ -64,6 +84,10 @@ namespace CocomeStore.Services.Statsistics
             return new Statistic { Label = year + "", Dataset = dataset.ToArray() };
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<Statistic> GetProvidersStatistic()
         {
             var statistics = new List<Statistic>();
@@ -74,6 +98,11 @@ namespace CocomeStore.Services.Statsistics
             return statistics;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="providerId"></param>
+        /// <returns></returns>
         public Statistic GetProviderStatistic(int providerId)
         {
             Provider provider = _context.Providers.Find(providerId);
@@ -91,6 +120,11 @@ namespace CocomeStore.Services.Statsistics
             return new() { Label = provider.Name, Dataset = dataset.ToArray() };
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="storeId"></param>
+        /// <returns></returns>
         public IEnumerable<Statistic> GetStoreProfit(int storeId)
         {
             var latest = DateTime.Now.Year;

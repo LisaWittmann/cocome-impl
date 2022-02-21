@@ -7,11 +7,19 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CocomeStore.Controllers
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [ApiController]
     [Authorize]
     [Route("api/[controller]")]
     public class FileUploadController : Controller
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> OnPostUploadAsync(IFormFile file)
         {

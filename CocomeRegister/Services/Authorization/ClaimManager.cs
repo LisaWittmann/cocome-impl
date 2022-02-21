@@ -5,14 +5,23 @@ using Microsoft.AspNetCore.Identity;
 
 namespace CocomeStore.Models.Authorization
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class ClaimManager
     {
         private readonly UserManager<ApplicationUser> _userManager;
+
         public ClaimManager(UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<Claim>> GetClaims(ApplicationUser user)
         {
             var claims = new List<Claim>

@@ -7,6 +7,9 @@ using RazorLight;
 
 namespace CocomeStore.Services.Documents
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class DocumentService : IDocumentService
     {
         private readonly IRazorLightEngine _engine;
@@ -18,6 +21,11 @@ namespace CocomeStore.Services.Documents
             _converter = converter;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="saleTO"></param>
+        /// <returns></returns>
         public async Task<byte[]> CreateBill(SaleTO saleTO)
         {
         

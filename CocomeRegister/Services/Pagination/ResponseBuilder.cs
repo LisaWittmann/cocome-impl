@@ -6,8 +6,20 @@ using CocomeStore.Services.Pagination;
 
 namespace CocomeStore.Services
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class ResponseBuilder<T>
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="filter"></param>
+        /// <param name="uriService"></param>
+        /// <param name="route"></param>
+        /// <returns></returns>
         public PagedResponse<T> CreatePagedResponse(
             IEnumerable<T> data, PaginationFilter filter, IUriService uriService, string route
         )

@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.WebUtilities;
 
 namespace CocomeStore.Services.Pagination
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class UriService : IUriService
     {
         private readonly string _baseUri;
@@ -13,6 +16,12 @@ namespace CocomeStore.Services.Pagination
             _baseUri = baseUri;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <param name="route"></param>
+        /// <returns></returns>
         public Uri GetPageUri(PaginationFilter filter, string route)
         {
             var _enpointUri = new Uri(string.Concat(_baseUri, route));

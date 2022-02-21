@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CocomeStore.Models
@@ -6,7 +7,7 @@ namespace CocomeStore.Models
     /// <summary>
     /// 
     /// </summary>
-    public class StockItem
+    public class SaleElement
     {
         [ScaffoldColumn(false)]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -18,13 +19,13 @@ namespace CocomeStore.Models
         public Product Product { get; set; }
 
         [Required]
-        public int Stock { get; set; }
+        public int Amount { get; set; }
 
         [Required]
-        public int StoreId { get; set; }
+        public int SaleId { get; set; }
 
-        public Store Store { get; set; }
+        public Sale Sale { get; set; }
 
-        public int Minimum { get; set; }
+        public Discount Discount { get; set; }
     }
 }

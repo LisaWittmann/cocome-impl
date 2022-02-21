@@ -11,6 +11,9 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace CocomeStore.Controllers
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [ApiController]
     [Authorize(Policy = "enterprise")]
     [Route("api/[controller]")]
@@ -31,6 +34,10 @@ namespace CocomeStore.Controllers
             _statistics = statistics;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("orders")]
         public ActionResult<IEnumerable<OrderTO>> GetAllOrders()
@@ -38,6 +45,10 @@ namespace CocomeStore.Controllers
             return _service.GetAllOrders().ToArray();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("inventories")]
         public ActionResult<IEnumerable<StockItem>> GetAllStockItems()
@@ -45,6 +56,10 @@ namespace CocomeStore.Controllers
             return _service.GetAllStockItems().ToArray();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("stores")]
         public ActionResult<IEnumerable<Store>> GetAllStores()
@@ -52,6 +67,10 @@ namespace CocomeStore.Controllers
             return _service.GetAllStores().ToArray();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("provider")]
         public ActionResult<IEnumerable<Provider>> GetAllProvider()
@@ -59,6 +78,10 @@ namespace CocomeStore.Controllers
             return _service.GetAllProvider().ToArray();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("products")]
         public ActionResult<IEnumerable<ProductTO>> GetAllProducts()
@@ -66,6 +89,11 @@ namespace CocomeStore.Controllers
             return _service.GetAllProducts().ToArray();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("product/{id}/stores")]
         public ActionResult<IEnumerable<Store>> GetStores(int id)
@@ -73,6 +101,11 @@ namespace CocomeStore.Controllers
             return _service.GetStores(id).ToArray();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="product"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("create-product")]
         public ActionResult<IEnumerable<ProductTO>> CreateProduct(ProductTO product)
@@ -89,6 +122,12 @@ namespace CocomeStore.Controllers
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="product"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("update-product/{id}")]
         public ActionResult<IEnumerable<ProductTO>> UpdateProduct(int id, ProductTO product)
@@ -110,6 +149,11 @@ namespace CocomeStore.Controllers
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="store"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("create-store")]
         public ActionResult<IEnumerable<Store>> CreateStore(Store store)
@@ -126,6 +170,12 @@ namespace CocomeStore.Controllers
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="store"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("update-store/{id}")]
         public ActionResult<IEnumerable<Store>> UpdateStore(int id, Store store)
@@ -147,6 +197,11 @@ namespace CocomeStore.Controllers
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="provider"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("create-provider")]
         public ActionResult<IEnumerable<Provider>> CreateProvider(Provider provider)
@@ -163,6 +218,12 @@ namespace CocomeStore.Controllers
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="provider"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("update-provider/{id}")]
         public ActionResult<IEnumerable<Provider>> UpdateProvider(int id, Provider provider)
@@ -184,6 +245,12 @@ namespace CocomeStore.Controllers
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="product"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("create-stock/{id}")]
         public ActionResult<IEnumerable<Store>> CreateStock(int id, ProductTO product)
@@ -201,6 +268,10 @@ namespace CocomeStore.Controllers
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("store-reports")]
         public IEnumerable<Statistic> GetStoreStatistic()
@@ -208,6 +279,10 @@ namespace CocomeStore.Controllers
             return _statistics.GetLatestProfit().ToArray();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("provider-reports")]
         public IEnumerable<Statistic> GetProvidersStatistic()
@@ -215,7 +290,11 @@ namespace CocomeStore.Controllers
             return _statistics.GetProvidersStatistic().ToArray();
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("provider-report/{id}")]
         public ActionResult<Statistic> GetProviderStatistic(int id)

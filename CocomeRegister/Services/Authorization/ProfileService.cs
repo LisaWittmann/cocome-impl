@@ -5,8 +5,16 @@ using IdentityServer4.Services;
 
 namespace CocomeStore.Services.Authorization
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class ProfileService : IProfileService
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public Task GetProfileDataAsync(ProfileDataRequestContext context)
         {
             var roleClaims = context.Subject.FindAll(JwtClaimTypes.Role);

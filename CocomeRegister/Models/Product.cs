@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CocomeStore.Models
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class Product
     {
         [ScaffoldColumn(false)]

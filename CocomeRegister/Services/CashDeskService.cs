@@ -10,6 +10,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CocomeStore.Services
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class CashDeskService : ICashDeskService
     {
         private readonly CocomeDbContext _context;
@@ -24,6 +27,12 @@ namespace CocomeStore.Services
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="storeId"></param>
+        /// <param name="saleTO"></param>
+        /// <returns></returns>
         public SaleTO CreateSale(int storeId, SaleTO saleTO)
         {
             var store = _context.Stores.Find(storeId);
@@ -57,6 +66,11 @@ namespace CocomeStore.Services
             return saleTO;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="storeId"></param>
+        /// <returns></returns>
         public IEnumerable<Product> GetAvailableProducts(int storeId)
         {
             return _context.StockItems

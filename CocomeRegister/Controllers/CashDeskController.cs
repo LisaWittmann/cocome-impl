@@ -14,6 +14,9 @@ using Microsoft.Extensions.Logging;
 
 namespace CocomeStore.Controllers
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [ApiController]
     [Authorize(Policy = "cashdesk")]
     [Route("api/[controller]")]
@@ -40,6 +43,11 @@ namespace CocomeStore.Controllers
             _documentService = documentService;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("express/{id}")]
         public bool GetExpressMode(int id)
@@ -48,6 +56,12 @@ namespace CocomeStore.Controllers
             return inExpressMode;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="expressMode"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("update-express/{id}")]
         public bool EndExpressMode(int id, bool expressMode)
@@ -57,6 +71,12 @@ namespace CocomeStore.Controllers
             return inExpressMode;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="storeId"></param>
+        /// <param name="productId"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("products/{storeId}/{productId}")]
         public ActionResult<Product> GetProduct(int storeId, int productId)
@@ -71,6 +91,13 @@ namespace CocomeStore.Controllers
             return product;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="storeId"></param>
+        /// <param name="q"></param>
+        /// <param name="filter"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("products/{storeId}")]
         public ActionResult<PagedResponse<Product>> GetProducts(int storeId, [FromQuery] string q, [FromQuery] PaginationFilter filter)
@@ -88,6 +115,12 @@ namespace CocomeStore.Controllers
             return responseBuilder.CreatePagedResponse(data, filter, _uriService, route);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="storeId"></param>
+        /// <param name="saleTO"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("checkout/{storeId}")]
         public async Task<IActionResult> ConfirmCheckout(int storeId, SaleTO saleTO)

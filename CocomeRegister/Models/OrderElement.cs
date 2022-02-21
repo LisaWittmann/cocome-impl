@@ -6,14 +6,23 @@ namespace CocomeStore.Models
     /// <summary>
     /// 
     /// </summary>
-    public class Provider
+    public class OrderElement
     {
-
         [ScaffoldColumn(false)]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         [Required]
-        public string Name { get; set; }
+        public int ProductId { get; set; }
+
+        public Product Product { get; set; }
+
+        [Required]
+        public int Amount { get; set; }
+
+        [Required]
+        public int OrderId { get; set; }
+
+        public Order Order { get; set; }
     }
 }

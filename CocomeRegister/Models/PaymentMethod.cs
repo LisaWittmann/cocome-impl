@@ -1,6 +1,8 @@
-﻿using System;
-namespace CocomeStore.Models
+﻿namespace CocomeStore.Models
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public enum PaymentMethod
     {
         Cash,

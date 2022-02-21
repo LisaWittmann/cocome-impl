@@ -17,6 +17,5 @@ namespace CocomeStore.Services
         void UpdateProduct(int storeId, ProductTO productTO);
 
         IEnumerable<StockItem> GetInventory(int storeId);
-        void UpdateStock(int storeId, int productId, int stock);
     }
 }

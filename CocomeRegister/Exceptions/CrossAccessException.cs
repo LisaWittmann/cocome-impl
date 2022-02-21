@@ -1,6 +1,9 @@
 ﻿using System;
 namespace CocomeStore.Exceptions
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class CrossAccessException : Exception
     {
         public CrossAccessException()

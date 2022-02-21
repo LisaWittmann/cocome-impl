@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 using CocomeStore.Models;
@@ -10,6 +9,9 @@ using CocomeStore.Models.Database;
 
 namespace CocomeStore.Controllers
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class SeedController : ControllerBase
@@ -32,6 +34,10 @@ namespace CocomeStore.Controllers
             _claimManager = claimManager;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<ActionResult> CreateDefaultUsers()
         {

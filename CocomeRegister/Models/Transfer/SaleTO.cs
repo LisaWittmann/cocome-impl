@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CocomeStore.Models.Transfer
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class SaleTO
     {
         [Required]
