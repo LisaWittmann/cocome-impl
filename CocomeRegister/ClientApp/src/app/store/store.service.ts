@@ -94,7 +94,9 @@ export class StoreStateService extends StateService<StoreState> {
   }
 
   get runningOutOfStock() {
-    return this.state.inventory.filter(item => item.stock < 10);
+    return this.state.inventory.filter(item => 
+      (item.minimum && item.stock < item.minimum) || item.stock < 10
+    );
   }
 
   /**

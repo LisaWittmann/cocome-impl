@@ -11,4 +11,5 @@ export interface StockItem {
     store: Store;
     product: Product;
     stock: number;
+    minimum: number;
 }

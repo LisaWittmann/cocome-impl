@@ -131,7 +131,7 @@ namespace CocomeStore.Services
             var stocks = _context.StockItems
                 .Where(item =>
                     item.ProductId == productId &&
-                    item.Stock > item.Minimum * 3)
+                    item.Stock > item.Minimum * 4)
                 .AsEnumerable()
                 .Where(item => nearStores.Contains(item.StoreId))
                 .ToArray();
@@ -173,7 +173,7 @@ namespace CocomeStore.Services
                 var exchange = exchanges
                     .Where(ex => ex.ProviderId == sendingStore.Id)
                     .SingleOrDefault();
-                var amount = item.Minimum + 1;
+                var amount = item.Minimum * 2;
 
                 if (exchange == null)
                 {
