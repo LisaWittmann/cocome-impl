@@ -235,14 +235,6 @@ export class StoreStateService extends StateService<StoreState> {
   }
 
   /**
-   * check whether states store is provider or receiving store of a stock exchange 
-   * @param exchange exchange to check status for
-   */
-  isProvider(exchange: StockExchange) {
-    return exchange.provider.id === this.state.store.id;
-  }
-
-  /**
    * mark stock exchange as placed
    * @param exchange exchange to perform changes on
    */

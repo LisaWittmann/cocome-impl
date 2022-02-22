@@ -153,7 +153,7 @@ namespace CocomeStore.Services
 
             _mapper.UpdateProduct(product, productTO);
             _context.SaveChanges();
-            return _mapper.CreateProductTO(product);
+            return productTO;
         }
 
         /// <summary>

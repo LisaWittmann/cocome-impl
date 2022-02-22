@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { StockExchange } from 'src/models/StockExchange';
+import { Store } from 'src/models/Store';
 import { StoreStateService } from '../store.service';
 
 @Component({
@@ -9,8 +10,13 @@ import { StoreStateService } from '../store.service';
 })
 export class StoreExchangeDetailComponent {
     @Input() exchange: StockExchange;
+    store: Store;
 
-    constructor(private storeService: StoreStateService) {}
+    constructor(private storeService: StoreStateService) {
+        this.storeService.store$.subscribe(store => {
+            this.store = store;
+        })
+    }
 
     get status() {
         if (this.exchange.closed) {
@@ -21,7 +27,7 @@ export class StoreExchangeDetailComponent {
     }
 
     get isProvider() {
-        return this.storeService.isProvider(this.exchange);
+        return this.store && this.store.id === this.exchange.provider.id;
     }
 
     close() {

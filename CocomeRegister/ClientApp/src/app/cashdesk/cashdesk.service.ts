@@ -114,7 +114,10 @@ export class CashDeskStateService extends StateService<CashDeskState> {
         return this.http.post(
             `${this.api}/checkout/${this.state.storeId}`, sale,
             { responseType: 'blob' }
-        ).toPromise();
+        ).toPromise().then(response => {
+            this.setState({ shoppingCard: [] });
+            return response;
+        });
     }
 
     /**

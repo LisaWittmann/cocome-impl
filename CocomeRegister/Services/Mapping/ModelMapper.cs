@@ -202,8 +202,8 @@ namespace CocomeStore.Services.Mapping
             return new()
             {
                 Id = stockExchange.Id,
-                Store = stockExchange.Provider,
-                Provider = stockExchange.Store,
+                Store = stockExchange.Store,
+                Provider = stockExchange.Provider,
                 Elements = elements.ToArray(),
                 PlacingDate = stockExchange.PlacingDate,
                 DeliveringDate = stockExchange.DeliveringDate,
