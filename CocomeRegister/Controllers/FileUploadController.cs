@@ -8,7 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace CocomeStore.Controllers
 {
     /// <summary>
-    /// 
+    /// class <c>FileUploadController</c> provides a REST
+    /// endpoint to upload files to server and therefor requires
+    /// authorization
     /// </summary>
     [ApiController]
     [Authorize]
@@ -16,12 +18,15 @@ namespace CocomeStore.Controllers
     public class FileUploadController : Controller
     {
         /// <summary>
-        /// 
+        /// method <c>UploadAsync</c> is a http post
+        /// endpoint to upload a form file to server
         /// </summary>
-        /// <param name="file"></param>
-        /// <returns></returns>
+        /// <param name="file">
+        /// file object to upload
+        /// </param>
+        /// <returns>response with path of uploaded file</returns>
         [HttpPost]
-        public async Task<IActionResult> OnPostUploadAsync(IFormFile file)
+        public async Task<IActionResult> UploadAsync(IFormFile file)
         {
             var folderName = Path.Combine("StaticFiles", "Images");
             var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);

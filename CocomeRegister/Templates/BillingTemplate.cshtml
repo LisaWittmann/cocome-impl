@@ -61,7 +61,7 @@
                             }
 
                         </td>
-                        @{ var price = item.Product.SalePrice * item.Amount; }
+                        @{ var price = item.Product.SalePrice * item.Amount * (1 - item.Discount); }
                         <td>@price.ToString("F2")</td>
                     </tr>
                 }

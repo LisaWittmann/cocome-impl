@@ -3,7 +3,8 @@
 namespace CocomeStore.Models.Transfer
 {
     /// <summary>
-    /// 
+    /// class <c>SaleElementTO</c> is a data transfer object
+    /// of the class <see cref="SaleElement"/>
     /// </summary>
     public class SaleElementTO
     {
@@ -12,5 +13,7 @@ namespace CocomeStore.Models.Transfer
 
         [Required]
         public int Amount { get; set; }
+
+        public float Discount { get; set; }
     }
 }

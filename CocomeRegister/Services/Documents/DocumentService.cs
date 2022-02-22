@@ -8,7 +8,8 @@ using RazorLight;
 namespace CocomeStore.Services.Documents
 {
     /// <summary>
-    /// 
+    /// class <c>DocumentsService</c> implements <see cref="IDocumentService"/>
+    /// and provides functionality to genereade documents by templates
     /// </summary>
     public class DocumentService : IDocumentService
     {
@@ -22,9 +23,12 @@ namespace CocomeStore.Services.Documents
         }
 
         /// <summary>
-        /// 
+        /// method <c>CreateBill</c> creates a bill document
+        /// for the given sale transfer object
         /// </summary>
-        /// <param name="saleTO"></param>
+        /// <param name="saleTO">
+        /// sale transfer object containing the sales information
+        /// </param>
         /// <returns></returns>
         public async Task<byte[]> CreateBill(SaleTO saleTO)
         {

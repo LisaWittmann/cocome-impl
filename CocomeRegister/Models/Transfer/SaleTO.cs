@@ -4,7 +4,8 @@ using System.ComponentModel.DataAnnotations;
 namespace CocomeStore.Models.Transfer
 {
     /// <summary>
-    /// 
+    /// class <c>SaleTO</c> is a data transfer object
+    /// of the class <see cref="Sale"/>
     /// </summary>
     public class SaleTO
     {

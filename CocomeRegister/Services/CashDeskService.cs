@@ -11,7 +11,9 @@ using Microsoft.EntityFrameworkCore;
 namespace CocomeStore.Services
 {
     /// <summary>
-    /// 
+    /// class <c>CashDeskService</c> is a transient implementation of
+    /// <see cref="ICashDeskService"/>
+    /// and provides functionalities for a store cashdesk
     /// </summary>
     public class CashDeskService : ICashDeskService
     {
@@ -28,11 +30,16 @@ namespace CocomeStore.Services
         }
 
         /// <summary>
-        /// 
+        /// methon <c>Create Sale</c> creates a new sale objects
+        /// from the given transfer object and stores saves new entries
+        /// in the databse
         /// </summary>
-        /// <param name="storeId"></param>
-        /// <param name="saleTO"></param>
-        /// <returns></returns>
+        /// <param name="storeId">unique identifier of a store in the dabase
+        /// which provokes the sale</param>
+        /// <param name="saleTO">data transfer object containing the information
+        /// of the sale</param>
+        /// <returns>modified transfer object with billing information</returns>
+        /// <exception cref="ItemNotAvailableException"></exception>
         public SaleTO CreateSale(int storeId, SaleTO saleTO)
         {
             var store = _context.Stores.Find(storeId);
@@ -56,7 +63,7 @@ namespace CocomeStore.Services
                         "product with id " + element.Product.Id + "is not in stock of store " + storeId);
                 }
                 item.Stock -= element.Amount;
-                total += element.Amount * element.Product.SalePrice;
+                total += element.Amount * element.Product.SalePrice * (1 - element.Discount);
                 _context.SaleElements.Add(_mapper.CreateSaleElement(sale, storeId, element));
             }
 
@@ -67,10 +74,11 @@ namespace CocomeStore.Services
         }
 
         /// <summary>
-        /// 
+        /// method <c>GetAvailableProducts</c> filters all products of
+        /// the store with the given id that are currently in stock
         /// </summary>
-        /// <param name="storeId"></param>
-        /// <returns></returns>
+        /// <param name="storeId">unique identifier of a store in the database</param>
+        /// <returns>enumerable entries of products</returns>
         public IEnumerable<Product> GetAvailableProducts(int storeId)
         {
             return _context.StockItems

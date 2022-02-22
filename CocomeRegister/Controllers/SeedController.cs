@@ -9,9 +9,6 @@ using CocomeStore.Models.Database;
 
 namespace CocomeStore.Controllers
 {
-    /// <summary>
-    /// 
-    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class SeedController : ControllerBase
@@ -34,10 +31,6 @@ namespace CocomeStore.Controllers
             _claimManager = claimManager;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
         [HttpGet]
         public async Task<ActionResult> CreateDefaultUsers()
         {

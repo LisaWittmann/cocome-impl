@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace CocomeStore.Models
 {
     /// <summary>
-    /// 
+    /// class <c>Sale</c>
     /// </summary>
     public class Sale
     {

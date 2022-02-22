@@ -7,16 +7,21 @@ using CocomeStore.Models.Transfer;
 namespace CocomeStore.Services.Mapping
 {
     /// <summary>
-    /// 
+    /// class <c>ModelMapper</c> is an implementation of <see cref="IModelMapper"/>
+    /// and provides methods to convert objects into transfer objects or to convert
+    /// an objects transfer object into the origin class
     /// </summary>
     public class ModelMapper : IModelMapper
     {
         /// <summary>
-        /// 
+        /// method <c>CreateOrderElement</c> creates a new order element out of
+        /// a given order and the order element transfer object
         /// </summary>
-        /// <param name="order"></param>
-        /// <param name="orderElementTO"></param>
-        /// <returns></returns>
+        /// <param name="order">related order object</param>
+        /// <param name="orderElementTO">
+        /// transfer object containing the order elements information
+        /// </param>
+        /// <returns>new order element instance</returns>
         public OrderElement CreateOrderElement(Order order, OrderElementTO orderElementTO)
         {
             OrderElement orderElement = new ()
@@ -29,10 +34,13 @@ namespace CocomeStore.Services.Mapping
         }
 
         /// <summary>
-        /// 
+        /// method <c>CreateOrderElementTO</c> creates a new order element
+        /// transfer object out of the given order element
         /// </summary>
-        /// <param name="orderElement"></param>
-        /// <returns></returns>
+        /// <param name="orderElement">
+        /// order element instance to convert in transfer object
+        /// </param>
+        /// <returns>new order element transfer object instance</returns>
         public OrderElementTO CreateOrderElementTO(OrderElement orderElement)
         {
             OrderElementTO orderElementTO = new ()
@@ -44,10 +52,13 @@ namespace CocomeStore.Services.Mapping
         }
 
         /// <summary>
-        /// 
+        /// method <c>CreateOrder</c> creates a new order out of the given order
+        /// transfer object
         /// </summary>
-        /// <param name="orderTO"></param>
-        /// <returns></returns>
+        /// <param name="orderTO">
+        /// transfer object containing the orders information
+        /// </param>
+        /// <returns>new order instance</returns>
         public Order CreateOrder(OrderTO orderTO)
         {
             Order order = new()
@@ -60,11 +71,16 @@ namespace CocomeStore.Services.Mapping
         }
 
         /// <summary>
-        /// 
+        /// method <c>CreateOrderTO</c> creates a new order transfer object
+        /// instance out of the given order and its belonging order elements
         /// </summary>
-        /// <param name="order"></param>
-        /// <param name="orderElements"></param>
-        /// <returns></returns>
+        /// <param name="order">
+        /// order object to convert in transfer object
+        /// </param>
+        /// <param name="orderElements">
+        /// related order elements of the order object to convert
+        /// </param>
+        /// <returns>new order transfer object instance</returns>
         public OrderTO CreateOrderTO(Order order, IEnumerable<OrderElement> orderElements)
         {
             var elements = orderElements
@@ -86,10 +102,13 @@ namespace CocomeStore.Services.Mapping
         }
 
         /// <summary>
-        /// 
+        /// method <c>CreateProduct</c> creates a new product out of a given
+        /// product transfer object instance
         /// </summary>
-        /// <param name="productTO"></param>
-        /// <returns></returns>
+        /// <param name="productTO">
+        /// transfer object containing the products information
+        /// </param>
+        /// <returns>new product instance</returns>
         public Product CreateProduct(ProductTO productTO)
         {
             Product product = new()
@@ -106,10 +125,13 @@ namespace CocomeStore.Services.Mapping
         }
 
         /// <summary>
-        /// 
+        /// method <c>CreateProductTO</c> creates a new product transfer object
+        /// based on the given products data
         /// </summary>
-        /// <param name="product"></param>
-        /// <returns></returns>
+        /// <param name="product">
+        /// product instance to convert into transfer object
+        /// </param>
+        /// <returns>new product transfer object instance</returns>
         public ProductTO CreateProductTO(Product product)
         {
             ProductTO productTO = new()
@@ -126,7 +148,7 @@ namespace CocomeStore.Services.Mapping
         }
 
         /// <summary>
-        /// 
+        /// method <c>CreateSaleElement</c>
         /// </summary>
         /// <param name="sale"></param>
         /// <param name="storeId"></param>
@@ -138,33 +160,20 @@ namespace CocomeStore.Services.Mapping
             {
                 ProductId = saleElementTO.Product.Id,
                 Amount = saleElementTO.Amount,
-                Sale = sale
+                Sale = sale,
+                Discount = saleElementTO.Discount
             };
             return saleElement;
         }
 
         /// <summary>
-        /// 
+        /// method <c>UpdateProduct</c> syncronizes the given products data with
+        /// the data of the transfer object
         /// </summary>
-        /// <param name="stockItemTO"></param>
-        /// <returns></returns>
-        public StockItem CreateStockItem(StockItemTO stockItemTO)
-        {
-            StockItem stockItem = new()
-            {
-                ProductId = stockItemTO.Product.Id,
-                Stock = stockItemTO.Stock,
-                StoreId = stockItemTO.Store.Id,
-                Minimum = stockItemTO.Minimum
-            };
-            return stockItem;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="product"></param>
-        /// <param name="productTO"></param>
+        /// <param name="product">product to modify</param>
+        /// <param name="productTO">
+        /// transfer object containing the updated data
+        /// </param>
         public void UpdateProduct(Product product, ProductTO productTO)
         {
             product.Name = productTO.Name;
@@ -173,17 +182,6 @@ namespace CocomeStore.Services.Mapping
             product.Description = productTO.Description;
             product.ImageUrl = productTO.ImageUrl;
             product.ProviderId = productTO.Provider.Id;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="stockItem"></param>
-        /// <param name="stockItemTO"></param>
-        public void UpdateStockItem(StockItem stockItem, StockItemTO stockItemTO)
-        {
-            stockItem.Stock = stockItemTO.Stock;
-            stockItem.Minimum = stockItem.Minimum;
         }
     }
 }

@@ -7,19 +7,21 @@ using CocomeStore.Services.Pagination;
 namespace CocomeStore.Services
 {
     /// <summary>
-    /// 
+    /// class <c>ResponseBuilder</c> is a service class that provides
+    /// functionalities to convert data into a response class
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">type of data to covert</typeparam>
     public class ResponseBuilder<T>
     {
         /// <summary>
-        /// 
+        /// method <c>CreatePagedResponse</c> converts an enumerable dataset into
+        /// a paged response according to the given pagination filter
         /// </summary>
-        /// <param name="data"></param>
-        /// <param name="filter"></param>
-        /// <param name="uriService"></param>
-        /// <param name="route"></param>
-        /// <returns></returns>
+        /// <param name="data">data of the reponse</param>
+        /// <param name="filter">containing requested page and amount</param>
+        /// <param name="uriService">service to create uris of pagiantion</param>
+        /// <param name="route">route of endpoint that received the request</param>
+        /// <returns>new paged response instance</returns>
         public PagedResponse<T> CreatePagedResponse(
             IEnumerable<T> data, PaginationFilter filter, IUriService uriService, string route
         )

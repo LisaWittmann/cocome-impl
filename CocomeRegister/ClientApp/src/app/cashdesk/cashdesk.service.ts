@@ -77,7 +77,7 @@ export class CashDeskStateService extends StateService<CashDeskState> {
                 ]
             });
         } else {
-            this.setState({ shoppingCard: [...this.state.shoppingCard, {product: product, amount: 1}] });
+            this.setState({ shoppingCard: [...this.state.shoppingCard, {product: product, amount: 1, discount: this.discount}] });
         }
     }
 

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace CocomeStore.Models
 {
     /// <summary>
-    /// 
+    /// class <c>SaleElement</c>
     /// </summary>
     public class SaleElement
     {
@@ -26,6 +26,6 @@ namespace CocomeStore.Models
 
         public Sale Sale { get; set; }
 
-        public Discount Discount { get; set; }
+        public float Discount { get; set; }
     }
 }
