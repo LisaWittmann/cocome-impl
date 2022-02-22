@@ -64,12 +64,12 @@ export class CashDeskPaymentComponent {
       this.cardPayment ? this.totalPrice : this.handedCash
     ).then(blob => {
       this.router.navigate(['/kasse/home']);
-      
+
       const fileUrl = URL.createObjectURL(blob);
       console.log(fileUrl);
-      const a = document.createElement("a");
+      const a = document.createElement('a');
       a.href = fileUrl;
-      a.download = "billing.pdf";
+      a.download = 'billing.pdf';
       document.body.appendChild(a);
       a.click();
       a.remove();
@@ -83,9 +83,6 @@ export class CashDeskPaymentComponent {
           frame.contentWindow.print();
         }, 1);
       }*/
-
-
-      
     }).catch(error => console.error(error));
   }
 }

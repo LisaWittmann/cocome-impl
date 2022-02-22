@@ -1,11 +1,11 @@
-import { Product } from "./Product";
-import { Store } from "./Store";
+import { Product } from './Product';
+import { Store } from './Store';
 
 export class ExchangeElement {
     product: Product;
     amount: number;
 }
-export class StockExchange{
+export class StockExchange {
     id: number;
     elements: ExchangeElement[];
     store: Store;

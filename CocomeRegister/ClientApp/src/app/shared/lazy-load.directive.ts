@@ -4,7 +4,7 @@ import { Directive, ElementRef } from '@angular/core';
   selector: 'img:not([loading])'
 })
 export class LazyLoadDirective {
-  constructor(el : ElementRef) { 
-    el.nativeElement.setAttribute('loading','lazy')
+  constructor(el: ElementRef) {
+    el.nativeElement.setAttribute('loading', 'lazy');
   }
 }

@@ -19,7 +19,7 @@ export class EnterpriseProvidersComponent {
   ) {
     enterpriseService.providers$.subscribe(provider => {
       this.providers = provider;
-    })
+    });
   }
 
   getProducts(provider: Provider) {

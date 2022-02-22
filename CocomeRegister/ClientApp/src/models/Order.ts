@@ -1,6 +1,6 @@
-import { Product } from "./Product";
-import { Provider } from "./Provider";
-import { Store } from "./Store";
+import { Product } from './Product';
+import { Provider } from './Provider';
+import { Store } from './Store';
 export interface OrderElement {
     product: Product;
     amount: number;

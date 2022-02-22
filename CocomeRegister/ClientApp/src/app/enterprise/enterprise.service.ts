@@ -10,8 +10,8 @@ import { Statistic } from 'src/models/Transfer';
 
 interface EnterpriseState {
     products: Product[];
-    stores: Store[],
-    providers: Provider[],
+    stores: Store[];
+    providers: Provider[];
 }
 
 const initialState: EnterpriseState = {
@@ -33,7 +33,7 @@ export class EnterpriseStateService extends StateService<EnterpriseState> {
         @Inject('BASE_URL') baseUrl: string
     ) {
         super(initialState);
-        this.api = baseUrl + "api/enterprise";
+        this.api = baseUrl + 'api/enterprise';
         this.fetchProducts();
         this.fetchStores();
         this.fetchProviders();
@@ -117,7 +117,7 @@ export class EnterpriseStateService extends StateService<EnterpriseState> {
      */
     updateProduct(product: Product) {
         const index = this.state.products.indexOf(
-            this.state.products.find(p => p.id == product.id)
+            this.state.products.find(p => p.id === product.id)
         );
         this.http.put<Product>(
             `${this.api}/update-product/${product.id}`,
@@ -137,7 +137,7 @@ export class EnterpriseStateService extends StateService<EnterpriseState> {
      */
     updateStore(store: Store) {
         const index = this.state.stores.indexOf(
-            this.state.stores.find(s => s.id == store.id)
+            this.state.stores.find(s => s.id === store.id)
         );
         this.http.put<Store>(
             `${this.api}/update-store/${store.id}`,
@@ -157,7 +157,7 @@ export class EnterpriseStateService extends StateService<EnterpriseState> {
      */
     updateProvider(provider: Provider) {
         const index = this.state.products.indexOf(
-            this.state.products.find(p => p.id == provider.id)
+            this.state.products.find(p => p.id === provider.id)
         );
         this.http.put<Provider>(
             `${this.api}/update-provider/${provider.id}`,
@@ -177,7 +177,7 @@ export class EnterpriseStateService extends StateService<EnterpriseState> {
      * @returns observable http response
      */
     getProductsByProvider(provider: Provider) {
-        return this.state.products.filter(p => p.provider.id == provider.id);
+        return this.state.products.filter(p => p.provider.id === provider.id);
     }
 
     /**

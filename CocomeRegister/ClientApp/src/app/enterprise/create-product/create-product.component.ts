@@ -15,7 +15,7 @@ export class EnterpriseCreateProductComponent {
   constructor(
     private enterpriseService: EnterpriseStateService,
     private router: Router
-  ) { 
+  ) {
     this.enterpriseService.providers$.subscribe(providers => {
       this.providers = providers;
     });

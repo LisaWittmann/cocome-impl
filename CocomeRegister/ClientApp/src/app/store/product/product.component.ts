@@ -19,10 +19,10 @@ export class StoreProductComponent {
   ) {
     const productId = Number(router.url.split('/').pop());
     this.storeStateService.getProduct(productId).subscribe(result => {
-      this.product = result
+      this.product = result;
     }, error => {
       console.error(error);
-      this.location.back()
+      this.location.back();
     });
   }
 

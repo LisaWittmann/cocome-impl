@@ -55,8 +55,8 @@ export class CashDeskCheckoutComponent implements AfterViewInit, OnInit {
     this.cashdeskState.getProducts(this.pageIndex, this.pageSize, this.filter).subscribe(result => {
       this.products = result.data;
       this.pageIndex = result.pageNumber + 1;
-      this.lastPageIndex = result.totalPages
-    }, error => console.error(error))
+      this.lastPageIndex = result.totalPages;
+    }, error => console.error(error));
   }
 
   updateProductList() {
@@ -75,7 +75,7 @@ export class CashDeskCheckoutComponent implements AfterViewInit, OnInit {
     this.barcodeInput.nativeElement.focus();
     this.productList.nativeElement.addEventListener('scroll', (event) => {
       const container = event.target as HTMLElement;
-      const reachedEnd = container.offsetHeight + container.scrollTop >= container.scrollHeight
+      const reachedEnd = container.offsetHeight + container.scrollTop >= container.scrollHeight;
       const reachedLastPage = this.pageIndex > this.lastPageIndex;
       if (reachedEnd && !reachedLastPage) {
         this.updateProductList();

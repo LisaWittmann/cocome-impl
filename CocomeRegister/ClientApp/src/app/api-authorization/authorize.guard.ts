@@ -13,7 +13,7 @@ export class StoreGuard implements CanActivate {
     private authorize: AuthorizeService,
     private router: Router
   ) {}
-  
+
   canActivate(
     _next: ActivatedRouteSnapshot): Observable<boolean> | Promise<boolean> | boolean {
       return this.authorize.isManager()

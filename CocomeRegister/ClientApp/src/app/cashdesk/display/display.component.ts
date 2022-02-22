@@ -1,5 +1,5 @@
-import { Component } from "@angular/core";
-import { CashDeskStateService } from "../cashdesk.service";
+import { Component } from '@angular/core';
+import { CashDeskStateService } from '../cashdesk.service';
 
 
 @Component({
@@ -14,6 +14,6 @@ export class CashDeskDisplayComponent {
         this.cashdeskService.expressMode$.subscribe(express => {
             this.expressMode = express;
             console.log(express);
-        })
+        });
     }
 }

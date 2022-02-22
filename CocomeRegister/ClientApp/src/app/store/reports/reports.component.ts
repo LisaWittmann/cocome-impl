@@ -45,7 +45,7 @@ export class StoreReportsComponent implements OnInit {
       backgroundColor: toRGBA(chartColors[this.salesData.indexOf(data)], 0.5)
     }));
   }
- 
+
   initSalesChart() {
     const canvas = document.getElementById('salesChart') as HTMLCanvasElement;
     if (canvas) {

@@ -40,7 +40,7 @@ export class StoreStateService extends StateService<StoreState> {
     @Inject('BASE_URL') baseUrl: string
   ) {
     super(initialState);
-    this.api = baseUrl + "api/store";
+    this.api = baseUrl + 'api/store';
     this.authService.getUser().subscribe(user => {
       this.fetchStore(user.store);
     });
@@ -101,15 +101,19 @@ export class StoreStateService extends StateService<StoreState> {
    * get saved store in session storage
    */
   getSession() {
-    const store: Store = JSON.parse(sessionStorage.getItem("store"));
+    const store: Store = JSON.parse(sessionStorage.getItem('store'));
     if (store) {
       this.setStore(store);
     }
   }
 
 
+  /**
+   * update state store and all depending store data
+   * @param store store to set as new state store
+   */
   setStore(store: Store) {
-    sessionStorage.setItem("store", JSON.stringify(store));
+    sessionStorage.setItem('store', JSON.stringify(store));
     this.setState({ store: store });
     this.fetchInventory();
     this.fetchOrders();
@@ -152,7 +156,7 @@ export class StoreStateService extends StateService<StoreState> {
    * @param product product to remove all instances of
    */
   removeAllFromCard(product: Product) {
-    this.setState({ currentOrder: this.state.currentOrder.filter(element => element.product.id != product.id) });
+    this.setState({ currentOrder: this.state.currentOrder.filter(element => element.product.id !== product.id) });
   }
 
   /**
@@ -160,7 +164,7 @@ export class StoreStateService extends StateService<StoreState> {
    */
   placeNewOrder() {
     this.http.post<Order[]>(
-      `${this.api}/orders/${this.state.store.id}/create`, 
+      `${this.api}/orders/${this.state.store.id}/create`,
       this.state.currentOrder
     ).subscribe(result => {
       console.log(result);
@@ -230,10 +234,18 @@ export class StoreStateService extends StateService<StoreState> {
     );
   }
 
+  /**
+   * check whether states store is provider or receiving store of a stock exchange 
+   * @param exchange exchange to check status for
+   */
   isProvider(exchange: StockExchange) {
-    return exchange.provider.id == this.state.store.id
+    return exchange.provider.id === this.state.store.id;
   }
 
+  /**
+   * mark stock exchange as placed
+   * @param exchange exchange to perform changes on
+   */
   startExchange(exchange: StockExchange) {
     this.http.put<StockExchange[]>(
       `${this.api}/exchanges/${this.state.store.id}/start`,
@@ -243,6 +255,10 @@ export class StoreStateService extends StateService<StoreState> {
     }, error => console.error(error));
   }
 
+  /**
+   * mark stock exchange as delivered
+   * @param exchange exchange to perform changes on
+   */
   closeExchange(exchange: StockExchange) {
     this.http.put<StockExchange[]>(
       `${this.api}/exchanges/${this.state.store.id}/close`,

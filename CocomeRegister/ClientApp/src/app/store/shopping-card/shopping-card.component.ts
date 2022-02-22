@@ -20,7 +20,9 @@ export class StoreShoppingCardComponent {
   }
 
   get totalPrice() {
-    if (this.shoppingCard.length == 0) return 0;
+    if (this.shoppingCard.length === 0) {
+      return 0;
+    }
     return this.shoppingCard
             .map(element => element.product.price * element.amount)
             .reduce((x, y) => (x + y));

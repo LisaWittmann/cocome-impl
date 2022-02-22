@@ -25,7 +25,7 @@ export class EnterpriseProductComponent {
   ) {
     const productId = Number(router.url.split('/').pop());
     this.enterpriseService.products$.subscribe(products => {
-      this.product = products.find(p => p.id == productId);
+      this.product = products.find(p => p.id === productId);
       if (!this.product) {
         location.back();
       }
@@ -39,7 +39,7 @@ export class EnterpriseProductComponent {
     this.enterpriseService.getStoresByProduct(productId).subscribe(stores => {
       this.availableStores = stores;
       this.stores = this.stores.filter(store => !this.availableStores.some((a) => (a.id === store.id)));
-    })
+    });
   }
 
   updateProduct() {

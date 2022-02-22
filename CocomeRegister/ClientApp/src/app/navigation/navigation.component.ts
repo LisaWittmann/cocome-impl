@@ -11,7 +11,7 @@ export class NavigationComponent {
   userName: Observable<string>;
 
   isAuthenticated: boolean;
-  isAdmin: boolean
+  isAdmin: boolean;
   isCashier: boolean;
   isManager: boolean;
 
@@ -29,5 +29,5 @@ export class NavigationComponent {
     this.authService.isCashier().subscribe(cashier => {
       this.isCashier = cashier;
     });
-  } 
+  }
 }

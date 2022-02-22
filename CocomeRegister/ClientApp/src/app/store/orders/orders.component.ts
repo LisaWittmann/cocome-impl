@@ -27,8 +27,8 @@ export class StoreOrdersComponent {
         return `Bestellung ${order.id} vom
                 ${new Date(order.placingDate).toLocaleDateString('de-DE')}`;
     }
-    
+
     exchangeTitle = (exchange: StockExchange) => {
-        return `Anfrage ${exchange.id} von ${exchange.store.name} an ${exchange.provider.name}`
+        return `Anfrage ${exchange.id} von ${exchange.store.name} an ${exchange.provider.name}`;
     }
 }

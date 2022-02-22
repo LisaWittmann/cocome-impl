@@ -29,7 +29,9 @@ export class StoreOrderDetailComponent {
     }
 
     get totalPrice() {
-        if (this.order.elements.length == 0) return 0;
+        if (this.order.elements.length === 0) {
+            return 0;
+        }
         return this.order.elements
             .map(element => element.product.price * element.amount)
             .reduce((x, y) => (x + y));

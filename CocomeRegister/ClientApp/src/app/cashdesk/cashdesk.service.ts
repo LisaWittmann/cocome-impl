@@ -36,7 +36,7 @@ export class CashDeskStateService extends StateService<CashDeskState> {
     @Inject('BASE_URL') baseUrl: string
   ) {
         super(initialState);
-        this.api = baseUrl + "api/cashdesk";
+        this.api = baseUrl + 'api/cashdesk';
         this.authService.getUser().subscribe(user => {
             this.setState({ storeId: Number(user.store) });
         });
@@ -50,7 +50,7 @@ export class CashDeskStateService extends StateService<CashDeskState> {
             `${this.api}/express/${this.state.id}`
         ).subscribe(result => {
             this.setState({ expressMode: result});
-        }, error => console.error(error))
+        }, error => console.error(error));
     }
 
     resetExpressMode() {
@@ -68,17 +68,17 @@ export class CashDeskStateService extends StateService<CashDeskState> {
      * @param product product to add
      */
     addProduct(product: Product) {
-        if (this.state.expressMode && 
+        if (this.state.expressMode &&
             this.getCardItems() >= expressModeMaxItems) {
             return;
         }
-        const cardItem = this.state.shoppingCard.find(item => item.product.id == product.id);
+        const cardItem = this.state.shoppingCard.find(item => item.product.id === product.id);
         if (cardItem) {
             const index = this.state.shoppingCard.indexOf(cardItem);
             cardItem.amount++;
-            this.setState({ shoppingCard: 
+            this.setState({ shoppingCard:
                 [
-                    ...this.state.shoppingCard.slice(undefined, index), 
+                    ...this.state.shoppingCard.slice(undefined, index),
                     cardItem,
                     ...this.state.shoppingCard.slice(index + 1, undefined)
                 ]
@@ -110,7 +110,7 @@ export class CashDeskStateService extends StateService<CashDeskState> {
             paymentMethod: paymentMethod,
             total: this.getTotalPrice(),
             payed: payed
-        }
+        };
         return this.http.post(
             `${this.api}/checkout/${this.state.storeId}`, sale,
             { responseType: 'blob' }
@@ -134,7 +134,7 @@ export class CashDeskStateService extends StateService<CashDeskState> {
      * @returns observable http response
      */
     getProducts(page: number, size: number, searchparam?: string) {
-        let query = searchparam? `?q=${searchparam}&` : '?';
+        let query = searchparam ? `?q=${searchparam}&` : '?';
         query += `pageNumber=${page}&pageSize=${size}`;
         return this.http.get<PagedResponse<Product[]>>(
             `${this.api}/products/${this.state.storeId}${query}`
@@ -150,7 +150,7 @@ export class CashDeskStateService extends StateService<CashDeskState> {
      * @returns total length of shopping card
      */
     getCardItems(): number {
-        if (this.state.shoppingCard.length == 0) {
+        if (this.state.shoppingCard.length === 0) {
             return 0;
         }
         return this.state.shoppingCard
@@ -163,7 +163,7 @@ export class CashDeskStateService extends StateService<CashDeskState> {
      * @returns sum of all products in shopping card
      */
     getCardSum(): number {
-        if (this.state.shoppingCard.length == 0) {
+        if (this.state.shoppingCard.length === 0) {
             return 0;
         }
         return this.state.shoppingCard

@@ -22,9 +22,24 @@ import { AuthorizeService } from './api-authorization/authorize.service';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
-  { path: 'kasse', component: CashDeskComponent, canActivate: [CashDeskGuard], loadChildren: () => import('./cashdesk/cashdesk.module').then(m => m.CashDeskModule) },
-  { path: 'filiale', component: StoreComponent, canActivate: [StoreGuard], loadChildren: () => import('./store/store.module').then(m => m.StoreModule) },
-  { path: 'admin', component: EnterpriseComponent, canActivate: [EnterpriseGuard], loadChildren: () => import('./enterprise/enterprise.module').then(m => m.EnterpriseModule) },
+  {
+    path: 'kasse',
+    component: CashDeskComponent,
+    canActivate: [CashDeskGuard],
+    loadChildren: () => import('./cashdesk/cashdesk.module').then(m => m.CashDeskModule)
+  },
+  {
+    path: 'filiale',
+    component: StoreComponent,
+    canActivate: [StoreGuard],
+    loadChildren: () => import('./store/store.module').then(m => m.StoreModule)
+  },
+  {
+    path: 'admin',
+    component: EnterpriseComponent,
+    canActivate: [EnterpriseGuard],
+    loadChildren: () => import('./enterprise/enterprise.module').then(m => m.EnterpriseModule)
+  },
 ];
 
 @NgModule({
@@ -45,10 +60,10 @@ const appRoutes: Routes = [
   ],
   providers: [
     AuthorizeService,
-    { 
+    {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthorizeInterceptor,
-      multi: true 
+      multi: true
     }
   ],
   bootstrap: [AppComponent]

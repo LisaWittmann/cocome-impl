@@ -18,9 +18,9 @@ export class ProductDetailComponent {
   @Input() restricted: boolean;
   @Output() updateProductEvent = new EventEmitter<Product>();
 
-  baseUrl: string
+  baseUrl: string;
 
-  constructor(private http: HttpClient, @Inject("BASE_URL") baseUrl: string) {
+  constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
     this.baseUrl = baseUrl;
   }
 
@@ -28,7 +28,7 @@ export class ProductDetailComponent {
     if (files.length > 0) {
       const file = files[0];
       const data = new FormData();
-      data.append("file", file);
+      data.append('file', file);
       this.http.post<Resource>(`${this.baseUrl}api/fileupload`, data).subscribe(result => {
         this.product.imageUrl = result.path;
       }, error => console.error(error));
