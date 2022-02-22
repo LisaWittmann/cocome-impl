@@ -8,14 +8,12 @@ import { StateService } from 'src/services/StateService';
 import { AuthorizeService } from '../api-authorization/authorize.service';
 
 interface CashDeskState {
-    id: number;
     storeId: number;
     expressMode: boolean;
     shoppingCard: SaleElement[];
 }
 
 const initialState: CashDeskState = {
-    id: 1,
     storeId: undefined,
     expressMode: false,
     shoppingCard: [],
@@ -28,6 +26,7 @@ const expressModeMaxItems = 8;
 export class CashDeskStateService extends StateService<CashDeskState> {
     expressMode$: Observable<boolean> = this.select(state => state.expressMode);
     shoppingCard$: Observable<SaleElement[]> = this.select(state => state.shoppingCard);
+    lastSales: Map<number, Sale>;
     api: string;
 
     constructor(
@@ -37,29 +36,10 @@ export class CashDeskStateService extends StateService<CashDeskState> {
   ) {
         super(initialState);
         this.api = baseUrl + 'api/cashdesk';
+        this.lastSales = new Map<number, Sale>();
         this.authService.getUser().subscribe(user => {
             this.setState({ storeId: Number(user.store) });
         });
-        if (this.state.id) {
-            this.fetchExpressMode();
-        }
-    }
-
-    private fetchExpressMode() {
-        this.http.get<boolean>(
-            `${this.api}/express/${this.state.id}`
-        ).subscribe(result => {
-            this.setState({ expressMode: result});
-        }, error => console.error(error));
-    }
-
-    resetExpressMode() {
-        this.http.post<boolean>(
-            `${this.api}/update-express/${this.state.id}`,
-            false
-        ).subscribe(result => {
-            this.setState({ expressMode: result });
-        }, error => console.error(error));
     }
 
     /**
@@ -116,6 +96,7 @@ export class CashDeskStateService extends StateService<CashDeskState> {
             { responseType: 'blob' }
         ).toPromise().then(response => {
             this.setState({ shoppingCard: [] });
+            this.updateLastSales(sale);
             return response;
         });
     }
@@ -188,5 +169,26 @@ export class CashDeskStateService extends StateService<CashDeskState> {
      */
     getTotalPrice() {
         return this.getCardSum() - this.getTotalDiscount();
+    }
+
+    resetExpressMode() {
+        this.setState({ expressMode: false });
+    }
+
+    updateLastSales(sale: Sale) {
+        const currentTime = new Date(Date.now()).getTime();
+        this.lastSales.set(currentTime, sale);
+        const timedOutEntries = [...this.lastSales.keys()]
+            .filter(key => ((currentTime - key) * 1000 * 60 * 60) >= 1);
+        for (const entry of timedOutEntries) {
+            this.lastSales.delete(entry);
+        }
+        const validSales = [...this.lastSales.values()]
+            .filter(value => 
+                value.saleElements.length < expressModeMaxItems &&
+                value.paymentMethod == PaymentMethod.CASH)
+            .length;
+        
+        this.setState({ expressMode: (validSales * 2) > this.lastSales.size });
     }
 }
