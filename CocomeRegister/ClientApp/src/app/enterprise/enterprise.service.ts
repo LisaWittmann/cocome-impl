@@ -36,6 +36,9 @@ export class EnterpriseStateService extends StateService<EnterpriseState> {
         this.fetchProviders();
     }
 
+    /**
+     * request all products from api
+     */
     private fetchProducts() {
         this.http.get<Product[]>(
             `${this.api}/products`
@@ -44,6 +47,9 @@ export class EnterpriseStateService extends StateService<EnterpriseState> {
         }, error => console.error(error));
     }
 
+    /**
+     * request all providers from api
+     */
     private fetchProviders() {
         this.http.get<Provider[]>(
             `${this.api}/provider`
@@ -52,6 +58,9 @@ export class EnterpriseStateService extends StateService<EnterpriseState> {
         }, error => console.error(error));
     }
 
+    /**
+     * request all stores frm api
+     */
     private fetchStores() {
         this.http.get<Store[]>(
             `${this.api}/stores`
@@ -60,6 +69,10 @@ export class EnterpriseStateService extends StateService<EnterpriseState> {
         }, error => console.error(error));
     }
 
+    /**
+     * request adding new product data to databse
+     * @param product new product to add
+     */
     addProduct(product: Product) {
         this.http.post<Product>(
             `${this.api}/create-product`,
@@ -69,6 +82,10 @@ export class EnterpriseStateService extends StateService<EnterpriseState> {
         }, error => console.error(error));
     }
 
+    /**
+     * request adding new store data to database
+     * @param store new store to add
+     */
     addStore(store: Store) {
         this.http.post<Store>(
             `${this.api}/create-store`,
@@ -78,6 +95,10 @@ export class EnterpriseStateService extends StateService<EnterpriseState> {
         }, error => console.error(error));
     }
 
+    /**
+     * request adding new provider data to database
+     * @param provider new provider to add
+     */
     addProvider(provider: Provider) {
         this.http.post<Provider>(
             `${this.api}/create-provider`,
@@ -87,6 +108,10 @@ export class EnterpriseStateService extends StateService<EnterpriseState> {
         }, error => console.error(error));
     }
 
+    /**
+     * request updating products database entry
+     * @param product new product data
+     */
     updateProduct(product: Product) {
         const index = this.state.products.indexOf(
             this.state.products.find(p => p.id == product.id)
@@ -103,6 +128,10 @@ export class EnterpriseStateService extends StateService<EnterpriseState> {
         }, () => this.fetchProducts());
     }
 
+    /**
+     * request updating stores database entry
+     * @param store new store data
+     */
     updateStore(store: Store) {
         const index = this.state.stores.indexOf(
             this.state.stores.find(s => s.id == store.id)
@@ -119,6 +148,10 @@ export class EnterpriseStateService extends StateService<EnterpriseState> {
         }, () => this.fetchStores());
     }
 
+    /**
+     * request updating providers database entry
+     * @param product new provider data
+     */
     updateProvider(provider: Provider) {
         const index = this.state.products.indexOf(
             this.state.products.find(p => p.id == provider.id)
@@ -135,28 +168,52 @@ export class EnterpriseStateService extends StateService<EnterpriseState> {
         }, () => this.fetchProviders());
     }
 
+    /**
+     * request all products the given provider delivers
+     * @param provider provider to request products from
+     * @returns observable http response
+     */
     getProductsByProvider(provider: Provider) {
         return this.state.products.filter(p => p.provider.id == provider.id);
     }
 
+    /**
+     * request all stores that have the given product in stock
+     * @param productId product id to search stock items for
+     * @returns observable http response
+     */
     getStoresByProduct(productId: number) {
         return this.http.get<Store[]>(
             `${this.api}/product/${productId}/stores`
         );
     }
 
+    /**
+     * request delivery statistics
+     * @returns observable http response
+     */
     getDeliveryStatistic() {
         return this.http.get<Statistic[]>(
             `${this.api}/provider-reports`
         );
     }
 
+    /**
+     * request profut statistics for current year
+     * @returns observable http response
+     */
     getProfitStatistic() {
         return this.http.get<Statistic[]>(
             `${this.api}/store-reports`
         );
     }
 
+    /**
+     * request adding a product to a stores stock
+     * @param storeId store to add product to
+     * @param product product to add
+     * @returns observable http response
+     */
     addProductToStore(storeId: number, product: Product) {
         return this.http.post<Store[]>(
             `${this.api}/create-stock/${storeId}`, product

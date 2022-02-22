@@ -60,6 +60,11 @@ export class CashDeskStateService extends StateService<CashDeskState> {
         }, error => console.error(error));
     }
 
+    /**
+     * convert product into a saleElement and add it to shopping card
+     * or increase amount of saleElement if product is already in card
+     * @param product product to add
+     */
     addProduct(product: Product) {
         if (this.state.expressMode && 
             this.getCardItems() >= expressModeMaxItems) {
@@ -81,12 +86,22 @@ export class CashDeskStateService extends StateService<CashDeskState> {
         }
     }
 
+    /**
+     * remove saleElement with given product from shopping card
+     * @param product product to remove
+     */
     removeProduct(product: Product) {
         this.setState({ shoppingCard: this.state.shoppingCard.filter(
             cardItem => cardItem.product.id !== product.id
         )});
     }
 
+    /**
+     * request confirmation for new sale from shopping card elements
+     * @param paymentMethod confiremed payment method of the customer
+     * @param payed payed amount of the customer
+     * @returns promise of the http response
+     */
     async confirmCheckout(paymentMethod: PaymentMethod, payed: number) {
         const sale: Sale = {
             saleElements: this.state.shoppingCard,
@@ -99,10 +114,22 @@ export class CashDeskStateService extends StateService<CashDeskState> {
         ).toPromise();
     }
 
+    /**
+     * request product by id from api
+     * @param id productId
+     * @returns observable http response
+     */
     getProduct(id: number) {
         return this.http.get<Product>(`${this.api}/products/${this.state.storeId}/${id}`);
     }
 
+    /**
+     * request available products in store
+     * @param page current page number
+     * @param size max amount of items per request
+     * @param searchparam filter for products
+     * @returns observable http response
+     */
     getProducts(page: number, size: number, searchparam?: string) {
         let query = searchparam? `?q=${searchparam}&` : '?';
         query += `pageNumber=${page}&pageSize=${size}`;
@@ -115,6 +142,10 @@ export class CashDeskStateService extends StateService<CashDeskState> {
         return this.state.expressMode ? expressModeDiscount : 0;
     }
 
+    /**
+     * count items in shopping card
+     * @returns total length of shopping card
+     */
     getCardItems(): number {
         if (this.state.shoppingCard.length == 0) {
             return 0;
@@ -124,6 +155,10 @@ export class CashDeskStateService extends StateService<CashDeskState> {
             .reduce((x, y) => (x + y));
     }
 
+    /**
+     * calculates sum of shopping card
+     * @returns sum of all products in shopping card
+     */
     getCardSum(): number {
         if (this.state.shoppingCard.length == 0) {
             return 0;
@@ -133,10 +168,18 @@ export class CashDeskStateService extends StateService<CashDeskState> {
             .reduce((x, y) => (x + y));
     }
 
+    /**
+     * calculates total discount of shoppingcard
+     * @returns sum of all products discounts
+     */
     getTotalDiscount(): number {
         return this.getCardSum() * this.discount;
     }
 
+    /**
+     * calculates price of shopping card minus total discount
+     * @returns total price of all card items
+     */
     getTotalPrice() {
         return this.getCardSum() - this.getTotalDiscount();
     }
