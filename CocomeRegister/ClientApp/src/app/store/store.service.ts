@@ -40,6 +40,10 @@ export class StoreStateService extends StateService<StoreState> {
     this.getSession();
   }
 
+  /**
+   * request a store by it's id and set the result as state
+   * @param id storeid
+   */
   fetchStore(id: string) {
     this.http.get<Store>(
       `${this.api}/${id}`
@@ -48,6 +52,9 @@ export class StoreStateService extends StateService<StoreState> {
     }, error => console.error(error));
   }
 
+  /**
+   * request the states store stockitems
+   */
   fetchInventory() {
     this.http.get<StockItem[]>(
       `${this.api}/inventory/${this.state.store.id}`
@@ -56,6 +63,9 @@ export class StoreStateService extends StateService<StoreState> {
     }, error => console.error(error));
   }
 
+  /**
+   * request the states store orders
+   */
   fetchOrders() {
     this.http.get<Order[]>(
       `${this.api}/orders/${this.state.store.id}`
@@ -68,12 +78,16 @@ export class StoreStateService extends StateService<StoreState> {
     return this.state.inventory.filter(item => item.stock < 10);
   }
 
+  /**
+   * get saved store in session storage
+   */
   getSession() {
     const store: Store = JSON.parse(sessionStorage.getItem("store"));
     if (store) {
       this.setStore(store);
     }
   }
+
 
   setStore(store: Store) {
     sessionStorage.setItem("store", JSON.stringify(store));
@@ -82,6 +96,13 @@ export class StoreStateService extends StateService<StoreState> {
     this.fetchOrders();
   }
 
+  /**
+   * convert product into an order element and add it to current order
+   * or increase elements amount if product is already in order
+   * @param product product to add to order
+   * @param amount amount of prodcut to add to order, default 1
+   * @param replace replace existing amount of product in order, default false
+   */
   addToCard(product: Product, amount = 1, replace = false) {
     const currentOrder = this.state.currentOrder;
     const cardProduct = currentOrder.find(element => element.product.id === product.id);
@@ -93,6 +114,10 @@ export class StoreStateService extends StateService<StoreState> {
     this.setState({ currentOrder: currentOrder });
   }
 
+  /**
+   * decrease amount of the product in current order
+   * @param product product to decrease amount
+   */
   removeFromCard(product: Product) {
     const currentOrder = this.state.currentOrder;
     const cardProduct = this.state.currentOrder.find(element => element.product.id === product.id);
@@ -102,10 +127,17 @@ export class StoreStateService extends StateService<StoreState> {
     this.setState({ currentOrder: currentOrder });
   }
 
+  /**
+   * remove product completely from the current order
+   * @param product product to remove all instances of
+   */
   removeAllFromCard(product: Product) {
     this.setState({ currentOrder: this.state.currentOrder.filter(element => element.product.id != product.id) });
   }
 
+  /**
+   * post current order to api and update state to result
+   */
   placeNewOrder() {
     this.http.post<Order[]>(
       `${this.api}/create-order/${this.state.store.id}`, 
@@ -117,6 +149,10 @@ export class StoreStateService extends StateService<StoreState> {
     }, error => console.error(error));
   }
 
+  /**
+   * mark order as delivered
+   * @param order order to close
+   */
   closeOrder(order: Order) {
     this.http.post<Order[]>(
       `${this.api}/close-order/${this.state.store.id}`,
@@ -127,6 +163,10 @@ export class StoreStateService extends StateService<StoreState> {
     }, error => console.error(error));
   }
 
+  /**
+   * update product entry with current data
+   * @param product product containing id of entry to update
+   */
   updateProduct(product: Product) {
     this.http.post<StockItem[]>(
       `${this.api}/update-product/${this.state.store.id}`,
@@ -136,12 +176,22 @@ export class StoreStateService extends StateService<StoreState> {
     }, error => console.error(error));
   }
 
+  /**
+   * request product by its id
+   * @param id product id
+   * @returns observale http response
+   */
   getProduct(id: number) {
     return this.http.get<Product>(
       `${this.api}/${this.state.store.id}/product/${id}`
     );
   }
 
+  /**
+   * get stores latest year profits
+   * @returns statistic with all monthly profits
+   * as observable http response
+   */
   getLatestProfits() {
     const year = new Date(Date.now()).getFullYear();
     return this.http.get<Statistic>(
@@ -149,6 +199,11 @@ export class StoreStateService extends StateService<StoreState> {
     );
   }
 
+  /**
+   * get stores overall profits
+   * @returns list of statistics with each years profit
+   * as observable http response
+   */
   getProfits() {
     return this.http.get<Statistic[]>(
       `${this.api}/profit/${this.state.store.id}`

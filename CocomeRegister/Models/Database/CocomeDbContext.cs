@@ -25,8 +25,6 @@ namespace CocomeStore.Models.Database
 
         public DbSet<Order> Orders { get; set; }
 
-        public DbSet<Discount> Discounts { get; set; }
-
         public DbSet<SaleElement> SaleElements { get; set; }
 
         public DbSet<Sale> Sales { get; set; }

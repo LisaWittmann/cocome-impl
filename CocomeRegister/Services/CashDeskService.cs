@@ -72,7 +72,7 @@ namespace CocomeStore.Services
             }
 
             await _context.SaveChangesAsync();
-            _exchangeService.CheckForExchanges(storeId);
+            await _exchangeService.CheckForExchanges(storeId).ConfigureAwait(false);
 
             saleTO.Store = store;
             saleTO.Total = total;

@@ -159,17 +159,6 @@ namespace CocomeStore.Services.Mapping
             };
         }
 
-        public StockItem CreateStockItem(StockItemTO stockItemTO)
-        {
-            return new ()
-            {
-                ProductId = stockItemTO.Product.Id,
-                Stock = stockItemTO.Stock,
-                StoreId = stockItemTO.Store.Id,
-                Minimum = stockItemTO.Minimum
-            };
-        }
-
         public StockExchangeTO CreateStockExchangeTO(
            StockExchange stockExchange,
            IEnumerable<ExchangeElement> exchangeElements

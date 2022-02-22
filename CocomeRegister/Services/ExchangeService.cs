@@ -144,7 +144,6 @@ namespace CocomeStore.Services
             _logger.LogInformation("check for exchanges called");
             var lowStockItems = GetLowStockItems(storeId).ToArray();
             var exchanges = new List<StockExchange>();
-            var exchangeElements = new List<ExchangeElement>();
 
             if (lowStockItems.Length == 0)
             {
@@ -169,7 +168,7 @@ namespace CocomeStore.Services
                     .SingleOrDefault();
                 var amount = item.Minimum + 1;
 
-                if (exchange != null)
+                if (exchange == null)
                 {
                     exchange = new StockExchange()
                     {
@@ -179,19 +178,20 @@ namespace CocomeStore.Services
                         DeliveringDate = DateTime.MinValue,
                     };
                 }
-                exchangeElements.Add(new ()
+
+                _context.ExchangeElements.Add(new ()
                 {
                     ProductId = item.ProductId,
                     Amount = amount,
                     StockExchange = exchange,
                 });
-                _logger.LogInformation("prodct id: {}", item.ProductId);
-                var items =_context.StockItems
-                    .Where(item =>
-                        (item.StoreId == sendingStore.Id && item.ProductId == item.ProductId));
-                _logger.LogInformation("stock items: {}", items.ToArray().Length);
+              
+                var sendedItem =_context.StockItems
+                    .Where(i => i.StoreId == sendingStore.Id &&
+                    i.ProductId == item.ProductId)
+                    .Single();
+                sendedItem.Stock -= amount;
             }
-            await _context.ExchangeElements.AddRangeAsync(exchangeElements);
             await _context.SaveChangesAsync();
         }
     }
