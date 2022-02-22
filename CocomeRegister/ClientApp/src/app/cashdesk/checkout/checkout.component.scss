@@ -3,7 +3,13 @@
 .checkout {
     overflow: hidden;
     flex-direction: row;
-    position: relative;
+    position: absolute;
+    overflow: hidden;
+    top: 0;
+    height: 100vh;
+    width: 100vw;
+    z-index: 30;
+    background-color: $color-white;
 
     &__express {
         position: relative;
@@ -20,6 +26,7 @@
         width: 70%;
         position: relative;
         overflow: hidden;
+        height: 100%;
         @include flex-center(flex-start, column);
     }
 

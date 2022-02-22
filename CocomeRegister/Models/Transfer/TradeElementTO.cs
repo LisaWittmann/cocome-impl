@@ -4,10 +4,10 @@ using System.ComponentModel.DataAnnotations;
 namespace CocomeStore.Models.Transfer
 {
     /// <summary>
-    /// abstract class <c>TradeElementTO</c> is a data transfer object for class
+    /// class <c>TradeElementTO</c> is a data transfer object for class
     /// <see cref="TradeElement"/>
     /// </summary>
-    public abstract class TradeElementTO
+    public class TradeElementTO
     {
         [Required]
         public Product Product { get; set; }

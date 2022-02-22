@@ -1,16 +1,14 @@
 import { Product } from "./Product";
 import { Provider } from "./Provider";
 import { Store } from "./Store";
-import { Trade, TradeElement } from "./Trade";
-
-export class OrderElement implements TradeElement {
+export interface OrderElement {
     product: Product;
     amount: number;
 }
 
-export class Order implements Trade<Provider> {
+export interface Order {
     id: number;
-    elements: TradeElement[];
+    elements: OrderElement[];
     store: Store;
     provider: Provider;
     placingDate: Date;

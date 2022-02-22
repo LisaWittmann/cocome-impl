@@ -7,7 +7,7 @@
             <h2>Eingegangene Tauschanfragen</h2>
             <app-accordion
                 *ngFor="let exchange of providedExchanges"
-                [header]="title(exchange)"
+                [header]="exchangeTitle(exchange)"
             >
                 <app-store-exchange-detail [exchange]="exchange">                    
                 </app-store-exchange-detail>
@@ -17,7 +17,7 @@
             <h2>Ausstehende Bestellungen</h2>
             <app-accordion 
                 *ngFor="let order of orders"
-                [header]="title(order)"
+                [header]="orderTitle(order)"
             >
                 <app-store-order-detail [order]="order">
                 </app-store-order-detail>
@@ -27,7 +27,7 @@
             <h2>Ausstehende Tauschanfragen</h2>
             <app-accordion
                 *ngFor="let exchange of exchanges"
-                [header]="title(exchange)"
+                [header]="exchangeTitle(exchange)"
             >
                 <app-store-exchange-detail [exchange]="exchange">                    
                 </app-store-exchange-detail>

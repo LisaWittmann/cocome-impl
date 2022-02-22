@@ -4,10 +4,10 @@ using System.ComponentModel.DataAnnotations;
 namespace CocomeStore.Models.Transfer
 {
     /// <summary>
-    /// abstract class <c>TradeTO</c> is a data transfer object of class <see cref="Trade{T}"/>
+    /// class <c>TradeTO</c> is a data transfer object of class <see cref="Trade{T}"/>
     /// </summary>
     /// <typeparam name="T">class of the trades provider</typeparam>
-    public abstract class TradeTO<T>
+    public class TradeTO<T>
     {
         public int Id { get; set; }
 

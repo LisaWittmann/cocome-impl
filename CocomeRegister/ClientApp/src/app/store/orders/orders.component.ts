@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { Order } from 'src/models/Order';
 import { StockExchange } from 'src/models/StockExchange';
-import { Trade } from 'src/models/Trade';
 import { StoreStateService } from '../store.service';
 
 @Component({
@@ -24,8 +23,12 @@ export class StoreOrdersComponent {
         });
     }
 
-    title = (trade: Trade<any>) => {
-        return `Bestellung ${trade.id} vom
-                ${new Date(trade.placingDate).toLocaleDateString('de-DE')}`;
+    orderTitle = (order: Order) => {
+        return `Bestellung ${order.id} vom
+                ${new Date(order.placingDate).toLocaleDateString('de-DE')}`;
+    }
+    
+    exchangeTitle = (exchange: StockExchange) => {
+        return `Anfrage ${exchange.id} von ${exchange.store.name} an ${exchange.provider.name}`
     }
 }

@@ -5,11 +5,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace CocomeStore.Models
 {
     /// <summary>
-    /// abstract class <c>Trade</c> defines the object structure for a trade
+    /// class <c>Trade</c> defines the object structure for a trade
     /// of a store
     /// </summary>
     /// <typeparam name="T">type of provider</typeparam>
-    public abstract class Trade<T>
+    public class Trade<T>
     {
         [ScaffoldColumn(false)]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

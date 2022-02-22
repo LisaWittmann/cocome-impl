@@ -3,10 +3,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace CocomeStore.Models
 {
     /// <summary>
-    /// abstract class <c>TradeElement</c> defines the stucture of an object
+    /// class <c>TradeElement</c> defines the stucture of an object
     /// for a <see cref="Trade{T}"/>
     /// </summary>
-    public abstract class TradeElement
+    public class TradeElement
     {
         [ScaffoldColumn(false)]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
