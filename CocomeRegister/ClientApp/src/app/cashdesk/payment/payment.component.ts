@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { PaymentMethod } from 'src/services/Models';
+import { PaymentMethod } from 'src/models/Sale';
 import { CashDeskStateService } from '../cashdesk.service';
 
 @Component({

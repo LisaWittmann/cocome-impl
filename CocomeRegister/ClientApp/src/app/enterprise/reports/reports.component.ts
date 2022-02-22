@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import * as Chart from 'chart.js';
 import { interpolateColors, toRGBA } from 'src/services/ColorGenerator';
-import { Statistic } from 'src/services/Models';
+import { Statistic } from 'src/models/Transfer';
 import { monthValues } from 'src/services/Month';
 import { EnterpriseStateService } from '../enterprise.service';
 

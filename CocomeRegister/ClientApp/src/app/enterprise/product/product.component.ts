@@ -1,7 +1,9 @@
 import { Location } from '@angular/common';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { Product, Provider, Store } from 'src/services/Models';
+import { Product } from 'src/models/Product';
+import { Provider } from 'src/models/Provider';
+import { Store } from 'src/models/Store';
 import { EnterpriseStateService } from '../enterprise.service';
 
 @Component({

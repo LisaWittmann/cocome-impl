@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { OrderElement, Order } from 'src/services/Models';
+import { Order, OrderElement } from 'src/models/Order';
 import { StoreStateService } from '../store.service';
 
 @Component({
@@ -29,8 +29,8 @@ export class StoreOrderDetailComponent {
     }
 
     get totalPrice() {
-        if (this.order.orderElements.length == 0) return 0;
-        return this.order.orderElements
+        if (this.order.elements.length == 0) return 0;
+        return this.order.elements
             .map(element => element.product.price * element.amount)
             .reduce((x, y) => (x + y));
     }

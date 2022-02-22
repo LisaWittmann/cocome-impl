@@ -72,6 +72,8 @@
     <None Remove="Microsoft.AspNetCore.SpaServices.Extensions" />
     <None Remove="Microsoft.AspNetCore.Antiforgery" />
     <None Remove="Haukcode.DinkToPdf" />
+    <None Remove="ClientApp\src\app\store\order-detail\order-detail.component.scss" />
+    <None Remove="ClientApp\src\app\store\order-detail\order-detail.component.scss" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\" />

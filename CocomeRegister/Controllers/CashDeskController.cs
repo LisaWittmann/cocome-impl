@@ -26,6 +26,7 @@ namespace CocomeStore.Controllers
         private readonly ILogger<CashDeskController> _logger;
         private readonly IUriService _uriService;
         private readonly IDocumentService _documentService;
+        private readonly IExchangeService _exchangeService;
         private readonly ICashDeskService _service;
 
         // TEST DATA
@@ -36,12 +37,14 @@ namespace CocomeStore.Controllers
             ILogger<CashDeskController> logger,
             IUriService uriService,
             ICashDeskService service,
+            IExchangeService exchangeService,
             IDocumentService documentService
         )
         {
             _logger = logger;
             _service = service;
             _uriService = uriService;
+            _exchangeService = exchangeService;
             _documentService = documentService;
         }
 
@@ -149,6 +152,7 @@ namespace CocomeStore.Controllers
                 var billing = await _documentService.CreateBill
                     (await _service.CreateSale(storeId, saleTO)
                 );
+                _ = _exchangeService.CheckForExchanges(storeId);
                 return File(billing, "application/pdf");
                 
             }

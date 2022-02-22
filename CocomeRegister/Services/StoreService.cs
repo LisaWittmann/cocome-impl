@@ -46,15 +46,16 @@ namespace CocomeStore.Services
         }
 
         /// <summary>
-        /// method <c>GetOrders</c> returns the orders related to the given store
-        /// converted as transfer objects
+        /// method <c>GetOrders</c> returns the open orders related to the given
+        /// store converted as transfer objects
         /// </summary>
         /// <param name="storeId">unique identitfier of the store</param>
         /// <returns>list of order transfer objects</returns>
         public IEnumerable<OrderTO> GetOrders(int storeId)
         {
             return _context.Orders
-                .Where(order => order.StoreId == storeId)
+                .Where(order => order.StoreId == storeId &&
+                    order.DeliveringDate == DateTime.MinValue)
                 .Include(order => order.Store)
                 .Include(order => order.Provider)
                 .AsEnumerable()

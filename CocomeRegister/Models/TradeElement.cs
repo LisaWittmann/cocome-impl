@@ -1,12 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
 namespace CocomeStore.Models
 {
-    /// <summary>
-    /// class <c>OrderElement</c>
-    /// </summary>
-    public class OrderElement
+    public class TradeElement
     {
         [ScaffoldColumn(false)]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -15,14 +11,10 @@ namespace CocomeStore.Models
         [Required]
         public int ProductId { get; set; }
 
+        [Required]
         public Product Product { get; set; }
 
         [Required]
         public int Amount { get; set; }
-
-        [Required]
-        public int OrderId { get; set; }
-
-        public Order Order { get; set; }
     }
 }

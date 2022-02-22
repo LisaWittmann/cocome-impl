@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { Order } from 'src/services/Models';
+import { Order } from 'src/models/Order';
+import { StockExchange } from 'src/models/StockExchange';
+import { Trade } from 'src/models/Trade';
 import { StoreStateService } from '../store.service';
 
 @Component({
@@ -9,19 +11,21 @@ import { StoreStateService } from '../store.service';
 })
 export class StoreOrdersComponent {
     orders: Order[];
-    openOrders: Order[];
-    closedOrders: Order[];
+    providedExchanges: StockExchange[];
+    exchanges: StockExchange[];
 
-    constructor(private storeState: StoreStateService) {
-        this.storeState.orders$.subscribe(orders => {
+    constructor(private storeService: StoreStateService) {
+        this.storeService.orders$.subscribe(orders => {
             this.orders = orders;
-            this.closedOrders = orders.filter(order => order.closed);
-            this.openOrders = orders.filter(order => !order.closed);
+        });
+        this.storeService.exchanges$.subscribe(exchanges => {
+            this.exchanges = exchanges.filter(ex => !this.storeService.isProvider(ex) && !ex.closed);
+            this.providedExchanges = exchanges.filter(ex => this.storeService.isProvider(ex) && !ex.sended);
         });
     }
 
-    title = (order: Order) => {
-        return `Bestellung ${order.id} vom
-                ${new Date(order.placingDate).toLocaleDateString('de-DE')}`;
+    title = (trade: Trade<any>) => {
+        return `Bestellung ${trade.id} vom
+                ${new Date(trade.placingDate).toLocaleDateString('de-DE')}`;
     }
 }

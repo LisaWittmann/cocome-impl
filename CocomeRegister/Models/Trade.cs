@@ -4,21 +4,21 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CocomeStore.Models
 {
-    public class StockExchange
+    public class Trade<T>
     {
         [ScaffoldColumn(false)]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         [Required]
-        public int ReceivingStoreId { get; set; }
+        public int StoreId { get; set; }
 
-        public Store ReceivingStore { get; set; }
+        public Store Store { get; set; }
 
         [Required]
-        public int SendingStoreId { get; set; }
+        public int ProviderId { get; set; }
 
-        public Store SendingStore { get; set; }
+        public T Provider { get; set; }
 
         [Required]
         public DateTime PlacingDate { get; set; }

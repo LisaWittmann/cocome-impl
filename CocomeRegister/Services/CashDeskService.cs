@@ -19,17 +19,14 @@ namespace CocomeStore.Services
     public class CashDeskService : ICashDeskService
     {
         private readonly CocomeDbContext _context;
-        private readonly IExchangeService _exchangeService;
         private readonly IModelMapper _mapper;
 
         public CashDeskService(
             CocomeDbContext context,
-            IExchangeService exchangeService,
             IModelMapper mapper
         )
         {
             _context = context;
-            _exchangeService = exchangeService;
             _mapper = mapper;
         }
 
@@ -72,7 +69,6 @@ namespace CocomeStore.Services
             }
 
             await _context.SaveChangesAsync();
-            await _exchangeService.CheckForExchanges(storeId).ConfigureAwait(false);
 
             saleTO.Store = store;
             saleTO.Total = total;

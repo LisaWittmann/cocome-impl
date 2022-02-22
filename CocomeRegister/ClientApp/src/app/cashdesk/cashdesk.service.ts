@@ -1,7 +1,9 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { PagedResponse, PaymentMethod, Product, Sale, SaleElement } from 'src/services/Models';
+import { Product } from 'src/models/Product';
+import { Sale, SaleElement, PaymentMethod } from 'src/models/Sale';
+import { PagedResponse} from 'src/models/Transfer';
 import { StateService } from 'src/services/StateService';
 import { AuthorizeService } from '../api-authorization/authorize.service';
 

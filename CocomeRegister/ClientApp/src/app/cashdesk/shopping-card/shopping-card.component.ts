@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { Product, SaleElement } from 'src/services/Models';
+import { Product } from 'src/models/Product';
+import { SaleElement } from 'src/models/Sale';
 import { CashDeskStateService } from '../cashdesk.service';
 
 @Component({

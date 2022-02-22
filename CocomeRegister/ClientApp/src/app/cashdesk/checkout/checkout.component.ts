@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { Product } from 'src/services/Models';
+import { Product } from 'src/models/Product';
 import { CashDeskStateService } from '../cashdesk.service';
 
 @Component({

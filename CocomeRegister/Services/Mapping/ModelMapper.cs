@@ -88,7 +88,7 @@ namespace CocomeStore.Services.Mapping
             return new ()
             {
                 Id = order.Id,
-                OrderElements = elements,
+                Elements = elements,
                 Store = order.Store,
                 Provider = order.Provider,
                 PlacingDate = order.PlacingDate,
@@ -167,12 +167,13 @@ namespace CocomeStore.Services.Mapping
             return new()
             {
                 Id = stockExchange.Id,
-                SendingStore = stockExchange.SendingStore,
-                ReceivingStore = stockExchange.ReceivingStore,
-                ExchangeElements = exchangeElements.ToArray(),
+                Store = stockExchange.SendingStore,
+                Provider = stockExchange.ReceivingStore,
+                Elements = exchangeElements.ToArray(),
                 PlacingDate = stockExchange.PlacingDate,
                 DeliveringDate = stockExchange.DeliveringDate,
-                Closed = stockExchange.DeliveringDate != DateTime.MinValue
+                Closed = stockExchange.DeliveringDate != DateTime.MinValue,
+                Sended = stockExchange.PlacingDate != DateTime.MinValue
             };
         }
 

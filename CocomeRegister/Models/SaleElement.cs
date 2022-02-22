@@ -7,20 +7,8 @@ namespace CocomeStore.Models
     /// <summary>
     /// class <c>SaleElement</c>
     /// </summary>
-    public class SaleElement
+    public class SaleElement : TradeElement
     {
-        [ScaffoldColumn(false)]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-
-        [Required]
-        public int ProductId { get; set; }
-
-        public Product Product { get; set; }
-
-        [Required]
-        public int Amount { get; set; }
-
         [Required]
         public int SaleId { get; set; }
 

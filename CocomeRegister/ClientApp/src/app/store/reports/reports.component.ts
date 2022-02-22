@@ -3,9 +3,10 @@ import { Chart } from 'chart.js';
 import { jsPDF } from 'jspdf';
 import { interpolateColors, toRGBA } from 'src/services/ColorGenerator';
 import { Month, monthOrdinals, monthValues } from 'src/services/Month';
-import { Store, StockItem, Statistic } from 'src/services/Models';
 import { StoreStateService } from '../store.service';
 import html2canvas from 'html2canvas';
+import { StockItem, Store } from 'src/models/Store';
+import { Statistic } from 'src/models/Transfer';
 
 @Component({
   selector: 'app-store-reports',

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
-import { EventEmitter, Inject } from '@angular/core';
+import { EventEmitter, Inject, Provider } from '@angular/core';
 import { Component, Input, Output } from '@angular/core';
-import { Product, Provider } from 'src/services/Models';
+import { Product } from 'src/models/Product';
 
 export interface Resource {
   path: string;

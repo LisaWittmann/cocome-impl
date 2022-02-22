@@ -9,18 +9,20 @@ namespace CocomeStore.Models.Transfer
         public int Id { get; set; }
 
         [Required]
-        public ExchangeElement[] ExchangeElements { get; set; }
+        public ExchangeElement[] Elements { get; set; }
 
         [Required]
-        public Store ReceivingStore { get; set; }
+        public Store Store { get; set; }
 
         [Required]
-        public Store SendingStore { get; set; }
+        public Store Provider { get; set; }
 
         [Required]
         public DateTime PlacingDate { get; set; }
 
         public DateTime DeliveringDate { get; set; }
+
+        public bool Sended { get; set; }
 
         public bool Closed { get; set; }
     }

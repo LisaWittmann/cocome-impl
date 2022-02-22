@@ -1,9 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { Store } from 'src/models/Store';
 import { Observable } from 'rxjs';
-import { Product, Store, Provider, Statistic } from 'src/services/Models';
 import { StateService } from 'src/services/StateService';
+import { Product } from 'src/models/Product';
+import { Provider } from 'src/models/Provider';
+import { Statistic } from 'src/models/Transfer';
 
 interface EnterpriseState {
     products: Product[];

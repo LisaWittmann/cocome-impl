@@ -1,14 +1,17 @@
 import { AfterViewInit, Component } from '@angular/core';
 import { Chart } from 'chart.js';
+import { Order } from 'src/models/Order';
+import { StockItem, Store } from 'src/models/Store';
+import { Statistic } from 'src/models/Transfer';
 import { monthValues } from 'src/services/Month';
-import { StockItem, Store, Order, Statistic } from 'src/services/Models';
+
 import { StoreStateService } from '../store.service';
 @Component({
-  selector: 'app-store-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss'],
+  selector: 'app-store-home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.scss'],
 })
-export class StoreDashboardComponent implements AfterViewInit {
+export class StoreHomeComponent implements AfterViewInit {
   store: Store;
   runningOutOfStock: StockItem[];
   orders: Order[];

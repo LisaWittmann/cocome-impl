@@ -1,9 +1,9 @@
 import { EventEmitter } from '@angular/core';
 import { Component, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { OrderElement, Product } from 'src/services/Models';
+import { OrderElement } from 'src/models/Order';
+import { Product } from 'src/models/Product';
 import { StoreStateService } from '../store.service';
-
 @Component({
   selector: 'app-store-shopping-card',
   templateUrl: './shopping-card.component.html',

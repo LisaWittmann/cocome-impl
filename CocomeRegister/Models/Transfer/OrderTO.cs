@@ -13,7 +13,7 @@ namespace CocomeStore.Models.Transfer
         public int Id { get; set; }
 
         [Required]
-        public OrderElementTO[] OrderElements { get; set; }
+        public OrderElementTO[] Elements { get; set; }
 
         [Required]
         public Store Store { get; set; }

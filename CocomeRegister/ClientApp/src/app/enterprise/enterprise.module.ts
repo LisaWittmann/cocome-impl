@@ -21,13 +21,13 @@ import { AuthorizeService } from '../api-authorization/authorize.service';
 import { EnterpriseGuard } from '../api-authorization/authorize.guard';
 
 const enterpriseRoutes: Routes = [
-  { path: 'home', component: EnterpriseHomeComponent, canActivate: [EnterpriseGuard] },
-  { path: 'produkte', component: EnterpriseProductsComponent, canActivate: [EnterpriseGuard] },
-  { path: 'produkte/bearbeiten/:id', component: EnterpriseProductComponent, canActivate: [EnterpriseGuard] },
-  { path: 'produkte/neu', component: EnterpriseCreateProductComponent, canActivate: [EnterpriseGuard] },
-  { path: 'filialen', component: EnterpriseStoresComponent, canActivate: [EnterpriseGuard] },
-  { path: 'lieferanten', component: EnterpriseProvidersComponent, canActivate: [EnterpriseGuard] },
-  { path: 'statistik', component: EnterpriseReportsComponent, canActivate: [EnterpriseGuard] },
+  { path: 'home', component: EnterpriseHomeComponent },
+  { path: 'produkte', component: EnterpriseProductsComponent },
+  { path: 'produkte/bearbeiten/:id', component: EnterpriseProductComponent },
+  { path: 'produkte/neu', component: EnterpriseCreateProductComponent },
+  { path: 'filialen', component: EnterpriseStoresComponent },
+  { path: 'lieferanten', component: EnterpriseProvidersComponent },
+  { path: 'statistik', component: EnterpriseReportsComponent },
 ];
 @NgModule({
   imports: [

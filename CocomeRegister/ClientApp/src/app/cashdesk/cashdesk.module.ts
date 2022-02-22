@@ -14,12 +14,10 @@ import { ProductListComponent } from '../shared/product-list/product-list.compon
 import { ProductCardComponent } from '../shared/product-card/product-card.component';
 import { CashDeskStateService } from './cashdesk.service';
 
-import { CashDeskGuard } from '../api-authorization/authorize.guard';
-
 export const cashdeskRoutes: Routes = [
-  { path: 'home', component: CashDeskHomeComponent, canActivate: [CashDeskGuard] },
-  { path: 'checkout', component: CashDeskCheckoutComponent, canActivate: [CashDeskGuard] },
-  { path: 'payment', component: CashDeskPaymentComponent, canActivate: [CashDeskGuard] },
+  { path: 'home', component: CashDeskHomeComponent },
+  { path: 'checkout', component: CashDeskCheckoutComponent },
+  { path: 'payment', component: CashDeskPaymentComponent },
   { path: 'display', component: CashDeskDisplayComponent },
 ];
 

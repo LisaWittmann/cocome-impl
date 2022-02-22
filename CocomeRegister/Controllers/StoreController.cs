@@ -22,17 +22,20 @@ namespace CocomeStore.Controllers
     {
         private readonly ILogger<StoreController> _logger;
         private readonly IStoreService _service;
+        private readonly IExchangeService _exchangeService;
         private readonly IDatabaseStatistics _statistics;
 
         public StoreController(
             ILogger<StoreController> logger,
             IStoreService service,
+            IExchangeService exchangeService,
             IDatabaseStatistics statistics
         )
         {
             _service = service;
             _logger = logger;
             _statistics = statistics;
+            _exchangeService = exchangeService;
         }
 
         /// <summary>
@@ -81,6 +84,30 @@ namespace CocomeStore.Controllers
         }
 
         /// <summary>
+        /// method <c>GetProfit</c> is an http get endpint to request a stores
+        /// profit by year
+        /// </summary>
+        /// <param name="id">unique identitfier of the store</param>
+        /// <param name="year">year to filter profit for</param>
+        /// <returns>
+        /// statistic object containing the years monthly profits
+        /// </returns>
+        [HttpGet]
+        [Route("profit/{id}/{year}")]
+        public ActionResult<Statistic> GetProfit(int id, int year)
+        {
+            try
+            {
+                return _statistics.GetProfitOfYear(id, year);
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _logger.LogError(ex.Message);
+                return NotFound();
+            }
+        }
+
+        /// <summary>
         /// method <c>GetInventory</c> is an http get endpoint to request a stores
         /// stockitems by storeid
         /// </summary>
@@ -88,12 +115,17 @@ namespace CocomeStore.Controllers
         /// <returns>list of stockitems that are related with the store</returns>
         [HttpGet]
         [Route("inventory/{id}")]
-        public ActionResult<IEnumerable<StockItem>> GetInventory(int id)
+        public ActionResult<IEnumerable<StockItem>> GetInventory(int id, [FromQuery] bool low)
         {
             _logger.LogInformation("requesting inventory of store {}", id);
+            if (low)
+            {
+                return _exchangeService.GetLowStockItems(id).ToArray();
+            }
             return _service.GetInventory(id).ToArray();
             
         }
+
 
         /// <summary>
         /// method <c>GetOrders</c> is an http get endpoint to requets a stores
@@ -124,7 +156,7 @@ namespace CocomeStore.Controllers
         /// entries
         /// </returns>
         [HttpPost]
-        [Route("create-order/{id}")]
+        [Route("orders/{id}/create")]
         public ActionResult<IEnumerable<OrderTO>> PlaceOrder(int id, IEnumerable<OrderElementTO> elements)
         {
             try
@@ -150,7 +182,7 @@ namespace CocomeStore.Controllers
         /// </param>
         /// <returns></returns>
         [HttpPost]
-        [Route("close-order/{id}")]
+        [Route("orders/{id}/close")]
         public ActionResult<IEnumerable<OrderTO>> CloseOrder(int id, OrderTO orderTO)
         {
             try
@@ -185,7 +217,7 @@ namespace CocomeStore.Controllers
         /// inventory of the store or status bad request if an intern error accurs
         /// </returns>
         [HttpPost]
-        [Route("update-product/{id}")]
+        [Route("products/{id}/update")]
         public ActionResult<IEnumerable<StockItem>> UpdateProduct(int id, ProductTO productTO)
         {
             try
@@ -217,7 +249,7 @@ namespace CocomeStore.Controllers
         /// product is not in the stockitems of the store
         /// </returns>
         [HttpGet]
-        [Route("{id}/product/{productId}")]
+        [Route("products/{id}/{productId}")]
         public ActionResult<ProductTO> GetProduct(int id, int productId)
         {
             try
@@ -232,29 +264,68 @@ namespace CocomeStore.Controllers
             }
         }
 
+
         /// <summary>
-        /// method <c>GetProfit</c> is an http get endpint to request a stores
-        /// profit by year
+        /// method <c>GetExchanges</c> is an http get endpoint to request a stores
+        /// outstanding stock exchanges with another store
         /// </summary>
-        /// <param name="id">unique identitfier of the store</param>
-        /// <param name="year">year to filter profit for</param>
-        /// <returns>
-        /// statistic object containing the years monthly profits
-        /// </returns>
+        /// <param name="id">unique identifier of the store</param>
+        /// <param name="sending">
+        /// query param whether store is sender or receiver of exchanges
+        /// </param>
+        /// <returns>list of stock exchange entries as trasnfer object</returns>
         [HttpGet]
-        [Route("{id}/profit/{year}")]
-        public ActionResult<Statistic> GetProfit(int id, int year)
+        [Route("exchanges/{id}")]
+        public ActionResult<IEnumerable<StockExchangeTO>> GetExchanges(int id)
+        {
+            return _exchangeService.GetStockExchanges(id).ToArray();
+        }
+
+
+        /// <summary>
+        /// method <c>StartExchange</c>
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="exchangeTO"></param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("exchanges/{id}/start")]
+        public ActionResult<IEnumerable<StockExchangeTO>> StartExchange(int id, StockExchangeTO exchangeTO)
         {
             try
             {
-                return _statistics.GetProfitOfYear(id, year);
+                _exchangeService.StartStockExchange(exchangeTO);
+                return _exchangeService.GetStockExchanges(id).ToArray();
             }
-            catch(EntityNotFoundException ex)
+            catch (EntityNotFoundException ex)
             {
                 _logger.LogError(ex.Message);
                 return NotFound();
             }
+            
         }
 
+        /// <summary>
+        /// method <c>CloseExchange</c>
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="exchangeTO"></param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("exchanges/{id}/close")]
+        public ActionResult<IEnumerable<StockExchangeTO>> CloseExchange(int id, StockExchangeTO exchangeTO)
+        {
+            try
+            {
+                _exchangeService.CloseStockExchange(exchangeTO);
+                return _exchangeService.GetStockExchanges(id).ToArray();
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _logger.LogError(ex.Message);
+                return NotFound();
+            }
+
+        }
     }
 }

@@ -16,15 +16,15 @@ import { EnterpriseModule } from './enterprise/enterprise.module';
 import { CashDeskModule } from './cashdesk/cashdesk.module';
 
 import { ApiAuthorizationModule } from './api-authorization/api-authorization.module';
-import { AuthorizeGuard } from './api-authorization/authorize.guard';
+import { CashDeskGuard, EnterpriseGuard, StoreGuard } from './api-authorization/authorize.guard';
 import { AuthorizeInterceptor } from './api-authorization/authorize.interceptor';
 import { AuthorizeService } from './api-authorization/authorize.service';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
-  { path: 'kasse', component: CashDeskComponent, canActivate: [AuthorizeGuard], loadChildren: () => import('./cashdesk/cashdesk.module').then(m => m.CashDeskModule) },
-  { path: 'filiale', component: StoreComponent, canActivate: [AuthorizeGuard], loadChildren: () => import('./store/store.module').then(m => m.StoreModule) },
-  { path: 'admin', component: EnterpriseComponent, canActivate: [AuthorizeGuard], loadChildren: () => import('./enterprise/enterprise.module').then(m => m.EnterpriseModule) },
+  { path: 'kasse', component: CashDeskComponent, canActivate: [CashDeskGuard], loadChildren: () => import('./cashdesk/cashdesk.module').then(m => m.CashDeskModule) },
+  { path: 'filiale', component: StoreComponent, canActivate: [StoreGuard], loadChildren: () => import('./store/store.module').then(m => m.StoreModule) },
+  { path: 'admin', component: EnterpriseComponent, canActivate: [EnterpriseGuard], loadChildren: () => import('./enterprise/enterprise.module').then(m => m.EnterpriseModule) },
 ];
 
 @NgModule({

@@ -1,0 +1,103 @@
+@import "variables";
+
+.exchange-detail {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+    &__overview {
+        text-align: left;
+        font-weight: $weight-light;
+        margin-bottom: $spacing-m;
+        margin-top: $spacing-s;
+        
+        tr > td {
+
+            &:first-of-type {
+                padding-right: $spacing-s;
+                font-weight: $weight-regular;
+                width: 20%;
+
+                @media all and (max-width: 768px) {
+                    width: auto;
+                }
+            }
+
+            &:last-of-type {
+                @media all and (max-width: 768px) {
+                    text-align: right;
+                }
+            }
+        }
+    }
+
+    &__products {
+        font-weight: $weight-light;
+        border-collapse: separate;
+        border-spacing: $spacing-m $spacing-xs;
+        margin-right: -$spacing-m;
+        margin-left: -$spacing-m;
+
+        @media all and (max-width: 768px) {
+            border-spacing: 0;
+            margin-left: 0;
+            margin-right: 0;
+
+            thead {
+                display: none;
+            }
+
+            tr { 
+                display: table;
+                width: 100%;
+            }               
+            
+            td { 
+                border: 0;
+                display: none;
+                
+                &:first-child,
+                &:last-child {
+                    display: table-cell;
+                }
+
+                &:last-child {
+                    text-align: right;
+                }
+            }           
+        }
+
+        thead {
+            text-transform: uppercase;
+       
+            td {
+                border-bottom: $border-width solid $color-light-grey;
+            }
+        }
+
+        td {
+            text-align: center;
+            @include text-break();
+            
+            &:first-of-type {
+                text-align: left;
+            }
+
+            .highlighted {
+                color: #a8a8a8;
+            }
+        }
+
+        &-sum {
+            border-top: $border-width solid $color-light-grey;
+            padding-top: 10px;
+            font-weight: $weight-regular;
+            text-transform: uppercase;
+        }
+    }
+
+    &__accept {
+        margin-top: $spacing-s;
+        margin-bottom: $spacing-s;
+    }
+}

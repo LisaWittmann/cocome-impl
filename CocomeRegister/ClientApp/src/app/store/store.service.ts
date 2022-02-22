@@ -2,12 +2,17 @@ import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { StateService } from 'src/services/StateService';
-import { Product, StockItem, Store, Order, OrderElement, Statistic } from 'src/services/Models';
+import { Product } from 'src/models/Product';
+import { Store, StockItem } from 'src/models/Store';
+import { Order, OrderElement } from 'src/models/Order';
+import { Statistic } from 'src/models/Transfer';
+import { StockExchange } from 'src/models/StockExchange';
 import { AuthorizeService } from '../api-authorization/authorize.service';
 
 interface StoreState {
   store: Store;
   inventory: StockItem[];
+  exchanges: StockExchange[];
   currentOrder: OrderElement[];
   orders: Order[];
 }
@@ -15,6 +20,7 @@ interface StoreState {
 const initialState: StoreState = {
   store: undefined,
   inventory: [],
+  exchanges: [],
   currentOrder: [],
   orders: [],
 };
@@ -23,6 +29,7 @@ const initialState: StoreState = {
 export class StoreStateService extends StateService<StoreState> {
   store$: Observable<Store> = this.select(state => state.store);
   inventory$: Observable<StockItem[]> = this.select(state => state.inventory);
+  exchanges$: Observable<StockExchange[]> = this.select(state => state.exchanges);
   currentOrder$: Observable<OrderElement[]> = this.select(state => state.currentOrder);
   orders$: Observable<Order[]> = this.select(state => state.orders);
   api: string;
@@ -74,6 +81,18 @@ export class StoreStateService extends StateService<StoreState> {
     }, error => console.error(error));
   }
 
+  /**
+   * request the states stores exchanges
+   */
+  fetchExchanges() {
+    this.http.get<StockExchange[]>(
+      `${this.api}/exchanges/${this.state.store.id}`
+    ).subscribe(result => {
+      console.log(result);
+      this.setState({ exchanges: result });
+    }, error => console.error(error));
+  }
+
   get runningOutOfStock() {
     return this.state.inventory.filter(item => item.stock < 10);
   }
@@ -94,6 +113,7 @@ export class StoreStateService extends StateService<StoreState> {
     this.setState({ store: store });
     this.fetchInventory();
     this.fetchOrders();
+    this.fetchExchanges();
   }
 
   /**
@@ -140,7 +160,7 @@ export class StoreStateService extends StateService<StoreState> {
    */
   placeNewOrder() {
     this.http.post<Order[]>(
-      `${this.api}/create-order/${this.state.store.id}`, 
+      `${this.api}/orders/${this.state.store.id}/create`, 
       this.state.currentOrder
     ).subscribe(result => {
       console.log(result);
@@ -155,7 +175,7 @@ export class StoreStateService extends StateService<StoreState> {
    */
   closeOrder(order: Order) {
     this.http.post<Order[]>(
-      `${this.api}/close-order/${this.state.store.id}`,
+      `${this.api}/orders/${this.state.store.id}/close`,
       order
     ).subscribe(result => {
       this.setState({ orders: result });
@@ -169,7 +189,7 @@ export class StoreStateService extends StateService<StoreState> {
    */
   updateProduct(product: Product) {
     this.http.post<StockItem[]>(
-      `${this.api}/update-product/${this.state.store.id}`,
+      `${this.api}/products/${this.state.store.id}/update`,
       product
     ).subscribe(result => {
       this.setState({ inventory: result });
@@ -195,7 +215,7 @@ export class StoreStateService extends StateService<StoreState> {
   getLatestProfits() {
     const year = new Date(Date.now()).getFullYear();
     return this.http.get<Statistic>(
-      `${this.api}/${this.state.store.id}/profit/${year}`
+      `${this.api}/profit/${this.state.store.id}/${year}`
     );
   }
 
@@ -208,5 +228,27 @@ export class StoreStateService extends StateService<StoreState> {
     return this.http.get<Statistic[]>(
       `${this.api}/profit/${this.state.store.id}`
     );
+  }
+
+  isProvider(exchange: StockExchange) {
+    return exchange.provider.id == this.state.store.id
+  }
+
+  startExchange(exchange: StockExchange) {
+    this.http.put<StockExchange[]>(
+      `${this.api}/exchanges/${this.state.store.id}/start`,
+      exchange
+    ).subscribe(result => {
+      this.setState({ exchanges: result });
+    }, error => console.error(error));
+  }
+
+  closeExchange(exchange: StockExchange) {
+    this.http.put<StockExchange[]>(
+      `${this.api}/exchanges/${this.state.store.id}/close`,
+      exchange
+    ).subscribe(result => {
+      this.setState({ exchanges: result });
+    }, error => console.error(error));
   }
 }
