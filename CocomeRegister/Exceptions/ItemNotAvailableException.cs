@@ -7,12 +7,8 @@ namespace CocomeStore.Exceptions
     /// </summary>
     public class ItemNotAvailableException : Exception
     {
-        public ItemNotAvailableException()
-        {
-        }
+        public ItemNotAvailableException() { }
 
-        public ItemNotAvailableException(string message) : base(message)
-        {
-        }
+        public ItemNotAvailableException(string message) : base(message) { }
     }
 }

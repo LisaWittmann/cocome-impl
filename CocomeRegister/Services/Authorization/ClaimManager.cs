@@ -18,13 +18,13 @@ namespace CocomeStore.Models.Authorization
         }
 
         /// <summary>
-        /// method <c>GetClaims</c> generates user claims based on their given
+        /// method <c>GetClaimsAsync</c> generates user claims based on their given
         /// identity role and the store they belong to
         /// otherwise the custom userdata cannot be used for the jwt token
         /// </summary>
         /// <param name="user">application user to generate claims for</param>
         /// <returns></returns>
-        public async Task<IEnumerable<Claim>> GetClaims(ApplicationUser user)
+        public async Task<IEnumerable<Claim>> GetClaimsAsync(ApplicationUser user)
         {
             var claims = new List<Claim>
             {

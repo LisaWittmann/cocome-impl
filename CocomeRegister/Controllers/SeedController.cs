@@ -32,7 +32,7 @@ namespace CocomeStore.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> CreateDefaultUsers()
+        public async Task<ActionResult> CreateDefaultUsersAsync()
         {
 
             if (await _roleManager.FindByNameAsync(ApplicationRoles.Admin) == null)
@@ -61,7 +61,7 @@ namespace CocomeStore.Controllers
                 await _userManager.CreateAsync(user_Admin, "MySecr3t$");
 
                 await _userManager.AddToRoleAsync(user_Admin, ApplicationRoles.Admin);
-                await _userManager.AddClaimsAsync(user_Admin, await _claimManager.GetClaims(user_Admin));
+                await _userManager.AddClaimsAsync(user_Admin, await _claimManager.GetClaimsAsync(user_Admin));
 
 
                 user_Admin.EmailConfirmed = true;
@@ -91,7 +91,7 @@ namespace CocomeStore.Controllers
                 await _userManager.CreateAsync(user_Manager, "MySecr3t$");
 
                 await _userManager.AddToRoleAsync(user_Manager, ApplicationRoles.Manager);
-                await _userManager.AddClaimsAsync(user_Manager, await _claimManager.GetClaims(user_Manager));;
+                await _userManager.AddClaimsAsync(user_Manager, await _claimManager.GetClaimsAsync(user_Manager));;
 
                 user_Manager.EmailConfirmed = true;
                 user_Manager.LockoutEnabled = false;
@@ -114,7 +114,7 @@ namespace CocomeStore.Controllers
                 await _userManager.CreateAsync(user_Cashier, "MySecr3t$");
 
                 await _userManager.AddToRoleAsync(user_Cashier, ApplicationRoles.Cashier);
-                await _userManager.AddClaimsAsync(user_Cashier, await _claimManager.GetClaims(user_Cashier));
+                await _userManager.AddClaimsAsync(user_Cashier, await _claimManager.GetClaimsAsync(user_Cashier));
 
                 user_Cashier.EmailConfirmed = true;
                 user_Cashier.LockoutEnabled = false;

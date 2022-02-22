@@ -12,5 +12,6 @@ export interface SaleElement {
 export interface Sale {
     saleElements: SaleElement[];
     paymentMethod: PaymentMethod;
+    total: number;
     payed: number;
 }

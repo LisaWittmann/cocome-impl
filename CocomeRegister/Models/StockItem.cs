@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace CocomeStore.Models
 {
     /// <summary>
-    /// class <c>StockItem</c>
+    /// class <c>StockItem</c> defines the structure of a stores inventory unit
     /// </summary>
     public class StockItem
     {

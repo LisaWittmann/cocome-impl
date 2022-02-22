@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using CocomeStore.Models;
+using CocomeStore.Models.Transfer;
 using Microsoft.EntityFrameworkCore;
 using CocomeStore.Exceptions;
 using CocomeStore.Models.Database;

@@ -39,40 +39,33 @@ namespace CocomeStore.Services
         /// which provokes the sale</param>
         /// <param name="saleTO">data transfer object containing the information
         /// of the sale</param>
-        /// <returns>modified transfer object with billing information</returns>
         /// <exception cref="ItemNotAvailableException"></exception>
-        public async Task<SaleTO> CreateSale(int storeId, SaleTO saleTO)
+        public async Task CreateSaleAsync(SaleTO saleTO)
         {
-            var store = await _context.Stores.FindAsync(storeId);
-            if (store == null)
-            {
-                throw new EntityNotFoundException();
-            }
-
-            Sale sale = new() { StoreId = storeId, TimeStamp = DateTime.Now, PaymentMethod = saleTO.PaymentMethod };
-            float total = 0;
+            Sale sale = new() {
+                StoreId = saleTO.Store.Id,
+                TimeStamp = DateTime.Now,
+                PaymentMethod = saleTO.PaymentMethod
+            };
 
             foreach (var element in saleTO.SaleElements)
             {
                 StockItem item = _context.StockItems
-                    .Where(item => item.StoreId == storeId && item.ProductId == element.Product.Id)
+                    .Where(item =>
+                        item.StoreId == saleTO.Store.Id &&
+                        item.ProductId == element.Product.Id)
                     .SingleOrDefault();
 
                 if (item == null || item.Stock - element.Amount < 0)
                 {
-                    throw new ItemNotAvailableException(
-                        "product with id " + element.Product.Id + "is not in stock of store " + storeId);
+                    throw new ItemNotAvailableException();
                 }
                 item.Stock -= element.Amount;
-                total += element.Amount * element.Product.SalePrice * (1 - element.Discount);
-                await _context.SaleElements.AddAsync(_mapper.CreateSaleElement(sale, storeId, element));
+                await _context.SaleElements.AddAsync(
+                    _mapper.CreateSaleElement(sale, saleTO.Store.Id, element));
             }
 
             await _context.SaveChangesAsync();
-
-            saleTO.Store = store;
-            saleTO.Total = total;
-            return saleTO;
         }
 
         /// <summary>
@@ -87,6 +80,24 @@ namespace CocomeStore.Services
                 .Include(item => item.Product)
                 .Where(item => item.StoreId == storeId && item.Stock > 0)
                 .Select(item => item.Product);
+        }
+
+        /// <summary>
+        /// method <c>UpdateSaleDataAsync</c> 
+        /// </summary>
+        /// <param name="storeId"></param>
+        /// <param name="saleTO"></param>
+        /// <returns>modified transfer object with billing information</returns>
+        /// <exception cref="EntityNotFoundException"></exception>
+        public async Task<SaleTO> UpdateSaleDataAsync(int storeId, SaleTO saleTO)
+        {
+            var store = await _context.Stores.FindAsync(storeId);
+            if (store == null)
+            {
+                throw new EntityNotFoundException();
+            }
+            saleTO.Store = store;
+            return saleTO;
         }
     }
 }

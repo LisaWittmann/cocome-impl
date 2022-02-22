@@ -7,13 +7,8 @@ namespace CocomeStore.Exceptions
     /// </summary>
     public class CrossAccessException : Exception
     {
-        public CrossAccessException()
-        {
-        }
+        public CrossAccessException() { }
 
-        public CrossAccessException(string message) : base(message)
-        {
-        }
-
+        public CrossAccessException(string message) : base(message) { }
     }
 }

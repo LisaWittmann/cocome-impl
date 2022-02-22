@@ -24,7 +24,7 @@ namespace CocomeStore.Services.Mapping
         /// <returns>new order element instance</returns>
         public OrderElement CreateOrderElement(Order order, OrderElementTO orderElementTO)
         {
-            return new ()
+            return new()
             {
                 ProductId = orderElementTO.Product.Id,
                 Amount = orderElementTO.Amount,
@@ -42,7 +42,7 @@ namespace CocomeStore.Services.Mapping
         /// <returns>new order element transfer object instance</returns>
         public OrderElementTO CreateOrderElementTO(OrderElement orderElement)
         {
-            return new ()
+            return new()
             {
                 Product = orderElement.Product,
                 Amount = orderElement.Amount,
@@ -59,7 +59,7 @@ namespace CocomeStore.Services.Mapping
         /// <returns>new order instance</returns>
         public Order CreateOrder(OrderTO orderTO)
         {
-            return new ()
+            return new()
             {
                 StoreId = orderTO.Store.Id,
                 ProviderId = orderTO.Provider.Id,
@@ -85,10 +85,10 @@ namespace CocomeStore.Services.Mapping
                  .Select(element => CreateOrderElementTO(element))
                  .ToArray();
 
-            return new ()
+            return new()
             {
                 Id = order.Id,
-                Elements = elements,
+                Elements = elements.ToArray(),
                 Store = order.Store,
                 Provider = order.Provider,
                 PlacingDate = order.PlacingDate,
@@ -107,7 +107,7 @@ namespace CocomeStore.Services.Mapping
         /// <returns>new product instance</returns>
         public Product CreateProduct(ProductTO productTO)
         {
-            return new ()
+            return new()
             {
                 Name = productTO.Name,
                 Price = productTO.Price,
@@ -129,7 +129,7 @@ namespace CocomeStore.Services.Mapping
         /// <returns>new product transfer object instance</returns>
         public ProductTO CreateProductTO(Product product)
         {
-            return new ()
+            return new()
             {
                 Id = product.Id,
                 Name = product.Name,
@@ -142,15 +142,17 @@ namespace CocomeStore.Services.Mapping
         }
 
         /// <summary>
-        /// method <c>CreateSaleElement</c>
+        /// method <c>CreateSaleElement</c> creates a new sale element based on
+        /// the given data of a sale transfer object, the related sale and the
+        /// related storeId
         /// </summary>
-        /// <param name="sale"></param>
-        /// <param name="storeId"></param>
-        /// <param name="saleElementTO"></param>
-        /// <returns></returns>
+        /// <param name="sale">related sale</param>
+        /// <param name="storeId">related store by id</param>
+        /// <param name="saleElementTO">transfer object containing the data</param>
+        /// <returns>new sale element instance</returns>
         public SaleElement CreateSaleElement(Sale sale, int storeId, SaleElementTO saleElementTO)
         {
-            return new ()
+            return new()
             {
                 ProductId = saleElementTO.Product.Id,
                 Amount = saleElementTO.Amount,
@@ -159,17 +161,50 @@ namespace CocomeStore.Services.Mapping
             };
         }
 
-        public StockExchangeTO CreateStockExchangeTO(
-           StockExchange stockExchange,
-           IEnumerable<ExchangeElement> exchangeElements
-       )
+        /// <summary>
+        /// method <c>CreateExchangeElementTO</c> creates a new exchange element
+        /// transfer object based on the given ecxchange element data
+        /// </summary>
+        /// <param name="exchangeElement">
+        /// exchange instance to convert into transfer object
+        /// </param>
+        /// <returns>new exchange element transfer object instance</returns>
+        public ExchangeElementTO CreateExchangeElementTO(ExchangeElement exchangeElement)
         {
             return new()
             {
+                Product = exchangeElement.Product,
+                Amount = exchangeElement.Amount
+            };
+        }
+
+        /// <summary>
+        /// method <c>CreateStockExchangeTO</c> creates a new stock exchange
+        /// transfer object based on the given exchange data
+        /// </summary>
+        /// <param name="stockExchange">
+        /// exchange instance to convert into transfer object
+        /// </param>
+        /// <param name="exchangeElements">
+        /// related exchange elements to stock exchange object
+        /// </param>
+        /// <returns>new stock exchange transfer object instance</returns>
+        public StockExchangeTO CreateStockExchangeTO(
+           StockExchange stockExchange,
+           IEnumerable<ExchangeElement> exchangeElements
+        )
+        {
+            var elements = exchangeElements
+                 .DefaultIfEmpty()
+                 .Select(element => CreateExchangeElementTO(element))
+                 .ToArray();
+
+            return new()
+            {
                 Id = stockExchange.Id,
-                Store = stockExchange.SendingStore,
-                Provider = stockExchange.ReceivingStore,
-                Elements = exchangeElements.ToArray(),
+                Store = stockExchange.Provider,
+                Provider = stockExchange.Store,
+                Elements = elements.ToArray(),
                 PlacingDate = stockExchange.PlacingDate,
                 DeliveringDate = stockExchange.DeliveringDate,
                 Closed = stockExchange.DeliveringDate != DateTime.MinValue,

@@ -127,7 +127,7 @@ namespace CocomeStore.Controllers
         }
 
         /// <summary>
-        /// method <c>ConfirmCheckout</c> is an http post endpoint to confirm
+        /// method <c>ConfirmCheckoutAsync</c> is an http post endpoint to confirm
         /// a sale on the cashdesk, update the stores stock and print the sale
         /// billing
         /// </summary>
@@ -143,16 +143,16 @@ namespace CocomeStore.Controllers
         /// </returns>
         [HttpPost]
         [Route("checkout/{storeId}")]
-        public async Task<IActionResult> ConfirmCheckout(
+        public async Task<IActionResult> ConfirmCheckoutAsnyc(
             int storeId, SaleTO saleTO)
         {
             try
             {
                 _logger.LogInformation("confirm checkout");
-                var billing = await _documentService.CreateBill
-                    (await _service.CreateSale(storeId, saleTO)
-                );
-                _ = _exchangeService.CheckForExchanges(storeId);
+                saleTO = await _service.UpdateSaleDataAsync(storeId, saleTO);
+                var billing = await _documentService.CreateBillAsync(saleTO);
+                await _service.CreateSaleAsync(saleTO);
+                await _exchangeService.CheckForExchangesAsync(storeId).ConfigureAwait(false);
                 return File(billing, "application/pdf");
                 
             }

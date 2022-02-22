@@ -5,6 +5,6 @@ namespace CocomeStore.Services.Documents
 {
     public interface IDocumentService
     {
-        Task<byte[]> CreateBill(SaleTO saleTO);
+        Task<byte[]> CreateBillAsync(SaleTO saleTO);
     }
 }

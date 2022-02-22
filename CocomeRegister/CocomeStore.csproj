@@ -60,7 +60,6 @@
     <None Remove="Services\Mapping\" />
     <None Remove="Services\Statistics\" />
     <None Remove="Services\CashDesk\Printer\" />
-    <None Remove="Models\Transfer\Pagination\" />
     <None Remove="Services\Pagination\" />
     <None Remove="DinkToPdf" />
     <None Remove="Services\PDF\" />
@@ -86,7 +85,6 @@
     <Folder Include="Services\Authorization\" />
     <Folder Include="Services\Mapping\" />
     <Folder Include="Services\Statistics\" />
-    <Folder Include="Models\Transfer\Pagination\" />
     <Folder Include="Services\Pagination\" />
     <Folder Include="Services\Documents\" />
     <Folder Include="Templates\" />

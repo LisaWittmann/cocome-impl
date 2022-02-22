@@ -108,6 +108,7 @@ export class CashDeskStateService extends StateService<CashDeskState> {
         const sale: Sale = {
             saleElements: this.state.shoppingCard,
             paymentMethod: paymentMethod,
+            total: this.getTotalPrice(),
             payed: payed
         }
         return this.http.post(

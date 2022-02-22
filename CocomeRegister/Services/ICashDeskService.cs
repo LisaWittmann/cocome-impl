@@ -7,7 +7,8 @@ namespace CocomeStore.Services
 {
     public interface ICashDeskService
     {
-        Task<SaleTO> CreateSale(int storeId, SaleTO saleTO);
+        Task<SaleTO> UpdateSaleDataAsync(int storeId, SaleTO saleTO);
+        Task CreateSaleAsync(SaleTO saleTO);
         IEnumerable<Product> GetAvailableProducts(int storeId);
     }
 }

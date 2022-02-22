@@ -10,7 +10,7 @@ namespace CocomeStore.Services
     {
         IEnumerable<StockItem> GetLowStockItems(int storeId);
         IEnumerable<StockExchangeTO> GetStockExchanges(int storeId);
-        Task CheckForExchanges(int storeId);
+        Task CheckForExchangesAsync(int storeId);
         void CloseStockExchange(StockExchangeTO exchange);
         void StartStockExchange(StockExchangeTO exchange);
     }

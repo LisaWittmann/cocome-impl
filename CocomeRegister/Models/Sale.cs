@@ -5,6 +5,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace CocomeStore.Models
 {
     /// <summary>
+    /// enumeration <c>PaymentMethod</c>
+    /// </summary>
+    public enum PaymentMethod
+    {
+        Cash,
+        Card
+    }
+
+    /// <summary>
     /// class <c>Sale</c>
     /// </summary>
     public class Sale

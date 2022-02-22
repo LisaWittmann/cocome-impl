@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace CocomeStore.Models
 {
     /// <summary>
-    /// class <c>Product</c>
+    /// class <c>Product</c> defines the data of an enterprises offered product
     /// </summary>
     public class Product
     {

@@ -13,7 +13,8 @@ using Microsoft.Extensions.Logging;
 namespace CocomeStore.Services
 {
     /// <summary>
-    /// 
+    /// class <c>ExchangeService</c> implements <see cref="IExchangeService"/>
+    /// and provides functionalities to perform stock exchanges between stores
     /// </summary>
     public class ExchangeService : IExchangeService
     {
@@ -33,31 +34,36 @@ namespace CocomeStore.Services
         }
 
         /// <summary>
-        /// 
+        /// method <c>GetIncommingProducts</c> filters the product of a store
+        /// that are either ordered or in a stock exchange with another store
         /// </summary>
-        /// <param name="storeId"></param>
-        /// <returns></returns>
+        /// <param name="storeId">unique identifier of the store</param>
+        /// <returns>list of incomming products</returns>
         private IEnumerable<Product> GetIncommingProducts(int storeId)
         {
             var incommingProducts = _context.ExchangeElements
                 .Include(element => element.StockExchange)
                 .Where(element =>
                     element.StockExchange.DeliveringDate == DateTime.MinValue &&
-                    element.StockExchange.ReceivingStoreId == storeId)
+                    element.StockExchange.StoreId == storeId)
                 .Select(element => element.Product)
                 .ToList();
             incommingProducts.AddRange(_context.OrderElements
                 .Include(element => element.Order)
-                .Where(element => element.Order.StoreId == storeId)
+                .Where(element =>
+                    element.Order.DeliveringDate == DateTime.MinValue &&
+                    element.Order.StoreId == storeId)
                 .Select(element => element.Product));
             return incommingProducts.ToHashSet();
         }
 
         /// <summary>
-        /// 
+        /// method <c>GetLowStockItems</c> filters the stock items of a store
+        /// that are running out of stock but are not included in an incomming
+        /// order or a currently performed stock exchange
         /// </summary>
-        /// <param name="storeId"></param>
-        /// <returns></returns>
+        /// <param name="storeId">unique identifier of the store</param>
+        /// <returns>list of stock items of the store</returns>
         public IEnumerable<StockItem> GetLowStockItems(int storeId)
         {
             var incommingItems = GetIncommingProducts(storeId)
@@ -72,11 +78,14 @@ namespace CocomeStore.Services
         }
 
         /// <summary>
-        /// 
+        /// method <c>GetNearStoresAsync</c> filters the nearby stores to the
+        /// given store - a store is recognized as nearby if its postalcode starts
+        /// with the same number as the given store
         /// </summary>
-        /// <param name="storeId"></param>
-        /// <returns></returns>
-        private async Task<IEnumerable<int>> GetNearStores(int storeId)
+        /// <param name="storeId">unique identifier of the store</param>
+        /// <returns>list of stores that are near enough for an exchange</returns>
+        /// <exception cref="EntityNotFoundException"></exception>
+        private async Task<IEnumerable<int>> GetNearStoresAsync(int storeId)
         {
             var store = await _context.Stores.FindAsync(storeId);
             if (store == null)
@@ -101,14 +110,18 @@ namespace CocomeStore.Services
         }
 
         /// <summary>
-        /// 
+        /// method <c>GetExchangingStoreAsync</c> chooses the store of the nearby
+        /// stores, that has at least the tripled stock of the required minimum
+        /// stock for the product and selects the store with the highest stock
+        /// from all possible exchange providers
         /// </summary>
-        /// <param name="storeId"></param>
-        /// <param name="productId"></param>
-        /// <returns></returns>
-        private async Task<Store> GetExchangingStore(int storeId, int productId)
+        /// <param name="storeId">unique identifier of the store</param>
+        /// <param name="productId">unique identifier of the product to exchange</param>
+        /// <returns>best provider for the given product and store</returns>
+        /// <exception cref="EntityNotFoundException"></exception>
+        private async Task<Store> GetExchangingStoreAsync(int storeId, int productId)
         {
-            var nearStores = await GetNearStores(storeId);
+            var nearStores = await GetNearStoresAsync(storeId);
 
             if (nearStores.ToArray().Length == 0)
             {
@@ -136,18 +149,21 @@ namespace CocomeStore.Services
         }
 
         /// <summary>
-        /// 
+        /// method <c>CheckForExchangesAsync</c> searches for products that are
+        /// running out of stock in the given store and calculates if any other
+        /// store nearby has the product in stock and creates a new stock excange
+        /// if a possible providing store was found
         /// </summary>
-        /// <param name="storeId"></param>
-        /// <returns></returns>
-        public async Task CheckForExchanges(int storeId)
+        /// <param name="storeId">unique identifier of the store</param>
+        /// <exception cref="EntityNotFoundException"></exception>
+        public async Task CheckForExchangesAsync(int storeId)
         {
             var lowStockItems = GetLowStockItems(storeId).ToArray();
             var exchanges = new List<StockExchange>();
 
             foreach (var item in lowStockItems)
             {
-                var sendingStore = await GetExchangingStore(storeId, item.ProductId);
+                var sendingStore = await GetExchangingStoreAsync(storeId, item.ProductId);
                 if (sendingStore == null)
                 {
                     _logger.LogInformation("No sending store found for product {}", item.ProductId);
@@ -155,7 +171,7 @@ namespace CocomeStore.Services
                 }
 
                 var exchange = exchanges
-                    .Where(ex => ex.SendingStoreId == sendingStore.Id)
+                    .Where(ex => ex.ProviderId == sendingStore.Id)
                     .SingleOrDefault();
                 var amount = item.Minimum + 1;
 
@@ -163,8 +179,8 @@ namespace CocomeStore.Services
                 {
                     exchange = new StockExchange()
                     {
-                        SendingStoreId = sendingStore.Id,
-                        ReceivingStoreId = storeId,
+                        ProviderId = sendingStore.Id,
+                        StoreId = storeId,
                         PlacingDate = DateTime.MinValue,
                         DeliveringDate = DateTime.MinValue,
                     };
@@ -181,20 +197,21 @@ namespace CocomeStore.Services
         }
 
         /// <summary>
-        /// 
+        /// method <c>GetStockExchanges</c> filters all open stock exchanges where
+        /// the given store is either the provider or the receiving store
         /// </summary>
-        /// <param name="storeId"></param>
-        /// <returns></returns>
+        /// <param name="storeId">unique identifier of the store</param>
+        /// <returns>all open exchanges related to the store</returns>
         public IEnumerable<StockExchangeTO> GetStockExchanges(int storeId)
         {
             return _context.StockExchanges
                 .Where(exchange =>
-                    (exchange.ReceivingStoreId == storeId &&
+                    (exchange.StoreId == storeId &&
                     exchange.DeliveringDate == DateTime.MinValue) ||
-                    (exchange.SendingStoreId == storeId &&
+                    (exchange.ProviderId == storeId &&
                     exchange.PlacingDate == DateTime.MinValue))
-                .Include(exchange => exchange.SendingStore)
-                .Include(exchange => exchange.ReceivingStore)
+                .Include(exchange => exchange.Provider)
+                .Include(exchange => exchange.Store)
                 .AsEnumerable()
                 .GroupJoin(_context.ExchangeElements
                     .Include(element => element.Product),
@@ -205,9 +222,10 @@ namespace CocomeStore.Services
         }
 
         /// <summary>
-        /// 
+        /// method <c>CloseStockExchange</c>
         /// </summary>
         /// <param name="exchange"></param>
+        /// <exception cref="EntityNotFoundException"></exception>
         public void CloseStockExchange(StockExchangeTO exchange)
         {
             var stockExchange = _context.StockExchanges.Find(exchange.Id);
@@ -220,8 +238,8 @@ namespace CocomeStore.Services
             {
                 var stockItem = _context.StockItems
                     .Where(item =>
-                        item.StoreId == stockExchange.ReceivingStoreId &&
-                        item.ProductId == element.ProductId)
+                        item.StoreId == stockExchange.StoreId &&
+                        item.ProductId == element.Product.Id)
                     .SingleOrDefault();
                 stockItem.Stock += element.Amount;
             }
@@ -230,9 +248,10 @@ namespace CocomeStore.Services
         }
 
         /// <summary>
-        /// 
+        /// method <c>StartStockExchange</c>
         /// </summary>
         /// <param name="exchange"></param>
+        /// <exception cref="EntityNotFoundException"></exception>
         public void StartStockExchange(StockExchangeTO exchange)
         {
             var stockExchange = _context.StockExchanges.Find(exchange.Id);
@@ -245,8 +264,8 @@ namespace CocomeStore.Services
             {
                 var stockItem = _context.StockItems
                     .Where(item =>
-                        item.StoreId == stockExchange.SendingStoreId &&
-                        item.ProductId == element.ProductId)
+                        item.StoreId == stockExchange.ProviderId &&
+                        item.ProductId == element.Product.Id)
                     .SingleOrDefault();
                 stockItem.Stock -= element.Amount;
             }

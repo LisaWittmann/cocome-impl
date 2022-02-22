@@ -14,6 +14,7 @@ namespace CocomeStore.Services.Mapping
         ProductTO CreateProductTO(Product product);
         OrderElementTO CreateOrderElementTO(OrderElement orderElement);
         OrderTO CreateOrderTO(Order order, IEnumerable<OrderElement> orderElements);
+        ExchangeElementTO CreateExchangeElementTO(ExchangeElement exchangeElement);
         StockExchangeTO CreateStockExchangeTO(StockExchange stockExchange, IEnumerable<ExchangeElement> exchangeElements);
 
         void UpdateProduct(Product product, ProductTO productTO);

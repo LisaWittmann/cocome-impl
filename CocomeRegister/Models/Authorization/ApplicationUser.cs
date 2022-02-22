@@ -3,7 +3,8 @@
 namespace CocomeStore.Models.Authorization
 {
     /// <summary>
-    /// 
+    /// class <c>ApplicationUser</c> overwrites the default implementation of
+    /// ASP identity's <see cref="IdentityUser"/>
     /// </summary>
     public class ApplicationUser : IdentityUser
     {

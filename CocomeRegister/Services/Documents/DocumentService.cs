@@ -23,14 +23,14 @@ namespace CocomeStore.Services.Documents
         }
 
         /// <summary>
-        /// method <c>CreateBill</c> creates a bill document
+        /// method <c>CreateBillAsync</c> creates a bill document
         /// for the given sale transfer object
         /// </summary>
         /// <param name="saleTO">
         /// sale transfer object containing the sales information
         /// </param>
         /// <returns></returns>
-        public async Task<byte[]> CreateBill(SaleTO saleTO)
+        public async Task<byte[]> CreateBillAsync(SaleTO saleTO)
         {
         
             string template = await _engine.CompileRenderAsync("BillingTemplate", saleTO);

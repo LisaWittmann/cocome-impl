@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using CocomeStore.Models;
+using CocomeStore.Models.Transfer;
 
 namespace CocomeStore.Services
 {
