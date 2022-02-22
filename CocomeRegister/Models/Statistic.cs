@@ -2,6 +2,9 @@
 
 namespace CocomeStore.Models
 {
+    /// <summary>
+    /// class <c>Statistic</c>
+    /// </summary>
     public class Statistic
     {
         [Required]

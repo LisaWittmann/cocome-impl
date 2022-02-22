@@ -7,7 +7,6 @@ namespace CocomeStore.Services
     public interface IStoreService
     {
         Store GetStore(int storeId);
-        IEnumerable<Store> GetAllStores();
 
         IEnumerable<OrderTO> GetOrders(int storeId);
         void CloseOrder(int storeId, int orderId);

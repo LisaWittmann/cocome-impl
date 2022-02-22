@@ -45,6 +45,7 @@
                 step="0.01"
                 [readonly]="restricted"
                 [(ngModel)]="product.price"
+                (change)="suggestSalePrice()"
                 name="price"
                 required
                 class="input--labeled"

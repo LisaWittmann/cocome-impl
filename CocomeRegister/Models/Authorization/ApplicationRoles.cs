@@ -1,6 +1,8 @@
-﻿using System;
-namespace CocomeStore.Models.Authorization
+﻿namespace CocomeStore.Models.Authorization
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static class ApplicationRoles
     {
         public static readonly string Admin = "Administrator";

@@ -2,6 +2,9 @@
 
 namespace CocomeStore.Models.Authorization
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class ApplicationUser : IdentityUser
     {
         [PersonalData]

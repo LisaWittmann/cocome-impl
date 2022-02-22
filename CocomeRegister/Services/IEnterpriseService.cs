@@ -8,18 +8,17 @@ namespace CocomeStore.Services
     {
         IEnumerable<Store> GetAllStores();
         IEnumerable<OrderTO> GetAllOrders();
-        IEnumerable<StockItem> GetAllStockItems();
         IEnumerable<ProductTO> GetAllProducts();
         IEnumerable<Provider> GetAllProvider();
 
-        void CreateProduct(ProductTO productTO);
-        void UpdateProduct(int productId, ProductTO productTO);
+        ProductTO CreateProduct(ProductTO productTO);
+        ProductTO UpdateProduct(int productId, ProductTO productTO);
 
-        void CreateStore(Store storeTO);
-        void UpdateStore(int storeId, Store storeTO);
+        Store CreateStore(Store storeTO);
+        Store UpdateStore(int storeId, Store storeTO);
 
-        void CreateProvider(Provider providerTO);
-        void UpdateProvider(int providerId, Provider providerTO);
+        Provider CreateProvider(Provider providerTO);
+        Provider UpdateProvider(int providerId, Provider providerTO);
 
         IEnumerable<Store> GetStores(int productId);
         void AddToStock(int storeId, int productId);

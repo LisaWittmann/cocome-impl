@@ -35,6 +35,10 @@ export class ProductDetailComponent {
     }
   }
 
+  suggestSalePrice() {
+    this.product.salePrice = this.product.price * 2;
+  }
+
   updateProduct() {
     this.updateProductEvent.emit(this.product);
   }

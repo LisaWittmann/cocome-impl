@@ -9,6 +9,10 @@ using CocomeStore.Services.Mapping;
 
 namespace CocomeStore.Services
 {
+    /// <summary>
+    /// class <c>EnterpriseServices</c> implements <see cref="IEnterpriseService"/>
+    /// and provides functionalities for the enterprise administrator
+    /// </summary>
     public class EnterpriseService : IEnterpriseService
     {
         private CocomeDbContext _context;
@@ -23,26 +27,57 @@ namespace CocomeStore.Services
             _mapper = mapper;
         }
 
-        public void CreateProduct(ProductTO productTO)
+        /// <summary>
+        /// method <c>CreateProduct</c> creates a new product
+        /// entry in the database out of the incomming information
+        /// </summary>
+        /// <param name="productTO">
+        /// transfer object containing the product information
+        /// </param>
+        public ProductTO CreateProduct(ProductTO productTO)
         {
             Product product = _mapper.CreateProduct(productTO);
             _context.Products.Add(product);
             _context.SaveChanges();
+            return _mapper.CreateProductTO(product);
         }
 
-        public void CreateProvider(Provider provider)
+        /// <summary>
+        /// method <c>CreateProvider</c> creates a new provider
+        /// entry in the databse out of the incomming information
+        /// </summary>
+        /// <param name="provider">
+        /// object containing the providers information
+        /// </param>
+        public Provider CreateProvider(Provider provider)
         {
             _context.Providers.Add(provider);
             _context.SaveChanges();
+            return provider;
         }
 
-        public void CreateStore(Store store)
+        /// <summary>
+        /// method <c>CreateStore</c> creates a new store
+        /// entry in the database out of the incomming information
+        /// </summary>
+        /// <param name="store">
+        /// object containing the stores information
+        /// </param>
+        public Store CreateStore(Store store)
         {
             _context.Stores.Add(store);
             _context.SaveChanges();
+            return store;
         }
 
-
+        /// <summary>
+        /// method <c>GetAllOrders</c> returns all
+        /// orders entries in database as transfer objects
+        /// including related objects
+        /// </summary>
+        /// <returns>
+        /// enumerable order entries as transfer objects
+        /// </returns>
         public IEnumerable<OrderTO> GetAllOrders()
         { 
            return _context.Orders
@@ -56,7 +91,15 @@ namespace CocomeStore.Services
                     (order, elements) =>
                         _mapper.CreateOrderTO(order, elements.AsEnumerable()));
         }
-       
+
+        /// <summary>
+        /// method <c>GetAllProducts</c> returns all
+        /// product entries in database as transfer object
+        /// including related objects
+        /// </summary>
+        /// <returns>
+        /// enumerable product entries as transfer objects
+        /// </returns>
         public IEnumerable<ProductTO> GetAllProducts()
         {
             return _context.Products
@@ -64,25 +107,42 @@ namespace CocomeStore.Services
                 .Select(product => _mapper.CreateProductTO(product));
         }
 
+        /// <summary>
+        /// method <c>GetAllProviders</c> returns all
+        /// provider entries from database
+        /// </summary>
+        /// <returns>
+        /// enumerable provider entires
+        /// </returns>
         public IEnumerable<Provider> GetAllProvider()
         {
             return _context.Providers;
         }
 
-        public IEnumerable<StockItem> GetAllStockItems()
-        {
-            return _context.StockItems
-                .Include(item => item.Product)
-                .Include(item => item.Store);
-        }
-
+        /// <summary>
+        /// method <c>GetAllStores</c> returns all
+        /// store entries from database
+        /// </summary>
+        /// <returns>
+        /// enumerable store entries
+        /// </returns>
         public IEnumerable<Store> GetAllStores()
         {
             return _context.Stores;
         }
 
-
-        public void UpdateProduct(int productId, ProductTO productTO)
+        /// <summary>
+        /// method <c>UpdateProduct</c> provides funtionality
+        /// to modifiy a product entry in the databse
+        /// </summary>
+        /// <param name="productId">
+        /// unique identifier of the product to perform changes on
+        /// </param>
+        /// <param name="productTO">
+        /// object containing the modified informations
+        /// </param>
+        /// <exception cref="EntityNotFoundException"></exception>
+        public ProductTO UpdateProduct(int productId, ProductTO productTO)
         {
             Product product = _context.Products.Find(productId);
             if (product == null)
@@ -93,9 +153,21 @@ namespace CocomeStore.Services
 
             _mapper.UpdateProduct(product, productTO);
             _context.SaveChanges();
+            return _mapper.CreateProductTO(product);
         }
 
-        public void UpdateProvider(int providerId, Provider provider)
+        /// <summary>
+        /// method <c>UpdateProvider</c> provides functionality
+        /// to modify a provider entry in the database
+        /// </summary>
+        /// <param name="providerId">
+        /// unique identifier of the provider to perform changes on
+        /// </param>
+        /// <param name="provider">
+        /// object containing the modified informations
+        /// </param>
+        /// <exception cref="EntityNotFoundException"></exception>
+        public Provider UpdateProvider(int providerId, Provider provider)
         {
             Provider contextProvider = _context.Providers.Find(providerId);
             if (contextProvider == null)
@@ -106,9 +178,21 @@ namespace CocomeStore.Services
 
             contextProvider.Name = provider.Name;
             _context.SaveChanges();
+            return contextProvider;
         }
 
-        public void UpdateStore(int storeId, Store store)
+        /// <summary>
+        /// method <c>UpdateStore</c> provides functionality
+        /// to modify a store entry in the database
+        /// </summary>
+        /// <param name="storeId">
+        /// unique identifier of the store to perform changes on
+        /// </param>
+        /// <param name="store">
+        /// object containing the modified informations
+        /// </param>
+        /// <exception cref="EntityNotFoundException"></exception>
+        public Store UpdateStore(int storeId, Store store)
         {
             Store contextStore = _context.Stores.Find(storeId);
             if (store == null)
@@ -121,8 +205,19 @@ namespace CocomeStore.Services
             contextStore.City = store.City;
             contextStore.PostalCode = store.PostalCode;
             _context.SaveChanges();
+            return contextStore;
         }
 
+        /// <summary>
+        /// method <c>GetStores</c> returns all stores
+        /// that sell the product with the given id
+        /// </summary>
+        /// <param name="productId">
+        /// unique identifier of the product
+        /// </param>
+        /// <returns>
+        /// enumerable store entries without duplications
+        /// </returns>
         public IEnumerable<Store> GetStores(int productId)
         {
             return _context.StockItems
@@ -132,6 +227,17 @@ namespace CocomeStore.Services
                 .ToHashSet();
         }
 
+        /// <summary>
+        /// method <c>AddToStock</c> creates a new stockitem entry
+        /// in the database for the given store of the given product
+        /// </summary>
+        /// <param name="storeId">
+        /// unique identifier of the store
+        /// </param>
+        /// <param name="productId">
+        /// unique identifier ot the product
+        /// </param>
+        /// <exception cref="EntityNotFoundException"></exception>
         public void AddToStock(int storeId, int productId)
         {
             Store store = _context.Stores.Find(storeId);
@@ -145,6 +251,14 @@ namespace CocomeStore.Services
             {
                 throw new EntityNotFoundException(
                     "product with id " + productId + " could not be found");
+            }
+
+            var registred = _context.StockItems
+                .Where(item => item.ProductId == productId && item.StoreId == storeId)
+                .ToArray().Length > 0;
+            if (registred)
+            {
+                return;
             }
 
             _context.StockItems.Add(new() { ProductId = productId, StoreId = storeId, Stock = 0 });

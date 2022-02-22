@@ -50,6 +50,7 @@ export enum PaymentMethod {
 export interface SaleElement {
     product: Product;
     amount: number;
+    discount: number;
 }
 
 export interface Sale {

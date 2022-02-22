@@ -10,6 +10,10 @@ using CocomeStore.Services.Mapping;
 
 namespace CocomeStore.Services
 {
+    /// <summary>
+    /// class <c>StoreService</c> implenents <see cref="IStoreService"/>
+    /// and provides store intern functionalities
+    /// </summary>
     public class StoreService : IStoreService
     {
         private readonly CocomeDbContext _context;
@@ -24,6 +28,13 @@ namespace CocomeStore.Services
             _context = context;
         }
 
+        /// <summary>
+        /// method <c>GetStore</c> returns the store entry in the database with
+        /// the given id
+        /// </summary>
+        /// <param name="storeId">unique identifier of the store</param>
+        /// <returns>store entry from database</returns>
+        /// <exception cref="EntityNotFoundException"></exception>
         public Store GetStore(int storeId)
         {
             Store store = _context.Stores.Find(storeId);
@@ -34,11 +45,12 @@ namespace CocomeStore.Services
             return store;
         }
 
-        public IEnumerable<Store> GetAllStores()
-        {
-            return _context.Stores;
-        }
-
+        /// <summary>
+        /// method <c>GetOrders</c> returns the orders related to the given store
+        /// converted as transfer objects
+        /// </summary>
+        /// <param name="storeId">unique identitfier of the store</param>
+        /// <returns>list of order transfer objects</returns>
         public IEnumerable<OrderTO> GetOrders(int storeId)
         {
             return _context.Orders
@@ -53,7 +65,15 @@ namespace CocomeStore.Services
                     (order, elements) => _mapper.CreateOrderTO(order, elements.AsEnumerable()));
         }
 
-
+        /// <summary>
+        /// method <c>CloseOrder</c> provides the funcionality to mark a stores
+        /// order as delivered and update the orders deliveringDate to the current
+        /// timestamp
+        /// </summary>
+        /// <param name="storeId">unique identitfier of the store</param>
+        /// <param name="orderId">unique identitfier of the order</param>
+        /// <exception cref="EntityNotFoundException"></exception>
+        /// <exception cref="CrossAccessException"></exception>
         public void CloseOrder(int storeId, int orderId)
         {
             Order order = _context.Orders.Find(orderId);
@@ -84,6 +104,13 @@ namespace CocomeStore.Services
             _context.SaveChanges();
         }
 
+        /// <summary>
+        /// method <c>PlaceOrder</c> provides the functionality to create a new
+        /// order and add it to the database
+        /// </summary>
+        /// <param name="storeId">unique identitfier of the store</param>
+        /// <param name="elements">order transfer elements of the new order</param>
+        /// <exception cref="EntityNotFoundException"></exception>
         public void PlaceOrder(int storeId, IEnumerable<OrderElementTO> elements)
         {
             DateTime dateTime = DateTime.Now;
@@ -114,6 +141,12 @@ namespace CocomeStore.Services
         }
 
 
+        /// <summary>
+        /// method <c>GetInventory</c> returns all stockitems entries related to
+        /// the given store
+        /// </summary>
+        /// <param name="storeId">unique identitfier of the store</param>
+        /// <returns>list of stock items</returns>
         public IEnumerable<StockItem> GetInventory(int storeId)
         {
             return _context.StockItems
@@ -123,7 +156,14 @@ namespace CocomeStore.Services
                 .ThenInclude(product => product.Provider);
         }
 
-
+        /// <summary>
+        /// method <c>GetProduct</c> returns a product of the inventoy of the
+        /// given store with the given product id
+        /// </summary>
+        /// <param name="storeId">unique identitfier of the store</param>
+        /// <param name="productId">unique identitfier of the product</param>
+        /// <returns>product entry converted to transfer object</returns>
+        /// <exception cref="CrossAccessException"></exception>
         public ProductTO GetProduct(int storeId, int productId)
         {
             Product product = _context.StockItems
@@ -142,6 +182,13 @@ namespace CocomeStore.Services
             return _mapper.CreateProductTO(product);
         }
 
+        /// <summary>
+        /// method <c>UpdateProduct</c> provides the funtionality to update
+        /// a product entry in the database by the transfer objects id and apply
+        /// the transfer objects data to the entry object
+        /// </summary>
+        /// <param name="storeId">unique identitfier of the store</param>
+        /// <param name="productTO">transfer object containing the new data</param>
         public void UpdateProduct(int storeId, ProductTO productTO)
         {
             Product product = _context.Products.Find(productTO.Id);
