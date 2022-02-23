@@ -1,14 +1,28 @@
 using System.IO;
-using CocomeStore.Models;
+using System.Security.Claims;
+using CocomeStore.Models.Authorization;
+using CocomeStore.Models.Database;
 using CocomeStore.Services;
+using CocomeStore.Services.Authorization;
+using CocomeStore.Services.Mapping;
+using CocomeStore.Services.Pagination;
+using CocomeStore.Services.Documents;
+using CocomeStore.Services.Statsistics;
+using DinkToPdf;
+using DinkToPdf.Contracts;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using RazorLight;
 
 namespace CocomeRegister
 {
@@ -17,26 +31,72 @@ namespace CocomeRegister
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            using (var client = new CocomeDbContext())
-            {
-                client.Database.EnsureCreated();
-            }
         }
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddEntityFrameworkSqlite().AddDbContext<CocomeDbContext>(ServiceLifetime.Transient, ServiceLifetime.Singleton);
+            services.AddDefaultIdentity<ApplicationUser>(options =>
+                {
+                    options.SignIn.RequireConfirmedAccount = true;
+                    options.Password.RequireDigit = true;
+                    options.Password.RequireLowercase = true;
+                    options.Password.RequireUppercase = true;
+                    options.Password.RequireNonAlphanumeric = true;
+                    options.Password.RequiredLength = 8;
+                })
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<CocomeDbContext>();
+
+            services.AddIdentityServer()
+                 .AddApiAuthorization<ApplicationUser, CocomeDbContext>()
+                 .AddProfileService<ProfileService>();
+
+            services.AddAuthentication(options =>
+                {
+                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer()
+                .AddIdentityServerJwt();
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("enterprise", policy => policy.RequireClaim(ClaimTypes.Role, "Administrator"));
+                options.AddPolicy("store", policy => policy.RequireClaim(ClaimTypes.Role, "Filialleiter"));
+                options.AddPolicy("cashdesk", policy => policy.RequireClaim(ClaimTypes.Role, "Kassierer"));
+            });
 
             services.AddTransient<ICashDeskService, CashDeskService>();
             services.AddTransient<IEnterpriseService, EnterpriseService>();
             services.AddTransient<IStoreService, StoreService>();
-
             services.AddTransient<IModelMapper, ModelMapper>();
+            services.AddTransient<IExchangeService, ExchangeService>();
             services.AddTransient<IDatabaseStatistics, DatabaseStatistics>();
+            services.AddTransient<ClaimManager>();
 
+            services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
+            services.AddSingleton<IUriService>(o =>
+            {
+                var accessor = o.GetRequiredService<IHttpContextAccessor>();
+                var request = accessor.HttpContext.Request;
+                var uri = string.Concat(request.Scheme, "://", request.Host.ToUriComponent());
+                return new UriService(uri);
+            });
+
+            services.AddScoped<IRazorLightEngine>(sp =>
+            {
+                var engine = new RazorLightEngineBuilder()
+                    .UseFilesystemProject(Path.Combine(Directory.GetCurrentDirectory(), "Templates"))
+                    .UseMemoryCachingProvider()
+                    .Build();
+                return engine;
+            });
+            services.AddScoped<IDocumentService, DocumentService>();
+
+            services.AddHttpContextAccessor();
             services.AddControllersWithViews();
             services.AddDirectoryBrowser();
 
@@ -46,14 +106,14 @@ namespace CocomeRegister
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, CocomeDbContext context)
         {
-            UpdateDatabase(app);
-
             if (env.IsDevelopment())
             {
+                context.Database.EnsureCreated();
+                context.Database.Migrate();
                 app.UseDeveloperExceptionPage();
+                app.UseHsts();
             }
             else
             {
@@ -65,7 +125,6 @@ namespace CocomeRegister
             {
                 app.UseSpaStaticFiles();
             }
-
            
             app.UseFileServer(new FileServerOptions
             {
@@ -75,15 +134,19 @@ namespace CocomeRegister
                 EnableDirectoryBrowsing = true
             });
 
-
-
             app.UseRouting();
+            app.UseHttpsRedirection();
+            
+            app.UseAuthentication();
+            app.UseIdentityServer();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "api/{controller}/{action=Index}/{id?}");
+                endpoints.MapRazorPages();
             });
 
             app.UseSpa(spa =>
@@ -95,19 +158,6 @@ namespace CocomeRegister
                     spa.UseAngularCliServer(npmScript: "start");
                 }
             });
-        }
-
-        private static void UpdateDatabase(IApplicationBuilder app)
-        {
-            using (var serviceScope = app.ApplicationServices
-                .GetRequiredService<IServiceScopeFactory>()
-                .CreateScope())
-            {
-                using (var context = serviceScope.ServiceProvider.GetService<CocomeDbContext>())
-                {
-                    context.Database.Migrate();
-                }
-            }
         }
     }
 }

@@ -1,0 +1,53 @@
+<div class="exchange-detail">
+    <table class="exchange-detail__overview">
+        <tr>
+            <td>Bestellnummer:</td>
+            <td>{{ exchange.id }}</td>
+        </tr>
+        <tr>
+            <td>Status:</td>
+            <td>{{ status }}</td>
+        </tr>
+        <tr>
+            <td>Empfänger:</td>
+            <td>{{ exchange.store.name }}</td>
+        </tr>
+        <tr>
+            <td>Lieferant:</td>
+            <td>{{ exchange.provider.name }}</td>
+        </tr>
+    </table>
+    <table class="exchange-detail__products">
+        <thead>
+            <tr>
+                <td>Artikel</td>
+                <td>Anzahl</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let element of exchange.elements">
+                <td>
+                    {{ element.product.name }}<br>
+                    <span class="highlighted">Artikelnummer: {{ element.product.id }}</span>
+                </td>
+                <td>{{ element.amount }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="exchange-detail__accept">
+        <button
+            class="button" 
+            *ngIf="isProvider"
+            (click)="startDelivery()"
+        >
+            Produkte versenden
+        </button>
+        <button
+            class="button"
+            *ngIf="!isProvider"
+            (click)="close()"
+        >
+            Als Geliefert markieren
+        </button>
+    </div>
+</div>

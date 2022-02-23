@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import * as Chart from 'chart.js';
 import { interpolateColors, toRGBA } from 'src/services/ColorGenerator';
-import { Statistic } from 'src/services/Models';
+import { Statistic } from 'src/models/Transfer';
 import { monthValues } from 'src/services/Month';
 import { EnterpriseStateService } from '../enterprise.service';
 
@@ -24,22 +24,23 @@ export class EnterpriseReportsComponent implements OnInit {
     this.enterpriseService.getProfitStatistic().subscribe(statistic => {
       this.salesStatistic = statistic;
       this.initSalesChart();
-    })
+    });
   }
 
   getAverage(statistic: Statistic) {
     if (statistic.dataset.length > 1) {
       return statistic.dataset.reduce((x, y) => x + y) / statistic.dataset.length;
-    } else if (statistic.dataset.length == 0) {
-      return 0
-    } else return statistic.dataset[0];
+    } else if (statistic.dataset.length === 0) {
+      return 0;
+    }
+    return statistic.dataset[0];
   }
 
   getSum(statistic: Statistic) {
-    if (statistic.dataset.length == 0) {
+    if (statistic.dataset.length === 0) {
       return 0;
     } else {
-      return statistic.dataset.reduce((x, y) => x + y)
+      return statistic.dataset.reduce((x, y) => x + y);
     }
   }
 
@@ -74,7 +75,7 @@ export class EnterpriseReportsComponent implements OnInit {
       });
     }
   }
-  
+
   initSalesChart() {
     const canvas = document.getElementById('salesChart') as HTMLCanvasElement;
     if (canvas) {

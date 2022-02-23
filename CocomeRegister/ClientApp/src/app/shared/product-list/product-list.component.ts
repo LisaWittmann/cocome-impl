@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { Product } from 'src/services/Models';
+import { Product } from 'src/models/Product';
 
 @Component({
   selector: 'app-product-list',
@@ -10,6 +10,7 @@ export class ProductListComponent {
   @Input() discount: number;
   @Input() products: Product[];
   @Output() clickProductEvent = new EventEmitter<Product>();
+  @Output() filterEvent = new EventEmitter<string>();
 
   filter: string;
 
@@ -19,12 +20,6 @@ export class ProductListComponent {
 
   setFilter(filter: string) {
     this.filter = filter;
-  }
-
-  get displayedProducts() {
-    if (!this.filter) {
-      return this.products;
-    }
-    return this.products.filter(p => p.id.toString().includes(this.filter) || p.name.includes(this.filter));
+    this.filterEvent.emit(filter);
   }
 }

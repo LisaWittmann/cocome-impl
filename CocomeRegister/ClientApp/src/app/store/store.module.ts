@@ -5,20 +5,19 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { StoreComponent } from './store.component';
 import { StoreHomeComponent } from './home/home.component';
-import { StoreDashboardComponent } from './dashboard/dashboard.component';
 import { StoreNavigationComponent } from './navigation/navigation.component';
 import { StoreProductsComponent } from './products/products.component';
 import { StoreProductComponent } from './product/product.component';
 import { StoreShoppingCardComponent } from './shopping-card/shopping-card.component';
 import { StoreOrdersComponent } from './orders/orders.component';
 import { StoreOrderDetailComponent } from './order-detail/order-detail.component';
+import { StoreExchangeDetailComponent } from './exchange-detail/exchange-detail.component';
 import { StoreReportsComponent } from './reports/reports.component';
 import { StoreStateService } from './store.service';
 import { SharedModule } from '../shared/shared.module';
 
 const storeRoutes: Routes = [
-  { path: '', component: StoreHomeComponent },
-  { path: 'dashboard', component: StoreDashboardComponent },
+  { path: 'home', component: StoreHomeComponent },
   { path: 'sortiment', component: StoreProductsComponent },
   { path: 'sortiment/:id', component: StoreProductComponent },
   { path: 'bestellungen', component: StoreOrdersComponent },
@@ -34,18 +33,20 @@ const storeRoutes: Routes = [
   ],
   declarations: [
     StoreComponent,
-    StoreHomeComponent,
     StoreReportsComponent,
-    StoreDashboardComponent,
+    StoreHomeComponent,
     StoreNavigationComponent,
     StoreProductsComponent,
     StoreProductComponent,
     StoreShoppingCardComponent,
     StoreOrdersComponent,
     StoreOrderDetailComponent,
+    StoreExchangeDetailComponent
   ],
   exports: [StoreComponent],
-  providers: [StoreStateService],
+  providers: [
+    StoreStateService,
+  ],
   bootstrap: [StoreComponent],
 })
 export class StoreModule { }

@@ -23,7 +23,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let element of order.orderElements">
+            <tr *ngFor="let element of order.elements">
                 <td>
                     {{ element.product.name }}<br>
                     <span class="highlighted">Artikelnummer: {{ element.product.id }}</span>
@@ -42,10 +42,10 @@
     <div class="order-detail__accept">
         <button
             class="button" 
-            *ngIf="order.delivered && !order.closed"
+            *ngIf="!order.closed"
             (click)="close()"
         >
-            Warenbestand hinzufügen
+            Als geliefert markieren
         </button>
     </div>
 </div>

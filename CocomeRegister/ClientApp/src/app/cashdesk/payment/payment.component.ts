@@ -1,10 +1,7 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { PaymentMethod } from 'src/models/Sale';
 import { CashDeskStateService } from '../cashdesk.service';
-
-enum PaymentMethod {
-  CASH, CARD,
-}
 
 @Component({
   selector: 'app-cashdesk-payment',
@@ -18,7 +15,10 @@ export class CashDeskPaymentComponent {
   totalPrice = 0;
   handedCash = 0;
 
-  constructor(private router: Router, private cashdeskState: CashDeskStateService) {
+  constructor(
+    private router: Router,
+    private cashdeskState: CashDeskStateService
+  ) {
     this.cashdeskState.expressMode$.subscribe(mode => {
       this.expressMode = mode;
     });
@@ -59,7 +59,25 @@ export class CashDeskPaymentComponent {
   }
 
   confirmPayment() {
-    this.cashdeskState.confirmCheckout();
-    this.router.navigate(['kasse']);
+    this.cashdeskState.confirmCheckout(
+      this.paymentMethod,
+      this.cardPayment ? this.totalPrice : this.handedCash
+    ).then(blob => {
+      this.router.navigate(['/kasse/home']);
+
+      const fileUrl = URL.createObjectURL(blob);
+      console.log(fileUrl);
+      // open printer wizard
+      const frame = document.createElement('iframe');
+      document.body.appendChild(frame);
+      frame.style.display = 'none';
+      frame.src = fileUrl;
+      frame.onload = () => {
+        setTimeout(() => {
+          frame.focus();
+          frame.contentWindow.print();
+        }, 1);
+      }
+    }).catch(error => console.error(error));
   }
 }

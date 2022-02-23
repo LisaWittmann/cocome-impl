@@ -1,14 +1,16 @@
-<button class="navigation__button" (click)="toggle()">
-    <div class="bar bar-1" [class.bar-1--open]="opened"></div>
-    <div class="bar bar-2" [class.bar-2--open]="opened"></div>
-    <div class="bar bar-3" [class.bar-3--open]="opened"></div>
-</button>
-<div *ngIf="opened" class="navigation">
-    <nav class="navigation__content" (click)="toggle()">
-        <ul>
-            <li><a [routerLink]="'/kasse'">Kasse</a></li>
-            <li><a [routerLink]="'/filiale'">Store</a></li>
-            <li><a [routerLink]="'/admin/home'">Enterprise</a></li>
-        </ul>
-    </nav>
+<div class="navigation">
+    <div class="container">
+        <nav>
+            <a [routerLink]="['/authentication/profile']">{{ userName | async }}</a>
+            <ul *ngIf="isAuthenticated">
+                <li *ngIf="isAdmin"><a [routerLink]="['/admin/home']">Admin</a></li>
+                <li *ngIf="isManager"><a [routerLink]="['/filiale/home']">Filiale</a></li>
+                <li *ngIf="isCashier"><a [routerLink]="['/kasse/home']">Kasse</a></li>
+            </ul>
+            <ul *ngIf="!isAuthenticated">
+                <li><a [routerLink]="['/authentication/register']">Registrieren</a></li>
+                <li><a [routerLink]="['/authentication/login']">Login</a></li>
+            </ul>
+        </nav>
+    </div>
 </div>

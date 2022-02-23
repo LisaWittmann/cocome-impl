@@ -1,0 +1,40 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using CocomeStore.Models.Authorization
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    string returnUrl = null;
+    var query = ViewContext.HttpContext.Request.Query;
+    if (query.ContainsKey("returnUrl"))
+    {
+        returnUrl = query["returnUrl"];
+    }
+}
+
+<div class="nav-items container">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@User.Identity.Name</a>
+    }
+    else
+    {
+        <a></a>
+    }
+    <ul>
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <li class="nav-item">
+                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="/">
+                    <button type="submit" class="text-button">Logout</button>
+                </form>
+            </li>
+        }
+        else
+        {
+            <li>
+                <a asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@returnUrl">Login</a>
+            </li>
+        }
+    </ul>
+</div>

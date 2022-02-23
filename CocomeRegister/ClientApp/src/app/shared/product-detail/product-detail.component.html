@@ -1,13 +1,13 @@
 
 
-<div class="product-detail">
+<form class="product-detail" (submit)="updateProduct()">
     <label class="product-detail__image">
         <input
             type="file"
             accept=".jpg, .jpeg, .png"
             (change)="updateImage($event.target.files)"
         >
-        <img 
+        <img
             width="100%"
             *ngIf="product && product.imageUrl"
             [src]="product.imageUrl"
@@ -22,6 +22,8 @@
                 type="text"
                 [readonly]="restricted"
                 [(ngModel)]="product.name"
+                required
+                name="name"
                 class="input--labeled"
             >
         </div>
@@ -30,6 +32,7 @@
             <input
                 name="id"
                 readonly="readonly"
+                required
                 [(ngModel)]="product.id"
                 class="input--labeled"
             >
@@ -42,6 +45,9 @@
                 step="0.01"
                 [readonly]="restricted"
                 [(ngModel)]="product.price"
+                (change)="suggestSalePrice()"
+                name="price"
+                required
                 class="input--labeled"
             >
         </div>
@@ -53,6 +59,8 @@
                     step="0.01"
                     [min]="product.price"
                     [(ngModel)]="product.salePrice"
+                    name="saleprice"
+                    required
                     class="input--labeled"
                 >
         </div>
@@ -62,6 +70,8 @@
                 *ngIf="restricted"
                 readonly="readonly"
                 class="input--labeled"
+                name="provider"
+                required
                 [ngModel]="product.provider.name"
             >
             <select 
@@ -69,6 +79,7 @@
                 [(ngModel)]="product.provider" 
                 [value]="product.provider"
                 name="provider"
+                required
                 class="input--labeled"
             >
                 <option *ngFor="let provider of providers" [ngValue]="provider">
@@ -86,11 +97,11 @@
         </div>
         <div class="product-detail__save-button">
             <button
+                type="submit"
                 class="button__form"
-                (click)="updateProduct()"
             >
                 Speichern
             </button>
         </div>
     </div>
-</div>
+</form>

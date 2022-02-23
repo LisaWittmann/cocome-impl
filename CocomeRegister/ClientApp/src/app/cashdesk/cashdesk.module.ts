@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 
 import { CashDeskComponent } from './cashdesk.component';
 import { CashDeskHomeComponent } from './home/home.component';
+import { CashDeskDisplayComponent } from './display/display.component';
 import { CashDeskCheckoutComponent } from './checkout/checkout.component';
 import { CashDeskPaymentComponent } from './payment/payment.component';
 import { CashDeskShoppingCardComponent } from './shopping-card/shopping-card.component';
@@ -12,12 +13,12 @@ import { CashDeskShoppingCardComponent } from './shopping-card/shopping-card.com
 import { ProductListComponent } from '../shared/product-list/product-list.component';
 import { ProductCardComponent } from '../shared/product-card/product-card.component';
 import { CashDeskStateService } from './cashdesk.service';
-import { StoreStateService } from '../store/store.service';
 
 export const cashdeskRoutes: Routes = [
-  { path: '', component: CashDeskHomeComponent },
+  { path: 'home', component: CashDeskHomeComponent },
   { path: 'checkout', component: CashDeskCheckoutComponent },
   { path: 'payment', component: CashDeskPaymentComponent },
+  { path: 'display', component: CashDeskDisplayComponent },
 ];
 
 @NgModule({
@@ -29,6 +30,7 @@ export const cashdeskRoutes: Routes = [
   declarations: [
     CashDeskComponent,
     CashDeskHomeComponent,
+    CashDeskDisplayComponent,
     CashDeskCheckoutComponent,
     CashDeskShoppingCardComponent,
     CashDeskPaymentComponent,
@@ -36,11 +38,7 @@ export const cashdeskRoutes: Routes = [
     ProductCardComponent,
   ],
   exports: [CashDeskComponent],
-  providers: [CashDeskStateService, StoreStateService],
+  providers: [CashDeskStateService],
   bootstrap: [CashDeskComponent]
 })
 export class CashDeskModule { }
-
-export function CashDeskEntrypoint() {
-  return CashDeskModule;
-}

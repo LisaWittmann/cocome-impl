@@ -12,23 +12,34 @@
     <BuildServerSideRenderer>false</BuildServerSideRenderer>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <PreserveCompilationReferences>true</PreserveCompilationReferences>
+ </PropertyGroup>
+
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'CocomeRegister' " />
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.SpaServices" Version="3.1.21" />
-    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="5.0.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.12" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.12">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.ApiAuthorization.IdentityServer" Version="5.0.11" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.11" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.11" />
+    <PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="6.0.0" />
+    <PackageReference Include="RazorLight" Version="2.0.0-beta1" />
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="5.0.11" />
+    <PackageReference Include="Microsoft.AspNetCore.Antiforgery" Version="2.2.0" />
+    <PackageReference Include="Haukcode.DinkToPdf" Version="1.1.2" />
   </ItemGroup>
 
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
     <Content Remove="$(SpaRoot)**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
+    <Content Remove="wwwroot\css\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -40,6 +51,28 @@
     <None Remove="Models\Transfer\" />
     <None Remove="StaticFiles\" />
     <None Remove="StaticFiles\Images\" />
+    <None Remove="Microsoft.AspNetCore.Identity.UI" />
+    <None Remove="Microsoft.AspNetCore.ApiAuthorization.IdentityServer" />
+    <None Remove="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
+    <None Remove="Models\Authorization\" />
+    <None Remove="Microsoft.AspNetCore.SpaProxy" />
+    <None Remove="Services\Authorization\" />
+    <None Remove="Services\Mapping\" />
+    <None Remove="Services\Statistics\" />
+    <None Remove="Services\CashDesk\Printer\" />
+    <None Remove="Services\Pagination\" />
+    <None Remove="DinkToPdf" />
+    <None Remove="Services\PDF\" />
+    <None Remove="RazorLight" />
+    <None Remove="Template\" />
+    <None Remove="iTextSharp" />
+    <None Remove="Templates\" />
+    <None Remove="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" />
+    <None Remove="Microsoft.AspNetCore.SpaServices.Extensions" />
+    <None Remove="Microsoft.AspNetCore.Antiforgery" />
+    <None Remove="Haukcode.DinkToPdf" />
+    <None Remove="ClientApp\src\app\store\order-detail\order-detail.component.scss" />
+    <None Remove="ClientApp\src\app\store\order-detail\order-detail.component.scss" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\" />
@@ -47,6 +80,14 @@
     <Folder Include="Models\Transfer\" />
     <Folder Include="StaticFiles\" />
     <Folder Include="StaticFiles\Images\" />
+    <Folder Include="Models\Authorization\" />
+    <Folder Include="wwwroot\css\" />
+    <Folder Include="Services\Authorization\" />
+    <Folder Include="Services\Mapping\" />
+    <Folder Include="Services\Statistics\" />
+    <Folder Include="Services\Pagination\" />
+    <Folder Include="Services\Documents\" />
+    <Folder Include="Templates\" />
   </ItemGroup>
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
     <!-- Ensure Node.js is installed -->

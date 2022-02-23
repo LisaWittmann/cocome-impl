@@ -2,6 +2,9 @@
 
 namespace CocomeStore.Models.Transfer
 {
+    /// <summary>
+    /// class <c>ProductTO</c> is a data transfer object of class <see cref="Product"/>
+    /// </summary>
     public class ProductTO
     {
         [Required]

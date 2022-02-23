@@ -1,31 +1,66 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, Inject } from '@angular/core';
-import { Router } from '@angular/router';
-import { Store } from 'src/services/Models';
-import { StoreStateService } from '../store.service';
+import { AfterViewInit, Component } from '@angular/core';
+import { Chart } from 'chart.js';
+import { Order } from 'src/models/Order';
+import { StockItem, Store } from 'src/models/Store';
+import { Statistic } from 'src/models/Transfer';
+import { monthValues } from 'src/services/Month';
 
+import { StoreStateService } from '../store.service';
 @Component({
-  selector: 'app-store',
+  selector: 'app-store-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
 })
-export class StoreHomeComponent {
-  stores: Store[];
-  selectedStore: Store;
+export class StoreHomeComponent implements AfterViewInit {
+  store: Store;
+  runningOutOfStock: StockItem[];
+  orders: Order[];
+
+  chart: HTMLCanvasElement;
+  salesChart: Chart;
+  statistic: Statistic;
 
   constructor(
-    private http: HttpClient,
-    private router: Router,
-    private storeStateService: StoreStateService,
-    @Inject('BASE_URL') baseUrl: string
-  ) {
-    this.http.get<Store[]>(`${baseUrl}api/store`).subscribe(result => {
-      this.stores = result;
-    }, error => console.error(error));
+    private storeStateService: StoreStateService) {
+    this.storeStateService.store$.subscribe(store => {
+      this.store = store;
+    });
+    this.storeStateService.inventory$.subscribe(() => {
+      this.runningOutOfStock = this.storeStateService.runningOutOfStock;
+    });
+    this.storeStateService.orders$.subscribe(orders => {
+      this.orders = orders;
+    });
   }
 
-  selectStore() {
-    this.storeStateService.setStore(this.selectedStore);
-    this.router.navigate(['/filiale/dashboard']);
+  get openOrders() {
+    return this.orders.filter(order => !order.closed);
+  }
+
+  title = (order: Order) => {
+    return `Bestellung ${order.id} vom
+      ${new Date(order.placingDate).toLocaleDateString('de-DE')}`;
+  }
+
+  initChart() {
+    this.chart = (document.getElementById('salesChart') as HTMLCanvasElement);
+    this.salesChart = new Chart(this.chart.getContext('2d'), {
+      type: 'line',
+      data: {
+        datasets: [{
+          label: this.statistic.label,
+          data: this.statistic.dataset
+        }],
+        labels: monthValues,
+      },
+      options: { responsive: true }
+    });
+  }
+
+  ngAfterViewInit() {
+    this.storeStateService.getLatestProfits().subscribe(profits => {
+      this.statistic = profits;
+      this.initChart();
+    });
   }
 }

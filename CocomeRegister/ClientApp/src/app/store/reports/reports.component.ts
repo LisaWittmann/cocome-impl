@@ -3,9 +3,10 @@ import { Chart } from 'chart.js';
 import { jsPDF } from 'jspdf';
 import { interpolateColors, toRGBA } from 'src/services/ColorGenerator';
 import { Month, monthOrdinals, monthValues } from 'src/services/Month';
-import { Store, StockItem, Statistic } from 'src/services/Models';
 import { StoreStateService } from '../store.service';
 import html2canvas from 'html2canvas';
+import { StockItem, Store } from 'src/models/Store';
+import { Statistic } from 'src/models/Transfer';
 
 @Component({
   selector: 'app-store-reports',
@@ -29,11 +30,6 @@ export class StoreReportsComponent implements OnInit {
     this.storeStateService.inventory$.subscribe(inventory => {
       this.inventory = inventory;
     });
-    this.storeStateService.getProfits().subscribe(profits => {
-      this.salesData = profits;
-      this.initSalesChart();
-      this.initInventoryChart();
-    })
   }
 
   get date() {
@@ -49,7 +45,7 @@ export class StoreReportsComponent implements OnInit {
       backgroundColor: toRGBA(chartColors[this.salesData.indexOf(data)], 0.5)
     }));
   }
- 
+
   initSalesChart() {
     const canvas = document.getElementById('salesChart') as HTMLCanvasElement;
     if (canvas) {
@@ -83,12 +79,11 @@ export class StoreReportsComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.salesData && !this.salesChart) {
+    this.storeStateService.getProfits().subscribe(profits => {
+      this.salesData = profits;
       this.initSalesChart();
-    }
-    if (this.inventory && !this.inventoryChart) {
       this.initInventoryChart();
-    }
+    });
   }
 
   async generatePDFSection(elementId: string, pdf: jsPDF) {

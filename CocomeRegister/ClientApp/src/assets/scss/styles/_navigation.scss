@@ -1,0 +1,52 @@
+.navigation {
+    position: sticky;
+    z-index: 20;
+    top: 0;
+    width: 100vw;
+    background-color: $color-white;
+    border-bottom: 1px solid rgba($color-black, 0.1);
+
+    nav {
+        font-size: $text-m;
+        height: 65px;
+    }
+
+    &--sub {
+        position: sticky;
+        z-index: 12;
+        top: 0;
+        width: 100%;
+        background-color: $color-white;
+        border-bottom: 1px solid rgba($color-black, 0.1);
+        margin-bottom: 50px;
+
+        nav {
+            height: 40px;
+            font-size: $text-xs;
+        }
+    }
+}
+
+.navigation, .navigation--sub {
+    nav {
+        @include flex-center($justify: space-between);
+        
+        > * {
+            height: 100%;
+            margin: 0;
+            gap: 20px;
+            @include flex-center();
+        }
+
+        *:hover {
+            text-decoration: none;
+            user-select: none;
+        }
+
+        @media all and (max-width: 768px) {
+            > a {
+                display: none;
+            }
+        }
+    }
+}

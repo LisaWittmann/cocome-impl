@@ -17,6 +17,8 @@ import { EnterpriseProvidersComponent } from './providers/providers.component';
 import { EnterpriseReportsComponent } from './reports/reports.component';
 
 import { EnterpriseStateService } from './enterprise.service';
+import { AuthorizeService } from '../api-authorization/authorize.service';
+import { EnterpriseGuard } from '../api-authorization/authorize.guard';
 
 const enterpriseRoutes: Routes = [
   { path: 'home', component: EnterpriseHomeComponent },
@@ -46,7 +48,10 @@ const enterpriseRoutes: Routes = [
     EnterpriseReportsComponent,
   ],
   exports: [EnterpriseComponent],
-  providers: [EnterpriseStateService],
+  providers: [
+    EnterpriseStateService,
+    AuthorizeService
+  ],
   bootstrap: [EnterpriseComponent]
 })
 export class EnterpriseModule { }

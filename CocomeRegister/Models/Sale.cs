@@ -4,28 +4,18 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CocomeStore.Models
 {
-    public class SaleElement
+    /// <summary>
+    /// enumeration <c>PaymentMethod</c>
+    /// </summary>
+    public enum PaymentMethod
     {
-        [ScaffoldColumn(false)]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-
-        [Required]
-        public int ProductId { get; set; }
-
-        public Product Product { get; set; }
-
-        [Required]
-        public int Amount { get; set; }
-
-        [Required]
-        public int SaleId { get; set; }
-
-        public Sale Sale { get; set; }
-
-        public Discount Discount { get; set; }
+        Cash,
+        Card
     }
 
+    /// <summary>
+    /// class <c>Sale</c>
+    /// </summary>
     public class Sale
     {
         [ScaffoldColumn(false)]
@@ -40,5 +30,7 @@ namespace CocomeStore.Models
         [Required]
         public DateTime TimeStamp { get; set; }
 
+        [Required]
+        public PaymentMethod PaymentMethod { get; set; }
     }
 }
