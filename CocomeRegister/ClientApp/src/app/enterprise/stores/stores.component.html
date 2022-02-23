@@ -4,61 +4,6 @@
             <h1>Filialen</h1>
         </section>
         <section>
-            <app-accordion
-                *ngFor="let store of stores"
-                [header]="store.name"
-            >
-                <div class="store-detail">
-                    <div>
-                        <div class="input-wrapper">
-                            <label for="id">Id</label>
-                            <input 
-                                name="id"
-                                readonly="readonly"
-                                [(ngModel)]="store.id"
-                                class="input--labeled"
-                            >
-                        </div>
-                        <div class="input-wrapper">
-                            <label for="name">Name</label>
-                            <input 
-                                name="name"
-                                type="text"
-                                [(ngModel)]="store.name"
-                                class="input--labeled"
-                            >
-                        </div>
-                    </div>
-                    <div>
-                        <div class="input-wrapper">
-                            <label for="postalcode">Stadt</label>
-                            <input
-                                name="postalcode"
-                                type="number"
-                                [(ngModel)]="store.postalCode"
-                                class="input--labeled"
-                            >
-                        </div>
-                        <div class="input-wrapper">
-                            <label for="city">Stadt</label>
-                            <input
-                                name="city"
-                                type="text"
-                                [(ngModel)]="store.city"
-                                class="input--labeled"
-                            >
-                        </div>
-                        <button
-                            class="button__form"
-                            (click)="saveChanges(store)"
-                        >
-                            Speichern
-                        </button>
-                    </div>
-                </div>
-            </app-accordion>
-        </section>
-        <section>
             <h2>Neue Filiale hinzufügen</h2>
             <form class="store-detail" (submit)="submitStore()">
                 <div>
@@ -88,12 +33,70 @@
                             name="name"
                             class="input--labeled"
                             type="text"
+                            required
                             [(ngModel)]="newStore.name"
                         >
                     </div>
                     <button class="button__form" type="submit">Speichern</button>
                 </div>
             </form>
+        </section>
+        <section>
+            <h2>Alle Filialen</h2>
+            <app-accordion
+                *ngFor="let store of stores"
+                [header]="store.name"
+            >
+                <form class="store-detail" (submit)="saveChanges(store)">
+                    <div>
+                        <div class="input-wrapper">
+                            <label for="id">Id</label>
+                            <input 
+                                name="id"
+                                readonly="readonly"
+                                [(ngModel)]="store.id"
+                                class="input--labeled"
+                            >
+                        </div>
+                        <div class="input-wrapper">
+                            <label for="name">Name</label>
+                            <input 
+                                name="name"
+                                type="text"
+                                required
+                                [(ngModel)]="store.name"
+                                class="input--labeled"
+                            >
+                        </div>
+                    </div>
+                    <div>
+                        <div class="input-wrapper">
+                            <label for="postalcode">Stadt</label>
+                            <input
+                                name="postalcode"
+                                type="number"
+                                [(ngModel)]="store.postalCode"
+                                class="input--labeled"
+                            >
+                        </div>
+                        <div class="input-wrapper">
+                            <label for="city">Stadt</label>
+                            <input
+                                name="city"
+                                type="text"
+                                [(ngModel)]="store.city"
+                                class="input--labeled"
+                            >
+                        </div>
+                        <button
+                            class="button__form"
+                            type="submit"
+                        >
+                            Speichern
+                        </button>
+                    </div>
+                </form>
+            </app-accordion>
         </section>
     </div>
 </div>

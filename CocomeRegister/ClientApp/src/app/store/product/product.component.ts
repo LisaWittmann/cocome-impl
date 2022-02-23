@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
-import { Product } from 'src/services/Models';
 import { StoreStateService } from '../store.service';
+import { Product } from 'src/models/Product';
 
 @Component({
   selector: 'app-store-product',
@@ -10,7 +10,7 @@ import { StoreStateService } from '../store.service';
   styleUrls: ['./product.component.scss']
 })
 export class StoreProductComponent {
-  product: Product;
+  product = {} as Product;
 
   constructor(
     private storeStateService: StoreStateService,
@@ -19,10 +19,10 @@ export class StoreProductComponent {
   ) {
     const productId = Number(router.url.split('/').pop());
     this.storeStateService.getProduct(productId).subscribe(result => {
-      this.product = result
+      this.product = result;
     }, error => {
       console.error(error);
-      this.location.back()
+      this.location.back();
     });
   }
 

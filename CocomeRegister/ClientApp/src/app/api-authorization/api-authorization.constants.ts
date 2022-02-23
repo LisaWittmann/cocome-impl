@@ -3,10 +3,10 @@ export const ApplicationName = 'Cocome';
 export const ReturnUrlType = 'returnUrl';
 
 export const AuthRoles = {
-  Admin: "Administrator",
-  Manager: "Filialleiter",
-  Cashier: "Kassierer",
-}
+  Admin: 'Administrator',
+  Manager: 'Filialleiter',
+  Cashier: 'Kassierer',
+};
 
 export const QueryParameterNames = {
   ReturnUrl: ReturnUrlType,

@@ -1,13 +1,27 @@
-<div class="checkout page-container">
+<div class="checkout">
     <div class="checkout__products">
         <div *ngIf="expressMode" class="checkout__express">
             Express Modus - 50% Rabatt
         </div>
-        <app-product-list 
-            [discount]="discount"
-            [products]="products"
-            (clickProductEvent)="addToCard($event)"
-        ></app-product-list>
+        <div class="checkout__product-list" #productList>
+            <app-product-list
+                [discount]="discount"
+                [products]="products"
+                (clickProductEvent)="addToCard($event)"
+                (filterEvent)="getFilteredProducts($event)"
+            ></app-product-list>
+        </div>
+        <div class="checkout__barcode">
+            <form (submit)="onSubmit()">
+                <input
+                    [(ngModel)]="barcode"
+                    #barcodeInput
+                    name="barcode"
+                    class="checkout__barcode-input"
+                    placeholder="Barcode scannen">
+                <button type="submit"></button>
+            </form>
+        </div>
     </div>
     <div class="checkout__shopping-card">
         <app-cashdesk-shopping-card

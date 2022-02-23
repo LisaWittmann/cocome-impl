@@ -9,16 +9,14 @@ import { map } from 'rxjs/operators';
 })
 export class NavigationComponent {
   userName: Observable<string>;
-  userRoles: Observable<string[]>;
 
   isAuthenticated: boolean;
-  isAdmin: boolean
+  isAdmin: boolean;
   isCashier: boolean;
   isManager: boolean;
 
   constructor(private authService: AuthorizeService) {
     this.userName = this.authService.getUser().pipe(map(u => u && u.name));
-    this.userRoles = this.authService.getUser().pipe(map(u => u && u.role));
     this.authService.isAuthenticated().subscribe(auth => {
       this.isAuthenticated = auth;
     });
@@ -31,5 +29,5 @@ export class NavigationComponent {
     this.authService.isCashier().subscribe(cashier => {
       this.isCashier = cashier;
     });
-  } 
+  }
 }

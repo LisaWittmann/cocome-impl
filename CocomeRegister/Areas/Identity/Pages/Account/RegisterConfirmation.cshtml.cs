@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using CocomeStore.Models;
+using CocomeStore.Models.Authorization;
 
 namespace CocomeStore.Areas.Identity.Pages.Account
 {

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
-import { EventEmitter, Inject } from '@angular/core';
+import { EventEmitter, Inject, Provider } from '@angular/core';
 import { Component, Input, Output } from '@angular/core';
-import { Product, Provider } from 'src/services/Models';
+import { Product } from 'src/models/Product';
 
 export interface Resource {
   path: string;
@@ -18,9 +18,9 @@ export class ProductDetailComponent {
   @Input() restricted: boolean;
   @Output() updateProductEvent = new EventEmitter<Product>();
 
-  baseUrl: string
+  baseUrl: string;
 
-  constructor(private http: HttpClient, @Inject("BASE_URL") baseUrl: string) {
+  constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
     this.baseUrl = baseUrl;
   }
 
@@ -28,11 +28,15 @@ export class ProductDetailComponent {
     if (files.length > 0) {
       const file = files[0];
       const data = new FormData();
-      data.append("file", file);
+      data.append('file', file);
       this.http.post<Resource>(`${this.baseUrl}api/fileupload`, data).subscribe(result => {
         this.product.imageUrl = result.path;
       }, error => console.error(error));
     }
+  }
+
+  suggestSalePrice() {
+    this.product.salePrice = this.product.price * 2;
   }
 
   updateProduct() {

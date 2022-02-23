@@ -4,6 +4,10 @@
             <h1>Produkte</h1>
         </section>
         <section>
+            <button
+                class="products__add-button"
+                (click)="createProduct()"
+            >+</button>
             <ul>
                 <app-product-table-row 
                     *ngFor="let product of products"
@@ -12,9 +16,5 @@
                 >
                 </app-product-table-row>
             </ul>
-            <button
-                class="products__add-button"
-                (click)="createProduct()"
-            >+</button>
         </section>
 </div>

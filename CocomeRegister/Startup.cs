@@ -1,12 +1,20 @@
 using System.IO;
 using System.Security.Claims;
-using CocomeStore.Models;
 using CocomeStore.Models.Authorization;
+using CocomeStore.Models.Database;
 using CocomeStore.Services;
+using CocomeStore.Services.Authorization;
+using CocomeStore.Services.Bank;
+using CocomeStore.Services.Mapping;
+using CocomeStore.Services.Pagination;
+using CocomeStore.Services.Printer;
+using DinkToPdf;
+using DinkToPdf.Contracts;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +22,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using RazorLight;
 
 namespace CocomeRegister
 {
@@ -26,7 +35,6 @@ namespace CocomeRegister
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddEntityFrameworkSqlite().AddDbContext<CocomeDbContext>(ServiceLifetime.Transient, ServiceLifetime.Singleton);
@@ -64,11 +72,32 @@ namespace CocomeRegister
             services.AddTransient<ICashDeskService, CashDeskService>();
             services.AddTransient<IEnterpriseService, EnterpriseService>();
             services.AddTransient<IStoreService, StoreService>();
-
             services.AddTransient<IModelMapper, ModelMapper>();
-            services.AddTransient<IDatabaseStatistics, DatabaseStatistics>();
+            services.AddTransient<IExchangeService, ExchangeService>();
+            services.AddTransient<IReportService, ReportService>();
+            services.AddTransient<IBankService, BankService>();
             services.AddTransient<ClaimManager>();
 
+            services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
+            services.AddSingleton<IUriService>(o =>
+            {
+                var accessor = o.GetRequiredService<IHttpContextAccessor>();
+                var request = accessor.HttpContext.Request;
+                var uri = string.Concat(request.Scheme, "://", request.Host.ToUriComponent());
+                return new UriService(uri);
+            });
+
+            services.AddScoped<IRazorLightEngine>(sp =>
+            {
+                var engine = new RazorLightEngineBuilder()
+                    .UseFilesystemProject(Path.Combine(Directory.GetCurrentDirectory(), "Templates"))
+                    .UseMemoryCachingProvider()
+                    .Build();
+                return engine;
+            });
+            services.AddScoped<IPrinterService, PrinterService>();
+
+            services.AddHttpContextAccessor();
             services.AddControllersWithViews();
             services.AddDirectoryBrowser();
 
@@ -78,7 +107,6 @@ namespace CocomeRegister
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, CocomeDbContext context)
         {
             if (env.IsDevelopment())

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Store } from 'src/services/Models';
+import { Store } from 'src/models/Store';
 import { EnterpriseStateService } from '../enterprise.service';
 
 @Component({

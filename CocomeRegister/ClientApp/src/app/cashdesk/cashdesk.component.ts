@@ -4,4 +4,4 @@ import { Component } from '@angular/core';
   selector: 'app-cashdesk',
   templateUrl: './cashdesk.component.html'
 })
-export class CashDeskComponent { }
+export class CashDeskComponent {}

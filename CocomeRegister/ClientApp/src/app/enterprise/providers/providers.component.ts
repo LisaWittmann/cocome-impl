@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { Provider, Product } from 'src/services/Models';
+import { Product } from 'src/models/Product';
+import { Provider } from 'src/models/Provider';
 import { EnterpriseStateService } from '../enterprise.service';
 
 @Component({
@@ -18,7 +19,7 @@ export class EnterpriseProvidersComponent {
   ) {
     enterpriseService.providers$.subscribe(provider => {
       this.providers = provider;
-    })
+    });
   }
 
   getProducts(provider: Provider) {

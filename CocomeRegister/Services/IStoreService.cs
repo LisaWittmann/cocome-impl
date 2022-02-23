@@ -7,7 +7,6 @@ namespace CocomeStore.Services
     public interface IStoreService
     {
         Store GetStore(int storeId);
-        IEnumerable<Store> GetAllStores();
 
         IEnumerable<OrderTO> GetOrders(int storeId);
         void CloseOrder(int storeId, int orderId);
@@ -17,6 +16,5 @@ namespace CocomeStore.Services
         void UpdateProduct(int storeId, ProductTO productTO);
 
         IEnumerable<StockItem> GetInventory(int storeId);
-        void UpdateStock(int storeId, int productId, int stock);
     }
 }

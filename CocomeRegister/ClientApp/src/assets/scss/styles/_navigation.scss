@@ -1,16 +1,35 @@
 .navigation {
     position: sticky;
-    z-index: 12;
+    z-index: 20;
     top: 0;
-    width: 100%;
+    width: 100vw;
     background-color: $color-white;
-    box-shadow: 0 0 10px 6px rgba($color-black, 0.1);
-
+    border-bottom: 1px solid rgba($color-black, 0.1);
 
     nav {
-        @include flex-center($justify: space-between);
         font-size: $text-m;
         height: 65px;
+    }
+
+    &--sub {
+        position: sticky;
+        z-index: 12;
+        top: 0;
+        width: 100%;
+        background-color: $color-white;
+        border-bottom: 1px solid rgba($color-black, 0.1);
+        margin-bottom: 50px;
+
+        nav {
+            height: 40px;
+            font-size: $text-xs;
+        }
+    }
+}
+
+.navigation, .navigation--sub {
+    nav {
+        @include flex-center($justify: space-between);
         
         > * {
             height: 100%;

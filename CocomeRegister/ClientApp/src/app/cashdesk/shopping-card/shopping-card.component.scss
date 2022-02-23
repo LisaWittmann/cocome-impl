@@ -8,7 +8,15 @@
 
     &__items {
         width: 100%;
+        height: 65vh;
+        overflow-y: scroll;
         cursor: pointer;
+        scroll-behavior: smooth;
+        scrollbar-width: none;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
 
         li {
             width: 100%;

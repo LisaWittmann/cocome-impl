@@ -1,9 +1,9 @@
 import { EventEmitter } from '@angular/core';
 import { Component, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { OrderElement, Product } from 'src/services/Models';
+import { OrderElement } from 'src/models/Order';
+import { Product } from 'src/models/Product';
 import { StoreStateService } from '../store.service';
-
 @Component({
   selector: 'app-store-shopping-card',
   templateUrl: './shopping-card.component.html',
@@ -11,7 +11,7 @@ import { StoreStateService } from '../store.service';
 })
 export class StoreShoppingCardComponent {
   @Output() closeShoppingCardEvent = new EventEmitter<Boolean>();
-  shoppingCard: OrderElement[];
+  shoppingCard: OrderElement[] = [];
 
   constructor(private storeStateService: StoreStateService, private router: Router) {
     this.storeStateService.currentOrder$.subscribe(currentOrder => {
@@ -20,7 +20,9 @@ export class StoreShoppingCardComponent {
   }
 
   get totalPrice() {
-    if (this.shoppingCard.length == 0) return 0;
+    if (this.shoppingCard.length === 0) {
+      return 0;
+    }
     return this.shoppingCard
             .map(element => element.product.price * element.amount)
             .reduce((x, y) => (x + y));

@@ -1,7 +1,9 @@
 import { Location } from '@angular/common';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { Product, Provider, Store } from 'src/services/Models';
+import { Product } from 'src/models/Product';
+import { Provider } from 'src/models/Provider';
+import { Store } from 'src/models/Store';
 import { EnterpriseStateService } from '../enterprise.service';
 
 @Component({
@@ -9,7 +11,7 @@ import { EnterpriseStateService } from '../enterprise.service';
   templateUrl: './product.component.html',
 })
 export class EnterpriseProductComponent {
-  product: Product;
+  product = {} as Product;
   providers: Provider[];
   stores: Store[];
   availableStores: Store[];
@@ -23,7 +25,7 @@ export class EnterpriseProductComponent {
   ) {
     const productId = Number(router.url.split('/').pop());
     this.enterpriseService.products$.subscribe(products => {
-      this.product = products.find(p => p.id == productId);
+      this.product = products.find(p => p.id === productId);
       if (!this.product) {
         location.back();
       }
@@ -37,7 +39,7 @@ export class EnterpriseProductComponent {
     this.enterpriseService.getStoresByProduct(productId).subscribe(stores => {
       this.availableStores = stores;
       this.stores = this.stores.filter(store => !this.availableStores.some((a) => (a.id === store.id)));
-    })
+    });
   }
 
   updateProduct() {

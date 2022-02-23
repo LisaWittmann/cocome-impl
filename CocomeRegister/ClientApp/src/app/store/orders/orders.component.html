@@ -3,34 +3,34 @@
         <section>
             <h1>Bestellungen</h1>
         </section>
-        <section *ngIf="openOrders.length">
-            <h2>Offene Bestellungen</h2>
-            <app-accordion 
-                *ngFor="let order of openOrders"
-                [header]="title(order)"
+        <section *ngIf="providedExchanges.length">
+            <h2>Eingegangene Tauschanfragen</h2>
+            <app-accordion
+                *ngFor="let exchange of providedExchanges"
+                [header]="exchangeTitle(exchange)"
             >
-                <app-store-order-detail [order]="order">
-                </app-store-order-detail>
+                <app-store-exchange-detail [exchange]="exchange">                    
+                </app-store-exchange-detail>
             </app-accordion>
         </section>
-        <section *ngIf="pendingOrders.length">
+        <section *ngIf="orders.length">
             <h2>Ausstehende Bestellungen</h2>
             <app-accordion 
-                *ngFor="let order of pendingOrders"
-                [header]="title(order)"
+                *ngFor="let order of orders"
+                [header]="orderTitle(order)"
             >
                 <app-store-order-detail [order]="order">
                 </app-store-order-detail>
             </app-accordion>
         </section>
-        <section *ngIf="closedOrders.length">
-            <h2>Geschlossene Bestellungen</h2>
-            <app-accordion 
-                *ngFor="let order of closedOrders"
-                [header]="title(order)"
+        <section *ngIf="exchanges.length">
+            <h2>Ausstehende Tauschanfragen</h2>
+            <app-accordion
+                *ngFor="let exchange of exchanges"
+                [header]="exchangeTitle(exchange)"
             >
-                <app-store-order-detail [order]="order">
-                </app-store-order-detail>
+                <app-store-exchange-detail [exchange]="exchange">                    
+                </app-store-exchange-detail>
             </app-accordion>
         </section>
     </div>

@@ -24,36 +24,66 @@
 
             <div *ngIf="cashPayment" class="payment__cash">
                 <div class="column-wrapper">
-                    <label for="handed-cash">
-                        <strong>Bezahlt:</strong>
-                    </label>
-                    <input name="handed-cash" type="number" [(ngModel)]="handedCash" min=0.00 step="0.01">
+                    <label for="handedCash">Bezahlt:</label>
+                    <input
+                        name="handedCash"
+                        type="number"
+                        required
+                        [(ngModel)]="handedCash"
+                        min=0.00
+                        step="0.01"
+                    >
                 </div>
                 <div class="column-wrapper">
-                    <strong>Rückgeld:</strong>
+                    Rückgeld:
                     <span>{{ cashback.toFixed(2) }} €</span>
                 </div>
             </div>
     
             <div *ngIf="cardPayment" class="payment__card">
                 <div class="column-wrapper">
-                    <strong *ngIf="paymentAccepted" class="success">Die Zahlung war erfolgreich</strong>
-                    <strong *ngIf="!paymentAccepted">
-                        Bitte die Karte in das Kartenlesegerät einführen und den Anweisungen auf dem Terminal folgen
+                    <strong *ngIf="paymentAccepted" class="success">
+                        Die Zahlung war erfolgreich
                     </strong>
+                    <strong *ngIf="cardPaymentError" class="error">
+                        Die Zahlung ist fehlgeschlagen
+                    </strong>
+                    <label for="cardNumber">Kartennummer:</label>
+                    <input 
+                        name="cardNumber"
+                        required
+                        [class.form-error]="cardPaymentError"
+                        [(ngModel)]="creditCard.number"
+                    >
+                    <label for="cardPin">Geheimzahl:</label>
+                    <input
+                        type="password"
+                        required
+                        [class.form-error]="cardPaymentError"
+                        [(ngModel)]="creditCard.pin"
+                    >
                 </div>
             </div>
         
             <div class="column-wrapper">
+                <button
+                    *ngIf="(cardPayment && !paymentAccepted)"
+                    class="button button--filled"
+                    (click)="confirmPayment()"
+                >
+                    Bestätigen
+                </button>
                 <button 
+                    *ngIf="(cardPayment && paymentAccepted) || cashPayment"
                     class="button button--filled"
                     [class.disabled]="!paymentAccepted"
-                    (click)="confirmPayment()"
+                    (click)="confirmCheckout()"
                 >
                     Vorgang abschließen
                 </button>
                 <button 
-                    class="button" 
+                    class="button"
+                    [class.disabled]="cardPayment && paymentAccepted"
                     (click)="resetPaymentMethod()"
                 >
                     Zurück

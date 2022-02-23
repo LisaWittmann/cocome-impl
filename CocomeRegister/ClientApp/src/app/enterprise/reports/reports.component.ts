@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import * as Chart from 'chart.js';
 import { interpolateColors, toRGBA } from 'src/services/ColorGenerator';
-import { Statistic } from 'src/services/Models';
+import { Report } from 'src/models/Transfer';
 import { monthValues } from 'src/services/Month';
 import { EnterpriseStateService } from '../enterprise.service';
 
@@ -10,57 +10,58 @@ import { EnterpriseStateService } from '../enterprise.service';
   templateUrl: './reports.component.html',
 })
 export class EnterpriseReportsComponent implements OnInit {
-  deliveryStatistic: Statistic[];
+  deliveryReport: Report[];
   deliveryChart: Chart;
 
-  salesStatistic: Statistic[];
+  salesReport: Report[];
   salesChart: Chart;
 
   constructor(private enterpriseService: EnterpriseStateService) {
-    this.enterpriseService.getDeliveryStatistic().subscribe(statistic => {
-      this.deliveryStatistic = statistic;
+    this.enterpriseService.getDeliveryReport().subscribe(report => {
+      this.deliveryReport = report;
       this.initDeliveryChart();
     });
-    this.enterpriseService.getProfitStatistic().subscribe(statistic => {
-      this.salesStatistic = statistic;
+    this.enterpriseService.getProfitReport().subscribe(report => {
+      this.salesReport = report;
       this.initSalesChart();
-    })
+    });
   }
 
-  getAverage(statistic: Statistic) {
-    if (statistic.dataset.length > 1) {
-      return statistic.dataset.reduce((x, y) => x + y) / statistic.dataset.length;
-    } else if (statistic.dataset.length == 0) {
-      return 0
-    } else return statistic.dataset[0];
+  getAverage(report: Report) {
+    if (report.dataset.length > 1) {
+      return report.dataset.reduce((x, y) => x + y) / report.dataset.length;
+    } else if (report.dataset.length === 0) {
+      return 0;
+    }
+    return report.dataset[0];
   }
 
-  getSum(statistic: Statistic) {
-    if (statistic.dataset.length == 0) {
+  getSum(report: Report) {
+    if (report.dataset.length === 0) {
       return 0;
     } else {
-      return statistic.dataset.reduce((x, y) => x + y)
+      return report.dataset.reduce((x, y) => x + y);
     }
   }
 
   get deliveryDataset() {
-    const chartColors = interpolateColors(this.deliveryStatistic.length, { colorStart: 0.6, colorEnd: 0.8 });
-    return this.deliveryStatistic.map(data => ({
+    const chartColors = interpolateColors(this.deliveryReport.length, { colorStart: 0.6, colorEnd: 0.8 });
+    return this.deliveryReport.map(data => ({
       label: data.label,
       data: data.dataset,
-      borderColor: chartColors[this.deliveryStatistic.indexOf(data)],
-      backgroundColor: toRGBA(chartColors[this.deliveryStatistic.indexOf(data)], 0.5),
+      borderColor: chartColors[this.deliveryReport.indexOf(data)],
+      backgroundColor: toRGBA(chartColors[this.deliveryReport.indexOf(data)], 0.5),
       fill: false,
     }));
   }
 
   get salesDataset() {
-    const chartColors = interpolateColors(this.salesStatistic.length, { colorStart: 0.4, colorEnd: 0.8 });
-    return this.salesStatistic.map(data => ({
+    const chartColors = interpolateColors(this.salesReport.length, { colorStart: 0.4, colorEnd: 0.8 });
+    return this.salesReport.map(data => ({
       label: data.label,
       data: data.dataset,
-      borderColor: chartColors[this.salesStatistic.indexOf(data)],
-      backgroundColor: toRGBA(chartColors[this.salesStatistic.indexOf(data)], 0.4),
+      borderColor: chartColors[this.salesReport.indexOf(data)],
+      backgroundColor: toRGBA(chartColors[this.salesReport.indexOf(data)], 0.4),
     }));
   }
 
@@ -74,7 +75,7 @@ export class EnterpriseReportsComponent implements OnInit {
       });
     }
   }
-  
+
   initSalesChart() {
     const canvas = document.getElementById('salesChart') as HTMLCanvasElement;
     if (canvas) {
@@ -90,10 +91,10 @@ export class EnterpriseReportsComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.deliveryStatistic && !this.deliveryChart) {
+    if (this.deliveryReport && !this.deliveryChart) {
       this.initDeliveryChart();
     }
-    if (this.salesStatistic && !this.salesChart) {
+    if (this.salesReport && !this.salesChart) {
       this.initSalesChart();
     }
   }

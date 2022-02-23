@@ -15,6 +15,7 @@ using Microsoft.Extensions.Logging;
 using CocomeStore.Models;
 using CocomeStore.Models.Authorization;
 using System.Security.Claims;
+using CocomeStore.Models.Database;
 
 namespace CocomeStore.Areas.Identity.Pages.Account
 {
@@ -107,7 +108,7 @@ namespace CocomeStore.Areas.Identity.Pages.Account
                 {
                     await _userManager.AddToRoleAsync(user, "Kassierer");
                 }
-                await _userManager.AddClaimsAsync(user, await _claimManager.GetClaims(user));
+                await _userManager.AddClaimsAsync(user, await _claimManager.GetClaimsAsync(user));
 
                 if (result.Succeeded)
                 {

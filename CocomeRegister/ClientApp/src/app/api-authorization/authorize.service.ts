@@ -51,13 +51,13 @@ export class AuthorizeService {
   }
 
   public isManager(): Observable<boolean> {
-    return this.getUser().pipe(map(u => 
-      u && u.role && u.store && u.role.includes(AuthRoles.Manager) 
+    return this.getUser().pipe(map(u =>
+      u && u.role && u.store && u.role.includes(AuthRoles.Manager)
     ));
   }
 
   public isCashier(): Observable<boolean> {
-    return this.getUser().pipe(map(u => 
+    return this.getUser().pipe(map(u =>
       u && u.role && u.store && u.role.includes(AuthRoles.Cashier))
     );
   }

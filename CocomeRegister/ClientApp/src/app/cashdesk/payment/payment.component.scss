@@ -2,7 +2,6 @@
 
 .payment {
     @include flex-center();
-    position: relative;
 
     h1 {
         font-size: $headline-l;
@@ -10,10 +9,11 @@
     }
 
     &__overlay {
-        @include overlay();
+        @include overlay(30);
         @include flex-center();
         background-color: rgba(black, 0.5);
         text-align: center;
+        overflow: hidden;
 
         &-content {
             @include flex-center($direction: column);
@@ -39,6 +39,10 @@
                 border-style: solid;
                 padding: $spacing-xs;
                 text-align: center;
+
+                &.form-error {
+                    border-color: red;
+                }
             }
         }
     }

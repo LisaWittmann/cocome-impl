@@ -1,20 +1,20 @@
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace CocomeStore.Controllers
 {
+    /// <summary>
+    /// class <c>OidcConfigurationController</c> provides the identity servers
+    /// configuration
+    /// </summary>
     public class OidcConfigurationController : Controller
     {
-        private readonly ILogger<OidcConfigurationController> _logger;
 
         public OidcConfigurationController(
-            IClientRequestParametersProvider clientRequestParametersProvider,
-            ILogger<OidcConfigurationController> logger
+            IClientRequestParametersProvider clientRequestParametersProvider
         )
         {
             ClientRequestParametersProvider = clientRequestParametersProvider;
-            _logger = logger;
         }
 
         public IClientRequestParametersProvider ClientRequestParametersProvider { get; }

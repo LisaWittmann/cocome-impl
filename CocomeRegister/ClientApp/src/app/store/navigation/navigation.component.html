@@ -1,14 +1,21 @@
-<div class="navigation">
+<div class="navigation--sub">
     <div class="container">
         <nav>
-            <a [routerLink]="'/filiale/home'">Dashboard</a>
+            <a [routerLink]="'/filiale/home'">Startseite</a>
             <ul>
                 <li><a [routerLink]="'/filiale/sortiment'">Produkte</a></li>
                 <li><a [routerLink]="'/filiale/bestellungen'">Bestellungen</a></li>
-                <li><a [routerLink]="'/filiale/berichte'">Reports</a></li>
+                <li><a [routerLink]="'/filiale/berichte'">Berichte</a></li>
                 <li>
-                    <button class="card__button" (click)="openShoppingCard()">
-                        <img src="assets/svg/shopping-basket-solid.svg">
+                    <button 
+                        name="Warenkorb öffnen"
+                        class="card__button"
+                        (click)="openShoppingCard()"
+                    >
+                        <img 
+                            src="assets/svg/shopping-basket-solid.svg"
+                            alt="Warenkorb"
+                        >
                         <span class="card__label" *ngIf="shoppingCardItems > 0">
                             {{ shoppingCardItems }}
                         </span>

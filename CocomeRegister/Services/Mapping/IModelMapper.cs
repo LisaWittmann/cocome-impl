@@ -2,21 +2,22 @@
 using CocomeStore.Models;
 using CocomeStore.Models.Transfer;
 
-namespace CocomeStore.Services
+namespace CocomeStore.Services.Mapping
 {
     public interface IModelMapper
     {
         Product CreateProduct(ProductTO productTO);
         Order CreateOrder(OrderTO orderTO);
         OrderElement CreateOrderElement(Order order, OrderElementTO orderElementTO);
+        Sale CreateSale(SaleTO saleTO);
         SaleElement CreateSaleElement(Sale sale, int storeId, SaleElementTO saleElementTO);
-        StockItem CreateStockItem(StockItemTO stockItemTO);
 
         ProductTO CreateProductTO(Product product);
         OrderElementTO CreateOrderElementTO(OrderElement orderElement);
         OrderTO CreateOrderTO(Order order, IEnumerable<OrderElement> orderElements);
+        ExchangeElementTO CreateExchangeElementTO(ExchangeElement exchangeElement);
+        StockExchangeTO CreateStockExchangeTO(StockExchange stockExchange, IEnumerable<ExchangeElement> exchangeElements);
 
         void UpdateProduct(Product product, ProductTO productTO);
-        void UpdateStockItem(StockItem stockItem, StockItemTO stockItemTO);
     }
 }

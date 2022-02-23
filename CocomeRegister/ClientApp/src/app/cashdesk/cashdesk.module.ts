@@ -12,15 +12,11 @@ import { CashDeskShoppingCardComponent } from './shopping-card/shopping-card.com
 import { ProductListComponent } from '../shared/product-list/product-list.component';
 import { ProductCardComponent } from '../shared/product-card/product-card.component';
 import { CashDeskStateService } from './cashdesk.service';
-import { StoreStateService } from '../store/store.service';
-
-import { AuthorizeService } from '../api-authorization/authorize.service';
-import { CashDeskGuard } from '../api-authorization/authorize.guard';
 
 export const cashdeskRoutes: Routes = [
-  { path: 'home', component: CashDeskHomeComponent, canActivate: [CashDeskGuard] },
-  { path: 'checkout', component: CashDeskCheckoutComponent, canActivate: [CashDeskGuard] },
-  { path: 'payment', component: CashDeskPaymentComponent, canActivate: [CashDeskGuard] },
+  { path: 'home', component: CashDeskHomeComponent },
+  { path: 'checkout', component: CashDeskCheckoutComponent },
+  { path: 'payment', component: CashDeskPaymentComponent },
 ];
 
 @NgModule({
@@ -39,11 +35,7 @@ export const cashdeskRoutes: Routes = [
     ProductCardComponent,
   ],
   exports: [CashDeskComponent],
-  providers: [
-    CashDeskStateService,
-    StoreStateService,
-    AuthorizeService
-  ],
+  providers: [CashDeskStateService],
   bootstrap: [CashDeskComponent]
 })
 export class CashDeskModule { }
