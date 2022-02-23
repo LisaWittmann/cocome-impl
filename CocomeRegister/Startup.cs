@@ -4,10 +4,10 @@ using CocomeStore.Models.Authorization;
 using CocomeStore.Models.Database;
 using CocomeStore.Services;
 using CocomeStore.Services.Authorization;
+using CocomeStore.Services.Bank;
 using CocomeStore.Services.Mapping;
 using CocomeStore.Services.Pagination;
-using CocomeStore.Services.Documents;
-using CocomeStore.Services.Statsistics;
+using CocomeStore.Services.Printer;
 using DinkToPdf;
 using DinkToPdf.Contracts;
 using Microsoft.AspNetCore.Authentication;
@@ -74,7 +74,8 @@ namespace CocomeRegister
             services.AddTransient<IStoreService, StoreService>();
             services.AddTransient<IModelMapper, ModelMapper>();
             services.AddTransient<IExchangeService, ExchangeService>();
-            services.AddTransient<IDatabaseStatistics, DatabaseStatistics>();
+            services.AddTransient<IReportService, ReportService>();
+            services.AddTransient<IBankService, BankService>();
             services.AddTransient<ClaimManager>();
 
             services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
@@ -94,7 +95,7 @@ namespace CocomeRegister
                     .Build();
                 return engine;
             });
-            services.AddScoped<IDocumentService, DocumentService>();
+            services.AddScoped<IPrinterService, PrinterService>();
 
             services.AddHttpContextAccessor();
             services.AddControllersWithViews();

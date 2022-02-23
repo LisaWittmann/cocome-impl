@@ -58,7 +58,6 @@
     <None Remove="Microsoft.AspNetCore.SpaProxy" />
     <None Remove="Services\Authorization\" />
     <None Remove="Services\Mapping\" />
-    <None Remove="Services\Statistics\" />
     <None Remove="Services\CashDesk\Printer\" />
     <None Remove="Services\Pagination\" />
     <None Remove="DinkToPdf" />
@@ -73,6 +72,7 @@
     <None Remove="Haukcode.DinkToPdf" />
     <None Remove="ClientApp\src\app\store\order-detail\order-detail.component.scss" />
     <None Remove="ClientApp\src\app\store\order-detail\order-detail.component.scss" />
+    <None Remove="Services\Bank\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\" />
@@ -84,10 +84,10 @@
     <Folder Include="wwwroot\css\" />
     <Folder Include="Services\Authorization\" />
     <Folder Include="Services\Mapping\" />
-    <Folder Include="Services\Statistics\" />
     <Folder Include="Services\Pagination\" />
-    <Folder Include="Services\Documents\" />
+    <Folder Include="Services\Printer\" />
     <Folder Include="Templates\" />
+    <Folder Include="Services\Bank\" />
   </ItemGroup>
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
     <!-- Ensure Node.js is installed -->

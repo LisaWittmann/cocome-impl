@@ -21,20 +21,20 @@ namespace CocomeStore.Controllers
     public class StoreController : Controller
     {
         private readonly ILogger<StoreController> _logger;
-        private readonly IStoreService _service;
+        private readonly IStoreService _storeService;
         private readonly IExchangeService _exchangeService;
-        private readonly IDatabaseStatistics _statistics;
+        private readonly IReportService _reportService;
 
         public StoreController(
             ILogger<StoreController> logger,
-            IStoreService service,
+            IStoreService storeService,
             IExchangeService exchangeService,
-            IDatabaseStatistics statistics
+            IReportService reportService
         )
         {
-            _service = service;
             _logger = logger;
-            _statistics = statistics;
+            _storeService = storeService;
+            _reportService = reportService;
             _exchangeService = exchangeService;
         }
 
@@ -51,7 +51,7 @@ namespace CocomeStore.Controllers
             try
             {
                 _logger.LogInformation("requesting store by id {}", id);
-                return _service.GetStore(id);
+                return _storeService.GetStore(id);
             }
             catch(EntityNotFoundException ex)
             {
@@ -66,15 +66,15 @@ namespace CocomeStore.Controllers
         /// </summary>
         /// <param name="id">unique identifier of the store</param>
         /// <returns>
-        /// profit statistics or not found if the store entry was not found
+        /// profit report or not found if the store entry was not found
         /// </returns>
         [HttpGet]
         [Route("profit/{id}")]
-        public ActionResult<IEnumerable<Statistic>> GetProfit(int id)
+        public ActionResult<IEnumerable<Report>> GetProfit(int id)
         {
             try
             {
-                return _statistics.GetStoreProfit(id).ToArray();
+                return _reportService.GetStoreProfit(id).ToArray();
             }
             catch (EntityNotFoundException ex)
             {
@@ -90,15 +90,15 @@ namespace CocomeStore.Controllers
         /// <param name="id">unique identitfier of the store</param>
         /// <param name="year">year to filter profit for</param>
         /// <returns>
-        /// statistic object containing the years monthly profits
+        /// report object containing the years monthly profits
         /// </returns>
         [HttpGet]
         [Route("profit/{id}/{year}")]
-        public ActionResult<Statistic> GetProfit(int id, int year)
+        public ActionResult<Report> GetProfit(int id, int year)
         {
             try
             {
-                return _statistics.GetProfitOfYear(id, year);
+                return _reportService.GetProfitOfYear(id, year);
             }
             catch (EntityNotFoundException ex)
             {
@@ -122,7 +122,7 @@ namespace CocomeStore.Controllers
             {
                 return _exchangeService.GetLowStockItems(id).ToArray();
             }
-            return _service.GetInventory(id).ToArray();
+            return _storeService.GetInventory(id).ToArray();
             
         }
 
@@ -140,7 +140,7 @@ namespace CocomeStore.Controllers
         public ActionResult<IEnumerable<OrderTO>> GetOrders(int id)
         {
             _logger.LogInformation("requesting orders of store {}", id);
-            return _service.GetOrders(id).ToArray();
+            return _storeService.GetOrders(id).ToArray();
         }
 
         /// <summary>
@@ -162,8 +162,8 @@ namespace CocomeStore.Controllers
             try
             {
                 _logger.LogInformation("place new order for store {}", id);
-                _service.PlaceOrder(id, elements);
-                return _service.GetOrders(id).ToArray();
+                _storeService.PlaceOrder(id, elements);
+                return _storeService.GetOrders(id).ToArray();
             }
             catch (Exception ex)
             {
@@ -188,8 +188,8 @@ namespace CocomeStore.Controllers
             try
             {
                 _logger.LogInformation("close order with id {} for store {}", orderTO.Id, id);
-                _service.CloseOrder(id, orderTO.Id);
-                return _service.GetOrders(id).ToArray();
+                _storeService.CloseOrder(id, orderTO.Id);
+                return _storeService.GetOrders(id).ToArray();
             }
             catch (EntityNotFoundException ex)
             {
@@ -223,7 +223,7 @@ namespace CocomeStore.Controllers
             try
             {
                 _logger.LogInformation("updating product {} from store {}", productTO.Name, id);
-                _service.UpdateProduct(id, productTO);
+                _storeService.UpdateProduct(id, productTO);
             }
             catch (CrossAccessException ex)
             {
@@ -235,7 +235,7 @@ namespace CocomeStore.Controllers
                 _logger.LogError(ex.Message);
                 return BadRequest();
             }
-            return _service.GetInventory(id).ToArray();
+            return _storeService.GetInventory(id).ToArray();
         }
 
         /// <summary>
@@ -255,7 +255,7 @@ namespace CocomeStore.Controllers
             try
             {
                 _logger.LogInformation("requesting product {} of store {}", productId, id);
-                return _service.GetProduct(id, productId);
+                return _storeService.GetProduct(id, productId);
             }
             catch (CrossAccessException ex)
             {

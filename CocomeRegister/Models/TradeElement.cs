@@ -6,7 +6,7 @@ namespace CocomeStore.Models
     /// class <c>TradeElement</c> defines the stucture of an object
     /// for a <see cref="Trade{T}"/>
     /// </summary>
-    public class TradeElement
+    public abstract class TradeElement
     {
         [ScaffoldColumn(false)]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

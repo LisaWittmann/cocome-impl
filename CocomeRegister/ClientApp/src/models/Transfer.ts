@@ -1,5 +1,5 @@
 
-export interface Statistic {
+export interface Report {
     label: string;
     dataset: number[];
 }

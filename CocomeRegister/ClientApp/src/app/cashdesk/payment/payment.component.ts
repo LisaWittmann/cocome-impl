@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { PaymentMethod } from 'src/models/Sale';
+import { CreditCard, PaymentMethod } from 'src/models/Sale';
 import { CashDeskStateService } from '../cashdesk.service';
 
 @Component({
@@ -10,8 +10,13 @@ import { CashDeskStateService } from '../cashdesk.service';
 })
 export class CashDeskPaymentComponent {
   expressMode: boolean;
-  paymentMethod: PaymentMethod | undefined = undefined;
+
+  paymentMethod: PaymentMethod = undefined;
+  creditCard = {} as CreditCard;
+  
   cardPaymentAccepted = false;
+  cardPaymentError = false;
+
   totalPrice = 0;
   handedCash = 0;
 
@@ -56,9 +61,21 @@ export class CashDeskPaymentComponent {
 
   resetPaymentMethod() {
     this.paymentMethod = undefined;
+    this.creditCard = {} as CreditCard;
+    this.cardPaymentError = false;
   }
 
   confirmPayment() {
+    this.cashdeskState.confirmPayment(this.creditCard).subscribe(() => {
+      this.cardPaymentError = false;
+      this.cardPaymentAccepted = true;
+    }, () => {
+      this.cardPaymentAccepted = false;
+      this.cardPaymentError = true;
+    });
+  }
+
+  confirmCheckout() {
     this.cashdeskState.confirmCheckout(
       this.paymentMethod,
       this.cardPayment ? this.totalPrice : this.handedCash

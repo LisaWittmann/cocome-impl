@@ -142,6 +142,22 @@ namespace CocomeStore.Services.Mapping
         }
 
         /// <summary>
+        /// method <c>CreateSale</c> creates a new sale based on hte given data
+        /// of a sale transfer object
+        /// </summary>
+        /// <param name="saleTO">transfer object containing the data</param>
+        /// <returns>new sale instance</returns>
+        public Sale CreateSale(SaleTO saleTO)
+        {
+            return new()
+            {
+                StoreId = saleTO.Store.Id,
+                TimeStamp = saleTO.TimeStamp,
+                PaymentMethod = saleTO.PaymentMethod
+            };
+        }
+
+        /// <summary>
         /// method <c>CreateSaleElement</c> creates a new sale element based on
         /// the given data of a sale transfer object, the related sale and the
         /// related storeId

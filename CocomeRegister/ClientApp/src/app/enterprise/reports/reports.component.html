@@ -15,7 +15,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let data of salesStatistic">
+                    <tr *ngFor="let data of salesReport">
                         <td>{{ data.label }}</td>
                         <td>{{ getAverage(data).toFixed(2)}} €</td>
                         <td>{{ getSum(data).toFixed(2)}} €</td>
@@ -26,7 +26,7 @@
         <section>
             <h2>Lieferzeiten</h2>
             <canvas id="deliveryChart">{{deliveryChart}}</canvas>
-            <table *ngIf="deliveryStatistic.length" class="legend">
+            <table *ngIf="deliveryReport.length" class="legend">
                 <thead>
                     <tr>
                         <td>Lieferant</td>
@@ -35,7 +35,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let data of deliveryStatistic">
+                    <tr *ngFor="let data of deliveryReport">
                         <td>{{ data.label }}</td>
                         <td>{{ data.dataset.length }}</td>
                         <td>{{ getAverage(data).toFixed(2) }} Tage</td>

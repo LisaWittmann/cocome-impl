@@ -2,7 +2,7 @@ import { AfterViewInit, Component } from '@angular/core';
 import { Chart } from 'chart.js';
 import { Order } from 'src/models/Order';
 import { StockItem, Store } from 'src/models/Store';
-import { Statistic } from 'src/models/Transfer';
+import { Report } from 'src/models/Transfer';
 import { monthValues } from 'src/services/Month';
 
 import { StoreStateService } from '../store.service';
@@ -18,7 +18,7 @@ export class StoreHomeComponent implements AfterViewInit {
 
   chart: HTMLCanvasElement;
   salesChart: Chart;
-  statistic: Statistic;
+  report: Report;
 
   constructor(
     private storeStateService: StoreStateService) {
@@ -48,8 +48,8 @@ export class StoreHomeComponent implements AfterViewInit {
       type: 'line',
       data: {
         datasets: [{
-          label: this.statistic.label,
-          data: this.statistic.dataset
+          label: this.report.label,
+          data: this.report.dataset
         }],
         labels: monthValues,
       },
@@ -59,7 +59,7 @@ export class StoreHomeComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     this.storeStateService.getLatestProfits().subscribe(profits => {
-      this.statistic = profits;
+      this.report = profits;
       this.initChart();
     });
   }

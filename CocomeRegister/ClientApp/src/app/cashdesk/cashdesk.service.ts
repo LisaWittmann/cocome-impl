@@ -2,20 +2,18 @@ import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Product } from 'src/models/Product';
-import { Sale, SaleElement, PaymentMethod } from 'src/models/Sale';
+import { Sale, SaleElement, PaymentMethod, CreditCard } from 'src/models/Sale';
 import { PagedResponse} from 'src/models/Transfer';
 import { StateService } from 'src/services/StateService';
 import { AuthorizeService } from '../api-authorization/authorize.service';
 
 interface CashDeskState {
-    id: number;
     storeId: number;
     expressMode: boolean;
     shoppingCard: SaleElement[];
 }
 
 const initialState: CashDeskState = {
-    id: 1,
     storeId: undefined,
     expressMode: false,
     shoppingCard: [],
@@ -28,6 +26,7 @@ const expressModeMaxItems = 8;
 export class CashDeskStateService extends StateService<CashDeskState> {
     expressMode$: Observable<boolean> = this.select(state => state.expressMode);
     shoppingCard$: Observable<SaleElement[]> = this.select(state => state.shoppingCard);
+    lastSales: Sale[] = [];
     api: string;
 
     constructor(
@@ -40,26 +39,6 @@ export class CashDeskStateService extends StateService<CashDeskState> {
         this.authService.getUser().subscribe(user => {
             this.setState({ storeId: Number(user.store) });
         });
-        if (this.state.id) {
-            this.fetchExpressMode();
-        }
-    }
-
-    private fetchExpressMode() {
-        this.http.get<boolean>(
-            `${this.api}/express/${this.state.id}`
-        ).subscribe(result => {
-            this.setState({ expressMode: result});
-        }, error => console.error(error));
-    }
-
-    resetExpressMode() {
-        this.http.post<boolean>(
-            `${this.api}/update-express/${this.state.id}`,
-            false
-        ).subscribe(result => {
-            this.setState({ expressMode: result });
-        }, error => console.error(error));
     }
 
     /**
@@ -98,6 +77,10 @@ export class CashDeskStateService extends StateService<CashDeskState> {
         )});
     }
 
+    confirmPayment(creditCard: CreditCard) {
+        return this.http.post(`${this.api}/checkout/card`, creditCard)
+    }
+
     /**
      * request confirmation for new sale from shopping card elements
      * @param paymentMethod confiremed payment method of the customer
@@ -108,6 +91,7 @@ export class CashDeskStateService extends StateService<CashDeskState> {
         const sale: Sale = {
             saleElements: this.state.shoppingCard,
             paymentMethod: paymentMethod,
+            timeStamp: new Date(Date.now()),
             total: this.getTotalPrice(),
             payed: payed
         };
@@ -116,6 +100,7 @@ export class CashDeskStateService extends StateService<CashDeskState> {
             { responseType: 'blob' }
         ).toPromise().then(response => {
             this.setState({ shoppingCard: [] });
+            this.updateLastSales(sale);
             return response;
         });
     }
@@ -188,5 +173,23 @@ export class CashDeskStateService extends StateService<CashDeskState> {
      */
     getTotalPrice() {
         return this.getCardSum() - this.getTotalDiscount();
+    }
+
+    resetExpressMode() {
+        this.setState({ expressMode: false });
+    }
+
+    updateLastSales(sale: Sale) {
+        const currentTime = new Date(Date.now()).getTime();
+        this.lastSales.push(sale);
+        this.lastSales = this.lastSales.filter(sale => 
+            ((currentTime - sale.timeStamp.getTime()) / 1000 / 60) < 60
+        );
+        const validSales = this.lastSales.filter(value => 
+            value.saleElements.length < expressModeMaxItems &&
+            value.paymentMethod == PaymentMethod.CASH
+        );
+        console.log(this.lastSales);
+        this.setState({ expressMode: (validSales.length * 2) > this.lastSales.length });
     }
 }

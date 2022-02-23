@@ -21,18 +21,18 @@ namespace CocomeStore.Controllers
     public class EnterpriseController : Controller
     {
         private readonly ILogger<EnterpriseController> _logger;
-        private readonly IEnterpriseService _service;
-        private readonly IDatabaseStatistics _statistics;
+        private readonly IEnterpriseService _enterpriseService;
+        private readonly IReportService _reportService;
 
         public EnterpriseController(
             ILogger<EnterpriseController> logger,
-            IEnterpriseService service,
-            IDatabaseStatistics statistics
+            IReportService reportService,
+            IEnterpriseService enterpriseService
         )
         {
             _logger = logger;
-            _service = service;
-            _statistics = statistics;
+            _reportService = reportService;
+            _enterpriseService = enterpriseService;
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace CocomeStore.Controllers
         [Route("orders")]
         public ActionResult<IEnumerable<OrderTO>> GetAllOrders()
         {
-            return _service.GetAllOrders().ToArray();
+            return _enterpriseService.GetAllOrders().ToArray();
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace CocomeStore.Controllers
         [Route("stores")]
         public ActionResult<IEnumerable<Store>> GetAllStores()
         {
-            return _service.GetAllStores().ToArray();
+            return _enterpriseService.GetAllStores().ToArray();
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace CocomeStore.Controllers
         [Route("provider")]
         public ActionResult<IEnumerable<Provider>> GetAllProvider()
         {
-            return _service.GetAllProvider().ToArray();
+            return _enterpriseService.GetAllProvider().ToArray();
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace CocomeStore.Controllers
         [Route("products")]
         public ActionResult<IEnumerable<ProductTO>> GetAllProducts()
         {
-            return _service.GetAllProducts().ToArray();
+            return _enterpriseService.GetAllProducts().ToArray();
         }
 
         /// <summary>
@@ -103,7 +103,7 @@ namespace CocomeStore.Controllers
         [Route("product/{id}/stores")]
         public ActionResult<IEnumerable<Store>> GetStores(int id)
         {
-            return _service.GetStores(id).ToArray();
+            return _enterpriseService.GetStores(id).ToArray();
         }
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace CocomeStore.Controllers
         {
             try
             {
-                return _service.CreateProduct(product);
+                return _enterpriseService.CreateProduct(product);
             }
             catch (Exception ex)
             {
@@ -145,7 +145,7 @@ namespace CocomeStore.Controllers
         {
             try
             {
-                return _service.UpdateProduct(id, product);
+                return _enterpriseService.UpdateProduct(id, product);
             }
             catch (EntityNotFoundException ex)
             {
@@ -171,7 +171,7 @@ namespace CocomeStore.Controllers
         {
             try
             {
-                return _service.CreateStore(store);
+                return _enterpriseService.CreateStore(store);
             }
             catch (Exception ex)
             {
@@ -196,7 +196,7 @@ namespace CocomeStore.Controllers
         {
             try
             {
-                return _service.UpdateStore(id, store);
+                return _enterpriseService.UpdateStore(id, store);
             }
             catch (EntityNotFoundException ex)
             {
@@ -224,7 +224,7 @@ namespace CocomeStore.Controllers
         {
             try
             {
-                return _service.CreateProvider(provider);
+                return _enterpriseService.CreateProvider(provider);
             }
             catch (Exception ex)
             {
@@ -249,7 +249,7 @@ namespace CocomeStore.Controllers
         {
             try
             {
-                return _service.UpdateProvider(id, provider);
+                return _enterpriseService.UpdateProvider(id, provider);
             }
             catch (EntityNotFoundException ex)
             {
@@ -281,8 +281,8 @@ namespace CocomeStore.Controllers
             {
                 _logger.LogInformation(
                     "adding product {} to store {}", product.Id, storeId);
-                _service.AddToStock(storeId, product.Id);
-                return _service.GetStores(product.Id).ToArray();
+                _enterpriseService.AddToStock(storeId, product.Id);
+                return _enterpriseService.GetStores(product.Id).ToArray();
             }
             catch (EntityNotFoundException ex)
             {
@@ -292,29 +292,29 @@ namespace CocomeStore.Controllers
         }
 
         /// <summary>
-        /// method <c>GetStoreStatistic</c> is an http get endpoint to request
-        /// a statistic of all stores current years profits
+        /// method <c>GetStoreReports</c> is an http get endpoint to request
+        /// a report of all stores current years profits
         /// </summary>
-        /// <returns>list of profit statistics labeled with store name</returns>
+        /// <returns>list of profit reports labeled with store name</returns>
         [HttpGet]
         [Route("store-reports")]
-        public IEnumerable<Statistic> GetStoreStatistic()
+        public IEnumerable<Report> GetStoreReports()
         {
-            return _statistics.GetLatestProfit().ToArray();
+            return _reportService.GetLatestProfit().ToArray();
         }
 
         /// <summary>
-        /// method <c>GetProviderStatistics</c> is a http get endpoint to
-        /// request all providers delivery statistics
+        /// method <c>GetDeliveryReports</c> is a http get endpoint to
+        /// request all providers delivery reports
         /// </summary>
         /// <returns>
-        /// array containing the delivery statistic of each provider in database
+        /// array containing the delivery report of each provider in database
         /// </returns>
         [HttpGet]
         [Route("provider-reports")]
-        public IEnumerable<Statistic> GetProvidersStatistic()
+        public IEnumerable<Report> GetDeliveryReports()
         {
-            return _statistics.GetProvidersStatistic().ToArray();
+            return _reportService.GetGeneralDeliveryReports().ToArray();
         }
     }
 }

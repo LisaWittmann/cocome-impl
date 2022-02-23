@@ -9,6 +9,7 @@ namespace CocomeStore.Services.Mapping
         Product CreateProduct(ProductTO productTO);
         Order CreateOrder(OrderTO orderTO);
         OrderElement CreateOrderElement(Order order, OrderElementTO orderElementTO);
+        Sale CreateSale(SaleTO saleTO);
         SaleElement CreateSaleElement(Sale sale, int storeId, SaleElementTO saleElementTO);
 
         ProductTO CreateProductTO(Product product);

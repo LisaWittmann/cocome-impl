@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { StateService } from 'src/services/StateService';
 import { Product } from 'src/models/Product';
 import { Provider } from 'src/models/Provider';
-import { Statistic } from 'src/models/Transfer';
+import { Report } from 'src/models/Transfer';
 
 interface EnterpriseState {
     products: Product[];
@@ -192,21 +192,21 @@ export class EnterpriseStateService extends StateService<EnterpriseState> {
     }
 
     /**
-     * request delivery statistics
+     * request delivery report
      * @returns observable http response
      */
-    getDeliveryStatistic() {
-        return this.http.get<Statistic[]>(
+    getDeliveryReport() {
+        return this.http.get<Report[]>(
             `${this.api}/provider-reports`
         );
     }
 
     /**
-     * request profut statistics for current year
+     * request profit report for current year
      * @returns observable http response
      */
-    getProfitStatistic() {
-        return this.http.get<Statistic[]>(
+    getProfitReport() {
+        return this.http.get<Report[]>(
             `${this.api}/store-reports`
         );
     }

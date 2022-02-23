@@ -3,6 +3,12 @@ import { Product } from './Product';
 export enum PaymentMethod {
     CASH, CARD
 }
+
+export interface CreditCard {
+    number: string;
+    pin: number;
+}
+
 export interface SaleElement {
     product: Product;
     amount: number;
@@ -12,6 +18,7 @@ export interface SaleElement {
 export interface Sale {
     saleElements: SaleElement[];
     paymentMethod: PaymentMethod;
+    timeStamp: Date;
     total: number;
     payed: number;
 }
