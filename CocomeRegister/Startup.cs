@@ -4,6 +4,7 @@ using CocomeStore.Models.Authorization;
 using CocomeStore.Models.Database;
 using CocomeStore.Services;
 using CocomeStore.Services.Authorization;
+using CocomeStore.Services.Bank;
 using CocomeStore.Services.Mapping;
 using CocomeStore.Services.Pagination;
 using CocomeStore.Services.Printer;
@@ -74,6 +75,7 @@ namespace CocomeRegister
             services.AddTransient<IModelMapper, ModelMapper>();
             services.AddTransient<IExchangeService, ExchangeService>();
             services.AddTransient<IReportService, ReportService>();
+            services.AddTransient<IBankService, BankService>();
             services.AddTransient<ClaimManager>();
 
             services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));

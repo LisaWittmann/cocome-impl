@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Product } from 'src/models/Product';
-import { Sale, SaleElement, PaymentMethod } from 'src/models/Sale';
+import { Sale, SaleElement, PaymentMethod, CreditCard } from 'src/models/Sale';
 import { PagedResponse} from 'src/models/Transfer';
 import { StateService } from 'src/services/StateService';
 import { AuthorizeService } from '../api-authorization/authorize.service';
@@ -75,6 +75,10 @@ export class CashDeskStateService extends StateService<CashDeskState> {
         this.setState({ shoppingCard: this.state.shoppingCard.filter(
             cardItem => cardItem.product.id !== product.id
         )});
+    }
+
+    confirmPayment(creditCard: CreditCard) {
+        return this.http.post(`${this.api}/checkout/card`, creditCard)
     }
 
     /**

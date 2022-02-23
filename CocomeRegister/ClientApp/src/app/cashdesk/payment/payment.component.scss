@@ -39,6 +39,10 @@
                 border-style: solid;
                 padding: $spacing-xs;
                 text-align: center;
+
+                &.form-error {
+                    border-color: red;
+                }
             }
         }
     }

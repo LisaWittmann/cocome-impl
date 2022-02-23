@@ -1,13 +1,12 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using CocomeStore.Exceptions;
 using CocomeStore.Models;
 using CocomeStore.Models.Transfer;
 using CocomeStore.Models.Transfer.Pagination;
 using CocomeStore.Services;
+using CocomeStore.Services.Bank;
 using CocomeStore.Services.Pagination;
-using CocomeStore.Services.Printer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -25,6 +24,7 @@ namespace CocomeStore.Controllers
     {
         private readonly ILogger<CashDeskController> _logger;
         private readonly IUriService _uriService;
+        private readonly IBankService _bankService;
         private readonly IPrinterService _printerService;
         private readonly IExchangeService _exchangeService;
         private readonly ICashDeskService _cashDeskService;
@@ -32,37 +32,18 @@ namespace CocomeStore.Controllers
         public CashDeskController(
             ILogger<CashDeskController> logger,
             IUriService uriService,
+            IBankService bankService,
             ICashDeskService service,
             IExchangeService exchangeService,
             IPrinterService printerService
         )
         {
             _logger = logger;
+            _bankService = bankService;
             _cashDeskService = service;
             _uriService = uriService;
             _exchangeService = exchangeService;
             _printerService = printerService;
-        }
-
-        /// <summary>
-        /// method <c>GetProduct</c> is an http get endpoint to request
-        /// a product in a stores stock by its id
-        /// </summary>
-        /// <param name="storeId">unique identifier of the store</param>
-        /// <param name="productId">unique identifier of the product</param>
-        /// <returns></returns>
-        [HttpGet]
-        [Route("products/{storeId}/{productId}")]
-        public ActionResult<Product> GetProduct(int storeId, int productId)
-        {
-            var product = _cashDeskService.GetAvailableProducts(storeId)
-                .Where(product => product.Id == productId)
-                .SingleOrDefault();
-            if (product == null)
-            {
-                return NotFound();
-            }
-            return product;
         }
 
         /// <summary>
@@ -99,6 +80,27 @@ namespace CocomeStore.Controllers
             }
             return responseBuilder.CreatePagedResponse(
                 data, filter, _uriService, route);
+        }
+
+        /// <summary>
+        /// method <c>GetProduct</c> is an http get endpoint to request
+        /// a product in a stores stock by its id
+        /// </summary>
+        /// <param name="storeId">unique identifier of the store</param>
+        /// <param name="productId">unique identifier of the product</param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("products/{storeId}/{productId}")]
+        public ActionResult<Product> GetProduct(int storeId, int productId)
+        {
+            var product = _cashDeskService.GetAvailableProducts(storeId)
+                .Where(product => product.Id == productId)
+                .SingleOrDefault();
+            if (product == null)
+            {
+                return NotFound();
+            }
+            return product;
         }
 
         /// <summary>
@@ -144,5 +146,26 @@ namespace CocomeStore.Controllers
             
         }
 
+        /// <summary>
+        /// method <c>ConfirmPaymentAsync</c> is an http post endpoint to confirm
+        /// a card payment
+        /// </summary>
+        /// <param name="creditCardTO">transfer object containing the credit card information</param>
+        /// <returns>status ok if payment was accepted or bad request if an error accurs</returns>
+        [HttpPost]
+        [Route("checkout/card")]
+        public async Task<IActionResult> ConfirmPaymentAsync(CreditCardTO creditCardTO)
+        {
+            try
+            {
+                await _bankService.ConfirmPaymentAsync(creditCardTO);
+                return Ok();
+            }
+            catch (InvalidPaymentException ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest();
+            }
+        }
     }
 }

@@ -45,6 +45,10 @@ section {
   color: $color-light-green;
 }
 
+.error {
+  color: red;
+}
+
 .disabled {
   pointer-events: none;
   opacity: 0.4;
