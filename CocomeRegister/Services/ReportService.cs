@@ -7,17 +7,17 @@ using Microsoft.EntityFrameworkCore;
 using CocomeStore.Exceptions;
 using CocomeStore.Models.Database;
 
-namespace CocomeStore.Services.Statsistics
+namespace CocomeStore.Services
 {
     /// <summary>
-    /// class <c>DatabaseStatistics</c> implements <see cref="IDatabaseStatistics"/>
-    /// and provides functionality to create statistics of applications database
+    /// class <c>ReportService</c> implements <see cref="IReportService"/>
+    /// and provides functionality to create reports of applications database
     /// </summary>
-    public class DatabaseStatistics : IDatabaseStatistics
+    public class ReportService : IReportService
     {
         private readonly CocomeDbContext _context;
 
-        public DatabaseStatistics(CocomeDbContext context)
+        public ReportService(CocomeDbContext context)
         {
             _context = context;
         }
@@ -59,14 +59,14 @@ namespace CocomeStore.Services.Statsistics
         /// </summary>
         /// <returns>
         /// list of all profits mapped to the store in current year in a
-        /// statistic object
+        /// report object
         /// </returns>
-        public IEnumerable<Statistic> GetLatestProfit()
+        public IEnumerable<Report> GetLatestProfit()
         {
-            var profits = new List<Statistic>();
+            var profits = new List<Report>();
             foreach(var store in _context.Stores)
             {
-                profits.Add(new Statistic()
+                profits.Add(new Report()
                 {
                     Label = store.Name,
                     Dataset = GetProfitOfYear(store.Id, DateTime.Now.Year).Dataset
@@ -84,51 +84,51 @@ namespace CocomeStore.Services.Statsistics
         /// </param>
         /// <param name="year">year to filter sales for</param>
         /// <returns>
-        /// statistic object containing the year as label and the monthly
+        /// report object containing the year as label and the monthly
         /// profit of the requested year as data
         /// </returns>
-        public Statistic GetProfitOfYear(int storeId, int year)
+        public Report GetProfitOfYear(int storeId, int year)
         {
             var dataset = new List<double>();
             for (int month = 1; month <= 12; month++)
             {
                 dataset.Add(GetProfitOfMonth(storeId, month, year));
             }
-            return new Statistic { Label = year + "", Dataset = dataset.ToArray() };
+            return new Report { Label = year + "", Dataset = dataset.ToArray() };
         }
 
         /// <summary>
-        /// method <c>GetProvidersStatistic</c> calculates the delivery times
+        /// method <c>GetGeneralDeliveryReports</c> calculates the delivery times
         /// of each provider in the database
         /// </summary>
         /// <returns>
-        /// list of statistics containing each provider in the database and his
-        /// delivery statistic
+        /// list of reports containing each provider in the database and his
+        /// delivery report
         /// </returns>
-        public IEnumerable<Statistic> GetProvidersStatistic()
+        public IEnumerable<Report> GetGeneralDeliveryReports()
         {
-            var statistics = new List<Statistic>();
+            var reports = new List<Report>();
             foreach(var provider in _context.Providers)
             {
-                statistics.Add(GetProviderStatistic(provider.Id));
+                reports.Add(GetDeliveryReport(provider.Id));
             }
-            return statistics;
+            return reports;
         }
 
         /// <summary>
-        /// method <c>GetProviderStatistic</c> calculates the delivery times of
+        /// method <c>GetDeliveryReport</c> calculates the delivery times of
         /// the given provider
         /// </summary>
         /// <param name="providerId">
         /// unique identifier of the provider
         /// </param>
         /// <returns>
-        /// statistic object containing the providers name as label and the
+        /// report object containing the providers name as label and the
         /// delivery time in days for each registered and delivered order to the
         /// provider in the database
         /// </returns>
         /// <exception cref="EntityNotFoundException"></exception>
-        public Statistic GetProviderStatistic(int providerId)
+        public Report GetDeliveryReport(int providerId)
         {
             Provider provider = _context.Providers.Find(providerId);
             if (provider == null)
@@ -155,9 +155,9 @@ namespace CocomeStore.Services.Statsistics
         /// unique identifier of the store
         /// </param>
         /// <returns>
-        /// array of statistics for each registered year
+        /// array of reports for each registered year
         /// </returns>
-        public IEnumerable<Statistic> GetStoreProfit(int storeId)
+        public IEnumerable<Report> GetStoreProfit(int storeId)
         {
             var latest = DateTime.Now.Year;
             var first = _context.Sales
@@ -171,12 +171,12 @@ namespace CocomeStore.Services.Statsistics
                 first = latest;
             }
 
-            var statistics = new List<Statistic>();
+            var reports = new List<Report>();
             for (int year = first; year <= DateTime.Now.Year; year++)
             {
-                statistics.Add(GetProfitOfYear(storeId, year));
+                reports.Add(GetProfitOfYear(storeId, year));
             }
-            return statistics;
+            return reports;
         }
     }
 }

@@ -5,7 +5,7 @@ import { StateService } from 'src/services/StateService';
 import { Product } from 'src/models/Product';
 import { Store, StockItem } from 'src/models/Store';
 import { Order, OrderElement } from 'src/models/Order';
-import { Statistic } from 'src/models/Transfer';
+import { Report } from 'src/models/Transfer';
 import { StockExchange } from 'src/models/StockExchange';
 import { AuthorizeService } from '../api-authorization/authorize.service';
 
@@ -215,23 +215,23 @@ export class StoreStateService extends StateService<StoreState> {
 
   /**
    * get stores latest year profits
-   * @returns statistic with all monthly profits
+   * @returns reports with all monthly profits
    * as observable http response
    */
   getLatestProfits() {
     const year = new Date(Date.now()).getFullYear();
-    return this.http.get<Statistic>(
+    return this.http.get<Report>(
       `${this.api}/profit/${this.state.store.id}/${year}`
     );
   }
 
   /**
    * get stores overall profits
-   * @returns list of statistics with each years profit
+   * @returns list of reports with each years profit
    * as observable http response
    */
   getProfits() {
-    return this.http.get<Statistic[]>(
+    return this.http.get<Report[]>(
       `${this.api}/profit/${this.state.store.id}`
     );
   }

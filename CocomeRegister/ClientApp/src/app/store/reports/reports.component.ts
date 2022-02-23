@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Chart } from 'chart.js';
-import { jsPDF } from 'jspdf';
 import { interpolateColors, toRGBA } from 'src/services/ColorGenerator';
 import { Month, monthOrdinals, monthValues } from 'src/services/Month';
 import { StoreStateService } from '../store.service';
-import html2canvas from 'html2canvas';
 import { StockItem, Store } from 'src/models/Store';
-import { Statistic } from 'src/models/Transfer';
+import { Report } from 'src/models/Transfer';
 
 @Component({
   selector: 'app-store-reports',
@@ -20,7 +18,7 @@ export class StoreReportsComponent implements OnInit {
   salesChart: Chart;
   inventoryChart: Chart;
 
-  salesData: Statistic[];
+  salesData: Report[];
   salesLegend = monthOrdinals;
 
   constructor(private storeStateService: StoreStateService) {
@@ -84,43 +82,5 @@ export class StoreReportsComponent implements OnInit {
       this.initSalesChart();
       this.initInventoryChart();
     });
-  }
-
-  async generatePDFSection(elementId: string, pdf: jsPDF) {
-    const section = document.getElementById(elementId);
-    const pageHeight = 295;
-    const pageWidth = 210;
-    const pageMargin = 10;
-
-    let imgData: string;
-    let imgHeight: number;
-    const imgWidth = pageWidth * 0.8;
-
-    const posX = (pageWidth - imgWidth) / 2;
-    let posY = pageMargin;
-
-    return html2canvas(section).then(canvas => {
-      imgData = canvas.toDataURL('image/png');
-      imgHeight = canvas.height * imgWidth / canvas.width;
-      let heightLeft = imgHeight;
-
-      pdf.addImage(imgData, 'PNG', posX, posY, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
-
-      while (heightLeft >= 0) {
-        posY += heightLeft - imgHeight;
-        pdf.addPage();
-        pdf.addImage(imgData, 'PNG', posX, posY, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
-      }
-    });
-  }
-
-  async generatePDF() {
-    const pdf = new jsPDF('p', 'mm', 'a4');
-    await this.generatePDFSection('store-reports-sales', pdf);
-    pdf.addPage();
-    await this.generatePDFSection('store-reports-inventory', pdf);
-    pdf.save(`Report-${this.date}.pdf`);
   }
 }
