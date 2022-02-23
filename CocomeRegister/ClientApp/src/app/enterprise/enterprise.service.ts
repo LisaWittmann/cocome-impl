@@ -55,7 +55,7 @@ export class EnterpriseStateService extends StateService<EnterpriseState> {
      */
     private fetchProviders() {
         this.http.get<Provider[]>(
-            `${this.api}/provider`
+            `${this.api}/providers`
         ).subscribe(result => {
             this.setState({ providers: result });
         }, error => console.error(error));
@@ -78,7 +78,7 @@ export class EnterpriseStateService extends StateService<EnterpriseState> {
      */
     addProduct(product: Product) {
         this.http.post<Product>(
-            `${this.api}/create-product`,
+            `${this.api}/products`,
             product
         ).subscribe(result => {
             this.setState({ products: [...this.state.products, result] });
@@ -91,7 +91,7 @@ export class EnterpriseStateService extends StateService<EnterpriseState> {
      */
     addStore(store: Store) {
         this.http.post<Store>(
-            `${this.api}/create-store`,
+            `${this.api}/stores`,
             store,
         ).subscribe(result => {
             this.setState({ stores: [...this.state.stores, result] });
@@ -104,7 +104,7 @@ export class EnterpriseStateService extends StateService<EnterpriseState> {
      */
     addProvider(provider: Provider) {
         this.http.post<Provider>(
-            `${this.api}/create-provider`,
+            `${this.api}/providers`,
             provider
         ).subscribe(result => {
             this.setState({ providers: [...this.state.providers, result] });
@@ -120,7 +120,7 @@ export class EnterpriseStateService extends StateService<EnterpriseState> {
             this.state.products.find(p => p.id === product.id)
         );
         this.http.put<Product>(
-            `${this.api}/update-product/${product.id}`,
+            `${this.api}/products/${product.id}`,
             product
         ).subscribe(result => {
             this.setState({ products: [
@@ -140,7 +140,7 @@ export class EnterpriseStateService extends StateService<EnterpriseState> {
             this.state.stores.find(s => s.id === store.id)
         );
         this.http.put<Store>(
-            `${this.api}/update-store/${store.id}`,
+            `${this.api}/stores/${store.id}`,
             store
         ).subscribe(result => {
             this.setState({ stores: [
@@ -160,7 +160,7 @@ export class EnterpriseStateService extends StateService<EnterpriseState> {
             this.state.products.find(p => p.id === provider.id)
         );
         this.http.put<Provider>(
-            `${this.api}/update-provider/${provider.id}`,
+            `${this.api}/providers/${provider.id}`,
             provider
         ).subscribe(result => {
             this.setState({ providers: [
@@ -187,7 +187,7 @@ export class EnterpriseStateService extends StateService<EnterpriseState> {
      */
     getStoresByProduct(productId: number) {
         return this.http.get<Store[]>(
-            `${this.api}/product/${productId}/stores`
+            `${this.api}/products/${productId}/stores`
         );
     }
 
@@ -197,7 +197,7 @@ export class EnterpriseStateService extends StateService<EnterpriseState> {
      */
     getDeliveryReport() {
         return this.http.get<Report[]>(
-            `${this.api}/provider-reports`
+            `${this.api}/reports/delivery`
         );
     }
 
@@ -207,7 +207,7 @@ export class EnterpriseStateService extends StateService<EnterpriseState> {
      */
     getProfitReport() {
         return this.http.get<Report[]>(
-            `${this.api}/store-reports`
+            `${this.api}/reports/profits`
         );
     }
 
@@ -219,7 +219,7 @@ export class EnterpriseStateService extends StateService<EnterpriseState> {
      */
     addProductToStore(storeId: number, product: Product) {
         return this.http.post<Store[]>(
-            `${this.api}/create-stock/${storeId}`, product
+            `${this.api}/stores/${storeId}/stock`, product
         );
     }
 }

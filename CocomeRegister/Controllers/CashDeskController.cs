@@ -8,6 +8,7 @@ using CocomeStore.Services;
 using CocomeStore.Services.Bank;
 using CocomeStore.Services.Pagination;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -20,6 +21,7 @@ namespace CocomeStore.Controllers
     [ApiController]
     [Authorize(Policy = "cashdesk")]
     [Route("api/[controller]")]
+    [Produces("application/json")]
     public class CashDeskController : Controller
     {
         private readonly ILogger<CashDeskController> _logger;
@@ -47,8 +49,7 @@ namespace CocomeStore.Controllers
         }
 
         /// <summary>
-        /// method <c>GetProducts</c> is an http get endpoint to request the
-        /// available porducts in a store
+        /// endpoint to request the available products in a store
         /// </summary>
         /// <param name="storeId">unique identifier of the store</param>
         /// <param name="q">search param to filter products by name or id</param>
@@ -60,8 +61,10 @@ namespace CocomeStore.Controllers
         /// <see cref="PagedResponse{Product}"/> containing the product entries
         /// of the requested page as data
         /// </returns>
+        /// <response code="200">products in requested format</response>
         [HttpGet]
         [Route("products/{storeId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<PagedResponse<Product>> GetProducts(
             int storeId,
             [FromQuery] string q,
@@ -83,14 +86,23 @@ namespace CocomeStore.Controllers
         }
 
         /// <summary>
-        /// method <c>GetProduct</c> is an http get endpoint to request
-        /// a product in a stores stock by its id
+        /// endpoint to request a product in a stores stock by its id
         /// </summary>
         /// <param name="storeId">unique identifier of the store</param>
         /// <param name="productId">unique identifier of the product</param>
-        /// <returns></returns>
+        /// <returns>product with requested id</returns>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     GET /api/cashdesk/products/1/1
+        ///   
+        /// </remarks>
+        /// <response code="200">returns the requested product</response>
+        /// <response code="404">product entry was not found</response>
         [HttpGet]
         [Route("products/{storeId}/{productId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Product> GetProduct(int storeId, int productId)
         {
             var product = _cashDeskService.GetAvailableProducts(storeId)
@@ -104,8 +116,8 @@ namespace CocomeStore.Controllers
         }
 
         /// <summary>
-        /// method <c>ConfirmCheckoutAsync</c> is an http post endpoint to confirm
-        /// a sale on the cashdesk, update the stores stock and print the sale
+        /// endpoint to confirm a sale on the cashdesk, update the stores stock
+        /// and print the sale
         /// billing
         /// </summary>
         /// <param name="storeId">unique identifier of the store</param>
@@ -118,8 +130,28 @@ namespace CocomeStore.Controllers
         /// if the store with the given id was not found or bad request if another
         /// error accurs
         /// </returns>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST /api/cashdesk/checkout/1
+        ///     {
+        ///         "saleElements": [],
+        ///         "paymentMethod": 0,
+        ///         "timeStamp": "\"2022-02-23T18:45:20.634Z\",
+        ///         "total": 0,
+        ///         "payed": 0
+        ///     }
+        ///   
+        /// </remarks>
+        /// <response code="200">returns billing as pdf for the sale</response>
+        /// <response code="409">a product of the sale is out of stock</response>
+        /// <response code="404">store was not found</response>
         [HttpPost]
         [Route("checkout/{storeId}")]
+        [Produces("application/pdf")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> ConfirmCheckoutAsnyc(
             int storeId, SaleTO saleTO)
         {
@@ -147,13 +179,26 @@ namespace CocomeStore.Controllers
         }
 
         /// <summary>
-        /// method <c>ConfirmPaymentAsync</c> is an http post endpoint to confirm
-        /// a card payment
+        /// endpoint to perform a card payment
         /// </summary>
         /// <param name="creditCardTO">transfer object containing the credit card information</param>
         /// <returns>status ok if payment was accepted or bad request if an error accurs</returns>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST /api/cashdesk/checkout/card
+        ///     {
+        ///         "number": "DE123455689"
+        ///         "pin": 1234
+        ///     }
+        ///  
+        /// </remarks>
+        /// <response code="200">credit card payment confiremed</response>
+        /// <response code="400">credit card was not accepted</response>
         [HttpPost]
         [Route("checkout/card")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> ConfirmPaymentAsync(CreditCardTO creditCardTO)
         {
             try
