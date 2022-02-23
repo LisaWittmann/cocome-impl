@@ -18,7 +18,6 @@ import { EnterpriseReportsComponent } from './reports/reports.component';
 
 import { EnterpriseStateService } from './enterprise.service';
 import { AuthorizeService } from '../api-authorization/authorize.service';
-import { EnterpriseGuard } from '../api-authorization/authorize.guard';
 
 import { EnterpriseUsersComponent } from './users/users.component';
 

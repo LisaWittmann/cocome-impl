@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Inject } from '@angular/core';
-import { User } from 'src/services/Models';
+import { Store } from 'src/models/Store';
+import { User } from 'src/models/User';
 import { EnterpriseStateService } from '../enterprise.service';
 
 @Component({
@@ -10,13 +11,16 @@ import { EnterpriseStateService } from '../enterprise.service';
 })
 export class EnterpriseUsersComponent {
   users: User[];
+  stores: Store[];
   newUser = {} as User;
-  newUserRole = {} as string;
-  newUserPassword = {} as string;
+  newUserRole: string;
+  newUserPassword: string;
 
   constructor(private enterpriseService: EnterpriseStateService, private http: HttpClient, @Inject("BASE_URL") baseUrl: string) {
-    this.http.get<User[]>(`${baseUrl}api/user`).subscribe(users => { this.users = users });
-    this.enterpriseService.users$.subscribe(users => {
+    this.enterpriseService.stores$.subscribe(stores => {
+      this.stores = stores;
+    });
+    this.enterpriseService.getUsers().subscribe(users => {
       this.users = users;
     });
   }
@@ -26,7 +30,9 @@ export class EnterpriseUsersComponent {
   }
 
   submitUser() {
-    this.enterpriseService.addUser(this.newUser, this.newUserRole, this.newUserPassword);
+    this.enterpriseService.addUser(this.newUser, this.newUserRole, this.newUserPassword).subscribe(user => {
+      this.users.push(user);
+    });
     this.newUser = {} as User;
   }
   

@@ -1,13 +1,4 @@
-<div class="page-container">
-  <!--{{ users | json }}<br />-->
-  <ul>
-    <li *ngFor="let user of users">
-      Username: {{user.userName}}<br />
-      Store: {{user.store}}<br /><br />
-    </li>
-  </ul>
-</div>
-<!--<div class="users page-container">
+<div class="users page-container">
   <div class="container">
     <section>
       <h1>Nutzer</h1>
@@ -17,13 +8,6 @@
                      [header]="user.lastName">
         <div class="user-detail">
           <div>
-            <div class="input-wrapper">
-              <label for="id">Id</label>
-              <input name="id"
-                     readonly="readonly"
-                     [(ngModel)]="user.id"
-                     class="input--labeled">
-            </div>
             <div class="input-wrapper">
               <label for="userName">Nutzername</label>
               <input name="userName"
@@ -54,12 +38,15 @@
                      [(ngModel)]="user.email"
                      class="input--labeled">
             </div>
-            <div class="input-wrapper">
+            <div class="input-wrapper" *ngIf="store">
               <label for="store">Filiale</label>
-              <input name="store"
-                     type="text"
-                     [(ngModel)]="user.store"
-                     class="input--labeled">
+              <select name="store"
+                   [(ngModel)]="user.store"
+                   class="input--labeled">
+                  <option *ngFor="let store of stores" [ngValue]="store">
+                    {{ store.name }}
+                  </option>
+              </select>
             </div>
             <button class="button__form"
                     (click)="saveChanges(user)">
@@ -71,7 +58,7 @@
     </section>
     <section>
       <h2>Neuen Nutzer hinzufügen</h2>
-      <div class="user-detail" (submit)="submitUser(newUser, role, password)">
+      <div class="user-detail" (submit)="submitUser()">
         <div>
           <div class="input-wrapper">
             <label for="userName">Nutzername</label>
@@ -107,20 +94,25 @@
             <label for="email">E-Mail</label>
             <input name="email"
                    type="text"
+                   required
                    [(ngModel)]="newUser.email"
                    class="input--labeled">
           </div>
           <div class="input-wrapper">
             <label for="store">Filiale</label>
-            <input name="store"
-                   type="text"
+            <select name="store"
                    [(ngModel)]="newUser.store"
                    class="input--labeled">
+              <option *ngFor="let store of stores" [ngValue]="store">
+                {{ store.name }}
+            </option>
+            </select>
           </div>
           <div class="input-wrapper">
             <label for="password">Passwort</label>
             <input name="password"
-                   type="text"
+                   type="password"
+                   required
                    [(ngModel)]="newUserPassword"
                    class="input--labeled">
           </div>
@@ -129,4 +121,4 @@
       </div>
     </section>
   </div>
-</div>-->
+</div>

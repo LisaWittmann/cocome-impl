@@ -1,7 +1,6 @@
 import { Store } from "./Store";
 
 export interface User {
-    id: number;
     firstName: string;
     lastName: string;
     userName: string;

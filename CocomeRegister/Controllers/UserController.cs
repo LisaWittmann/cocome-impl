@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using CocomeStore.Models.Authorization;
 using System.Threading.Tasks;
+using CocomeStore.Models.Database;
+using Microsoft.EntityFrameworkCore;
 
 namespace CocomeStore.Controllers
 {
@@ -40,7 +42,7 @@ namespace CocomeStore.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<ApplicationUser>> GetAllUsers()
         {
-            return _userManager.Users.ToArray();
+            return _userManager.Users.Include(user => user.Store).ToArray();
         }
 
         [HttpGet]
@@ -57,7 +59,7 @@ namespace CocomeStore.Controllers
             await _userManager.CreateAsync(applicationUser, password);
 
             await _userManager.AddToRoleAsync(applicationUser, role);
-            await _userManager.AddClaimsAsync(applicationUser, await _claimManager.GetClaims(applicationUser));
+            await _userManager.AddClaimsAsync(applicationUser, await _claimManager.GetClaimsAsync(applicationUser));
 
             _context.SaveChanges();
             return applicationUser;
@@ -70,7 +72,7 @@ namespace CocomeStore.Controllers
             ApplicationUser user = await _userManager.FindByNameAsync(username);
 
             await _userManager.AddToRoleAsync(user, role);
-            await _userManager.AddClaimsAsync(user, await _claimManager.GetClaims(user));
+            await _userManager.AddClaimsAsync(user, await _claimManager.GetClaimsAsync(user));
 
             _context.SaveChanges();
             return user;
