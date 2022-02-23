@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 using CocomeStore.Models.Transfer;
 
-namespace CocomeStore.Services.Documents
+namespace CocomeStore.Services
 {
-    public interface IDocumentService
+    public interface IPrinterService
     {
         Task<byte[]> CreateBillAsync(SaleTO saleTO);
     }

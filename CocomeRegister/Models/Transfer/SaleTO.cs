@@ -14,8 +14,13 @@ namespace CocomeStore.Models.Transfer
         [Required]
         public PaymentMethod PaymentMethod { get; set; }
 
+        [Required]
+        public DateTime TimeStamp { get; set; }
+
+        [Required]
         public float Payed { get; set; }
 
+        [Required]
         public float Total { get; set; }
 
         public Store Store { get; set; }

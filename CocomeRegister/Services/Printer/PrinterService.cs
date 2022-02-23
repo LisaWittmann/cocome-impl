@@ -5,18 +5,18 @@ using DinkToPdf;
 using DinkToPdf.Contracts;
 using RazorLight;
 
-namespace CocomeStore.Services.Documents
+namespace CocomeStore.Services.Printer
 {
     /// <summary>
-    /// class <c>DocumentsService</c> implements <see cref="IDocumentService"/>
-    /// and provides functionality to genereade documents by templates
+    /// class <c>PrinterService</c> implements <see cref="IPrinterService"/>
+    /// and provides functionality to genereade documents for printing by templates
     /// </summary>
-    public class DocumentService : IDocumentService
+    public class PrinterService : IPrinterService
     {
         private readonly IRazorLightEngine _engine;
         private readonly IConverter _converter;
 
-        public DocumentService(IRazorLightEngine engine, IConverter converter)
+        public PrinterService(IRazorLightEngine engine, IConverter converter)
         {
             _engine = engine;
             _converter = converter;
@@ -29,7 +29,6 @@ namespace CocomeStore.Services.Documents
         /// <param name="saleTO">
         /// sale transfer object containing the sales information
         /// </param>
-        /// <returns></returns>
         public async Task<byte[]> CreateBillAsync(SaleTO saleTO)
         {
         

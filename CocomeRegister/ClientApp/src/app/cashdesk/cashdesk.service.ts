@@ -26,7 +26,7 @@ const expressModeMaxItems = 8;
 export class CashDeskStateService extends StateService<CashDeskState> {
     expressMode$: Observable<boolean> = this.select(state => state.expressMode);
     shoppingCard$: Observable<SaleElement[]> = this.select(state => state.shoppingCard);
-    lastSales: Map<number, Sale>;
+    lastSales: Sale[] = [];
     api: string;
 
     constructor(
@@ -36,7 +36,6 @@ export class CashDeskStateService extends StateService<CashDeskState> {
   ) {
         super(initialState);
         this.api = baseUrl + 'api/cashdesk';
-        this.lastSales = new Map<number, Sale>();
         this.authService.getUser().subscribe(user => {
             this.setState({ storeId: Number(user.store) });
         });
@@ -88,6 +87,7 @@ export class CashDeskStateService extends StateService<CashDeskState> {
         const sale: Sale = {
             saleElements: this.state.shoppingCard,
             paymentMethod: paymentMethod,
+            timeStamp: new Date(Date.now()),
             total: this.getTotalPrice(),
             payed: payed
         };
@@ -177,18 +177,15 @@ export class CashDeskStateService extends StateService<CashDeskState> {
 
     updateLastSales(sale: Sale) {
         const currentTime = new Date(Date.now()).getTime();
-        this.lastSales.set(currentTime, sale);
-        const timedOutEntries = [...this.lastSales.keys()]
-            .filter(key => ((currentTime - key) * 1000 * 60 * 60) >= 1);
-        for (const entry of timedOutEntries) {
-            this.lastSales.delete(entry);
-        }
-        const validSales = [...this.lastSales.values()]
-            .filter(value => 
-                value.saleElements.length < expressModeMaxItems &&
-                value.paymentMethod == PaymentMethod.CASH)
-            .length;
-        
-        this.setState({ expressMode: (validSales * 2) > this.lastSales.size });
+        this.lastSales.push(sale);
+        this.lastSales = this.lastSales.filter(sale => 
+            ((currentTime - sale.timeStamp.getTime()) / 1000 / 60) < 60
+        );
+        const validSales = this.lastSales.filter(value => 
+            value.saleElements.length < expressModeMaxItems &&
+            value.paymentMethod == PaymentMethod.CASH
+        );
+        console.log(this.lastSales);
+        this.setState({ expressMode: (validSales.length * 2) > this.lastSales.length });
     }
 }

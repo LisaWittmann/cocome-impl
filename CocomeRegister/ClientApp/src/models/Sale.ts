@@ -12,6 +12,7 @@ export interface SaleElement {
 export interface Sale {
     saleElements: SaleElement[];
     paymentMethod: PaymentMethod;
+    timeStamp: Date;
     total: number;
     payed: number;
 }

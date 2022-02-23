@@ -7,7 +7,7 @@ using CocomeStore.Models.Transfer;
 using CocomeStore.Models.Transfer.Pagination;
 using CocomeStore.Services;
 using CocomeStore.Services.Pagination;
-using CocomeStore.Services.Documents;
+using CocomeStore.Services.Printer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -25,9 +25,9 @@ namespace CocomeStore.Controllers
     {
         private readonly ILogger<CashDeskController> _logger;
         private readonly IUriService _uriService;
-        private readonly IDocumentService _documentService;
+        private readonly IPrinterService _printerService;
         private readonly IExchangeService _exchangeService;
-        private readonly ICashDeskService _service;
+        private readonly ICashDeskService _cashDeskService;
 
         // TEST DATA
         // IN PROGRESS
@@ -38,14 +38,14 @@ namespace CocomeStore.Controllers
             IUriService uriService,
             ICashDeskService service,
             IExchangeService exchangeService,
-            IDocumentService documentService
+            IPrinterService printerService
         )
         {
             _logger = logger;
-            _service = service;
+            _cashDeskService = service;
             _uriService = uriService;
             _exchangeService = exchangeService;
-            _documentService = documentService;
+            _printerService = printerService;
         }
 
         // IN PROGRESS
@@ -80,7 +80,7 @@ namespace CocomeStore.Controllers
         [Route("products/{storeId}/{productId}")]
         public ActionResult<Product> GetProduct(int storeId, int productId)
         {
-            var product = _service.GetAvailableProducts(storeId)
+            var product = _cashDeskService.GetAvailableProducts(storeId)
                 .Where(product => product.Id == productId)
                 .SingleOrDefault();
             if (product == null)
@@ -114,7 +114,7 @@ namespace CocomeStore.Controllers
         {
             var route = Request.Path.Value;
             var responseBuilder = new ResponseBuilder<Product>();
-            var data = _service.GetAvailableProducts(storeId);
+            var data = _cashDeskService.GetAvailableProducts(storeId);
             if (q != null)
             {
                 data = data.Where(product =>
@@ -149,9 +149,9 @@ namespace CocomeStore.Controllers
             try
             {
                 _logger.LogInformation("confirm checkout");
-                saleTO = await _service.UpdateSaleDataAsync(storeId, saleTO);
-                var billing = await _documentService.CreateBillAsync(saleTO);
-                await _service.CreateSaleAsync(saleTO);
+                saleTO = await _cashDeskService.UpdateSaleDataAsync(storeId, saleTO);
+                var billing = await _printerService.CreateBillAsync(saleTO);
+                await _cashDeskService.CreateSaleAsync(saleTO);
                 await _exchangeService.CheckForExchangesAsync(storeId).ConfigureAwait(false);
                 return File(billing, "application/pdf");
                 

@@ -42,11 +42,7 @@ namespace CocomeStore.Services
         /// <exception cref="ItemNotAvailableException"></exception>
         public async Task CreateSaleAsync(SaleTO saleTO)
         {
-            Sale sale = new() {
-                StoreId = saleTO.Store.Id,
-                TimeStamp = DateTime.Now,
-                PaymentMethod = saleTO.PaymentMethod
-            };
+            var sale = _mapper.CreateSale(saleTO);
 
             foreach (var element in saleTO.SaleElements)
             {

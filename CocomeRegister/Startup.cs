@@ -6,7 +6,7 @@ using CocomeStore.Services;
 using CocomeStore.Services.Authorization;
 using CocomeStore.Services.Mapping;
 using CocomeStore.Services.Pagination;
-using CocomeStore.Services.Documents;
+using CocomeStore.Services.Printer;
 using DinkToPdf;
 using DinkToPdf.Contracts;
 using Microsoft.AspNetCore.Authentication;
@@ -93,7 +93,7 @@ namespace CocomeRegister
                     .Build();
                 return engine;
             });
-            services.AddScoped<IDocumentService, DocumentService>();
+            services.AddScoped<IPrinterService, PrinterService>();
 
             services.AddHttpContextAccessor();
             services.AddControllersWithViews();
