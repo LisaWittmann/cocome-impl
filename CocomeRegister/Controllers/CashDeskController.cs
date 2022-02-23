@@ -29,10 +29,6 @@ namespace CocomeStore.Controllers
         private readonly IExchangeService _exchangeService;
         private readonly ICashDeskService _cashDeskService;
 
-        // TEST DATA
-        // IN PROGRESS
-        private bool inExpressMode = true;
-
         public CashDeskController(
             ILogger<CashDeskController> logger,
             IUriService uriService,
@@ -46,27 +42,6 @@ namespace CocomeStore.Controllers
             _uriService = uriService;
             _exchangeService = exchangeService;
             _printerService = printerService;
-        }
-
-        // IN PROGRESS
-        [HttpGet]
-        [Route("express/{id}")]
-        public bool GetExpressMode(int id)
-        {
-            _logger.LogInformation("requesting expressMode of cashdesk {}", id);
-            return inExpressMode;
-        }
-
-        // IN PROGRESS
-        [HttpPost]
-        [Route("update-express/{id}")]
-        public bool EndExpressMode(int id, bool expressMode)
-        {
-            _logger.LogInformation(
-                "updating expressMode of cashdesk {} to {}",
-                id,expressMode);
-            inExpressMode = expressMode;
-            return inExpressMode;
         }
 
         /// <summary>

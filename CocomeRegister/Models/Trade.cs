@@ -9,7 +9,7 @@ namespace CocomeStore.Models
     /// of a store
     /// </summary>
     /// <typeparam name="T">type of provider</typeparam>
-    public class Trade<T>
+    public abstract class Trade<T>
     {
         [ScaffoldColumn(false)]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
