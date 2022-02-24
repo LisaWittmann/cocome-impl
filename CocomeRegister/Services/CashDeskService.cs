@@ -35,8 +35,6 @@ namespace CocomeStore.Services
         /// from the given transfer object and stores saves new entries
         /// in the databse
         /// </summary>
-        /// <param name="storeId">unique identifier of a store in the dabase
-        /// which provokes the sale</param>
         /// <param name="saleTO">data transfer object containing the information
         /// of the sale</param>
         /// <exception cref="ItemNotAvailableException"></exception>

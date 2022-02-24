@@ -15,17 +15,19 @@ namespace CocomeStore.Controllers
     [ApiController]
     [Authorize]
     [Route("api/[controller]")]
+    [Produces("application/json")]
     public class FileUploadController : Controller
     {
         /// <summary>
-        /// method <c>UploadAsync</c> is a http post
         /// endpoint to upload a form file to server
         /// </summary>
         /// <param name="file">
         /// file object to upload
         /// </param>
         /// <returns>response with path of uploaded file</returns>
+        /// <response code="200">file was saved under returned path</response>
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> UploadAsync(IFormFile file)
         {
             var folderName = Path.Combine("StaticFiles", "Images");

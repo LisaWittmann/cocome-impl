@@ -1,4 +1,6 @@
+using System;
 using System.IO;
+using System.Reflection;
 using System.Security.Claims;
 using CocomeStore.Models.Authorization;
 using CocomeStore.Models.Database;
@@ -22,6 +24,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using RazorLight;
 
 namespace CocomeRegister
@@ -100,6 +103,17 @@ namespace CocomeRegister
             services.AddHttpContextAccessor();
             services.AddControllersWithViews();
             services.AddDirectoryBrowser();
+            services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "CoCoME",
+                });
+
+                var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+            });
 
             services.AddSpaStaticFiles(configuration =>
             {
@@ -115,6 +129,11 @@ namespace CocomeRegister
                 context.Database.Migrate();
                 app.UseDeveloperExceptionPage();
                 app.UseHsts();
+                app.UseSwagger();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                });
             }
             else
             {
@@ -146,7 +165,7 @@ namespace CocomeRegister
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "api/{controller}/{action=Index}/{id?}");
+                    pattern: "{controller}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
 
