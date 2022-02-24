@@ -62,14 +62,14 @@ namespace CocomeStore.Controllers
         /// </returns>
         [HttpGet]
         [Route("products/{storeId}")]
-        public ActionResult<PagedResponse<Product>> GetProducts(
+        public ActionResult<PagedResponse<ProductTO>> GetProducts(
             int storeId,
             [FromQuery] string q,
             [FromQuery] PaginationFilter filter
         )
         {
             var route = Request.Path.Value;
-            var responseBuilder = new ResponseBuilder<Product>();
+            var responseBuilder = new ResponseBuilder<ProductTO>();
             var data = _cashDeskService.GetAvailableProducts(storeId);
             if (q != null)
             {
@@ -91,7 +91,7 @@ namespace CocomeStore.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("products/{storeId}/{productId}")]
-        public ActionResult<Product> GetProduct(int storeId, int productId)
+        public ActionResult<ProductTO> GetProduct(int storeId, int productId)
         {
             var product = _cashDeskService.GetAvailableProducts(storeId)
                 .Where(product => product.Id == productId)

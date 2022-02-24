@@ -69,13 +69,13 @@ namespace CocomeStore.Services
         /// the store with the given id that are currently in stock
         /// </summary>
         /// <param name="storeId">unique identifier of a store in the database</param>
-        /// <returns>enumerable entries of products</returns>
-        public IEnumerable<Product> GetAvailableProducts(int storeId)
+        /// <returns>enumerable entries of products as transfer objects</returns>
+        public IEnumerable<ProductTO> GetAvailableProducts(int storeId)
         {
             return _context.StockItems
                 .Include(item => item.Product)
                 .Where(item => item.StoreId == storeId && item.Stock > 0)
-                .Select(item => item.Product);
+                .Select(item => _mapper.CreateProductTO(item.Product));
         }
 
         /// <summary>

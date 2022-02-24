@@ -41,7 +41,7 @@
             </div>
     
             <div *ngIf="cardPayment" class="payment__card">
-                <div class="column-wrapper">
+                <form class="column-wrapper" (submit)="confirmPayment()">
                     <strong *ngIf="paymentAccepted" class="success">
                         Die Zahlung war erfolgreich
                     </strong>
@@ -62,7 +62,7 @@
                         [class.form-error]="cardPaymentError"
                         [(ngModel)]="creditCard.pin"
                     >
-                </div>
+                </form>
             </div>
         
             <div class="column-wrapper">
