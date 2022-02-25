@@ -49,6 +49,7 @@ namespace CocomeStore.Controllers
         /// endpoint to request all application users from the database
         /// </summary>
         /// <returns></returns>
+        /// <remarks>
         /// Sample request:
         ///
         ///     GET /api/user
@@ -73,6 +74,7 @@ namespace CocomeStore.Controllers
         /// </summary>
         /// <param name="userTO"></param>
         /// <returns></returns>
+        /// <remarks>
         /// Sample request:
         ///
         ///     PUT /api/user
@@ -114,6 +116,7 @@ namespace CocomeStore.Controllers
         /// </summary>
         /// <param name="userTO">user transfer object containing the new data</param>
         /// <returns>modified user entry as tranfer object</returns>
+        /// <remarks>
         /// Sample request:
         ///
         ///     PUT /api/user
