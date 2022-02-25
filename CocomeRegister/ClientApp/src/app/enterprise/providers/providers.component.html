@@ -21,7 +21,7 @@
                 </div>
             </form>
         </section>
-        <section>
+        <section *ngIf="providers.length">
             <h2>Alle Lieferanten</h2>
             <app-accordion
                 *ngFor="let provider of providers"

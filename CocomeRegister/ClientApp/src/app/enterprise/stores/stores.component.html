@@ -41,7 +41,7 @@
                 </div>
             </form>
         </section>
-        <section>
+        <section *ngIf="stores.length">
             <h2>Alle Filialen</h2>
             <app-accordion
                 *ngFor="let store of stores"
