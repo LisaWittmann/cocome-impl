@@ -3,10 +3,10 @@ import { Store } from "./Store";
 export interface User {
     firstName: string;
     lastName: string;
-    userName: string;
     email: string;
-    store: Store;
     roles: Role[];
+    store?: Store;
+    password?: string;
 }
 
 export enum Role {
@@ -14,3 +14,8 @@ export enum Role {
     Manager = "Filialleiter",
     Cashier = "Kassierer",
 }
+
+export interface RoleSelect {
+    role: Role,
+    selected: boolean;
+};

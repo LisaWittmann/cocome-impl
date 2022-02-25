@@ -1,9 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using CocomeStore.Models.Authorization;
 using System.ComponentModel.DataAnnotations;
 
 namespace CocomeStore.Models.Transfer
 {
+    /// <summary>
+    /// class <c>UserTO</c> is a data transfer object for class
+    /// <see cref="ApplicationUser"/>
+    /// </summary>
     public class UserTO
     {
         [Required]
@@ -17,6 +20,8 @@ namespace CocomeStore.Models.Transfer
 
         public Store Store { get; set; }
 
-        public IEnumerable<string> Roles { get; set; }
+        public string[] Roles { get; set; }
+
+        public string Password { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from 'src/models/Store';
@@ -226,21 +226,35 @@ export class EnterpriseStateService extends StateService<EnterpriseState> {
         );
     }
 
+    /**
+     * request all registered user
+     * @returns observable http response
+     */
     getUsers() {
         return this.http.get<User[]>(`${this.baseUrl}api/user`);
     }
 
-    addUser(newUser: User, role: string, password: string) {
+    /**
+     * request addinng a new user to application
+     * @param newUser user to add
+     * @returns observable http response
+     */
+    addUser(newUser: User) {
       return this.http.post<User>(
         `${this.baseUrl}api/user`,
-        [newUser, role, password]
+        newUser
       );
     }
 
-    updateUserRole(user: User, role: string) {
-      return this.http.post<User>(
-        `${this.baseUrl}api/user/role`,
-        [user, role]
+    /**
+     * request updating a user entry
+     * @param user user with updated data and identifying email
+     * @returns observable http response
+     */
+    updateUser(user: User) {
+      return this.http.put<User>(
+        `${this.baseUrl}api/user`,
+        user
       );
-  }
+    }
 }

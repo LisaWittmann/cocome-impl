@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Inject } from '@angular/core';
 import { Store } from 'src/models/Store';
-import { User } from 'src/models/User';
+import { Role, RoleSelect, User } from 'src/models/User';
 import { EnterpriseStateService } from '../enterprise.service';
 
 @Component({
@@ -10,13 +10,15 @@ import { EnterpriseStateService } from '../enterprise.service';
   styleUrls: ['./users.component.scss'],
 })
 export class EnterpriseUsersComponent {
-  users: User[];
-  stores: Store[];
-  newUser = {} as User;
-  newUserRole: string;
-  newUserPassword: string;
+  users: User[] = [];
+  stores: Store[] = [];
+  newUser: User;
+  selectedRoles: RoleSelect[];
+  registerError: boolean;
 
   constructor(private enterpriseService: EnterpriseStateService, private http: HttpClient, @Inject("BASE_URL") baseUrl: string) {
+    this.initEmptyUser();
+    this.initSelectedRoles();
     this.enterpriseService.stores$.subscribe(stores => {
       this.stores = stores;
     });
@@ -26,15 +28,55 @@ export class EnterpriseUsersComponent {
     });
   }
 
-  saveRoleChanges(user: User, role: string) {
-    this.enterpriseService.updateUserRole(user, role);
+  get storeRequired() {
+    return this.selectedRoles.length && this.selectedRoles.some(r => r.role != Role.Admin);
   }
 
-  submitUser() {
-    this.enterpriseService.addUser(this.newUser, this.newUserRole, this.newUserPassword).subscribe(user => {
-      this.users.push(user);
-    });
-    this.newUser = {} as User;
+  initEmptyUser() {
+    this.newUser = {
+      firstName: undefined,
+      lastName: undefined,
+      email: undefined,
+      roles: [],
+    };
   }
-  
+
+  initSelectedRoles() {
+    const roles = Object.keys(Role).map(r => Role[r]);
+    this.selectedRoles = [...roles].map(r => ({ role: r, selected: false } as RoleSelect));
+  }
+
+  updateUser(user: User) {
+    this.enterpriseService.updateUser(user).subscribe(() => {
+      console.log("updated");
+    }, error => {
+      console.error(error);
+      this.enterpriseService.getUsers().subscribe(users => {
+        this.users = users;
+      });
+    });
+  }
+
+  updateUserRole(user: User, event: any) {
+    const role: Role = event.target.value;
+    const selected = event.target.checked;
+    if (user.roles.includes(role) && !selected) {
+      user.roles = user.roles.filter(r => r !== role);
+    }
+    if (!user.roles.includes(role) && selected) {
+      user.roles.push(role);
+    }
+    console.log(user);
+  }
+
+  registerUser() {
+    this.enterpriseService.addUser(this.newUser).subscribe(user => {
+      this.users.push(user);
+      this.initEmptyUser();
+      this.registerError = false;
+    }, error => {
+      console.error(error);
+      this.registerError = true;
+    });
+  }
 }
