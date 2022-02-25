@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using CocomeStore.Models;
+using CocomeStore.Models.Authorization;
 using CocomeStore.Models.Transfer;
 
 namespace CocomeStore.Services.Mapping
@@ -11,6 +12,7 @@ namespace CocomeStore.Services.Mapping
         OrderElement CreateOrderElement(Order order, OrderElementTO orderElementTO);
         Sale CreateSale(SaleTO saleTO);
         SaleElement CreateSaleElement(Sale sale, int storeId, SaleElementTO saleElementTO);
+        ApplicationUser CreateApplicationUser(UserTO userTO);
 
         ProductTO CreateProductTO(Product product);
         OrderElementTO CreateOrderElementTO(OrderElement orderElement);

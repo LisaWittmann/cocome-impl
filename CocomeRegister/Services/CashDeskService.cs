@@ -93,5 +93,6 @@ namespace CocomeStore.Services
             saleTO.Store = store;
             return saleTO;
         }
+
     }
 }

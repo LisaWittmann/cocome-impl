@@ -1,0 +1,91 @@
+<div class="users page-container">
+  <div class="container">
+    <section>
+      <h1>Mitarbeiter</h1>
+    </section>
+    <section>
+      <h2>Neuen Mitarbeiter hinzufügen</h2>
+      <form class="user-detail" (submit)="registerUser()">
+        <div>
+          <div class="input-wrapper">
+            <label for="firstName">Vorname *</label>
+            <input name="firstName"
+                   type="text"
+                   required
+                   [class.form-error]="registerError"
+                   [(ngModel)]="newUser.firstName"
+                   class="input--labeled">
+          </div>
+          <div class="input-wrapper">
+            <label for="lastName">Nachname *</label>
+            <input name="lastName"
+                   type="text"
+                   required
+                   [class.form-error]="registerError"
+                   [(ngModel)]="newUser.lastName"
+                   class="input--labeled">
+          </div>
+          <div class="input-wrapper">
+            <label for="email">E-Mail *</label>
+            <input name="email"
+                   type="email"
+                   required
+                   [class.form-error]="registerError"
+                   [(ngModel)]="newUser.email"
+                   class="input--labeled">
+          </div>
+          <div class="input-wrapper">
+            <label for="password">Passwort *</label>
+            <input name="password"
+                   type="password"
+                   required
+                   [class.form-error]="registerError"
+                   [(ngModel)]="newUser.password"
+                   class="input--labeled">
+          </div>
+        </div>
+        <div>
+          <div class="checkbox-wrapper">
+            <p>Rolle</p>
+            <div *ngFor="let option of selectedRoles">
+              <input
+                [name]="option.role"
+                type="checkbox"
+                [value]="option.role"
+                [checked]="option.selected"
+                (change)="updateUserRole(newUser, $event)"
+              >
+              <label [for]="option.role">{{option.role}}</label>
+            </div>
+          </div>
+          <div class="input-wrapper">
+            <label for="store">Filiale</label>
+            <select name="store"
+                   [(ngModel)]="newUser.store"
+                   [required]="storeRequired"
+                   class="input--labeled">
+              <option *ngFor="let store of stores" [ngValue]="store">
+                {{ store.name }}
+            </option>
+            </select>
+          </div>
+          <button
+              class="button__form"
+              type="submit"
+            >Speichern</button>
+        </div>
+      </form>
+    </section>
+    <section *ngIf="users.length">
+      <h2>Alle Mitarbeiter</h2>
+      <app-enterprise-user-detail
+        *ngFor="let user of users"
+        [user]="user"
+        [stores]="stores"
+        (updateUserEvent)="updateUser($event)"
+        (updateRoleEvent)="updateUserRole(user, $event)"
+      >
+      </app-enterprise-user-detail>
+    </section>
+  </div>
+</div>
