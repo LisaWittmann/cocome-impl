@@ -6,39 +6,23 @@ using CocomeStore.Models;
 using CocomeStore.Models.Transfer;
 using CocomeStore.Services;
 
-namespace CocomeStore.Test.Services
+namespace CocomeTest.Services
 {
     
     public class CashDeskTestService : ICashDeskService
     {
-        private readonly List<ProductTO> _produkt;
+        private readonly List<Provider> _provider;
+        private readonly List<ProductTO> _product;
         private readonly List<SaleTO> _sale;
         private readonly List<Store> _store;
 
         public CashDeskTestService()
         {
-            Provider testProvider1 = new Provider()
-            {Id = 1, Name = "Testprovider1"};
-            Provider testProvider2 = new Provider()
-            { Id = 2, Name = "Testprovider2" };
-            _produkt = new List<ProductTO>()
-            {
-                new ProductTO() { Id = 1,
-                    Name = "Testprodukt1", Price=1f, SalePrice = 1f, Description="Das ist das Testprodukt Numemr 1", Provider=testProvider1},
-                new ProductTO() { Id = 2,
-                    Name = "Testprodukt2", Price=2f, SalePrice = 2f, Description="Das ist das Testprodukt Numemr 2", Provider=testProvider2},
-                new ProductTO() { Id = 3,
-                    Name = "Testprodukt3", Price=3f, SalePrice = 3f, Description="Das ist das Testprodukt Numemr 3", Provider=testProvider1}
-            };
-            _sale = new List<SaleTO>()
-            {
-
-            };
-
-            _store = new List<Store>()
-            {
-                new Store() { Id = 1, City = "Teststadt", Name="Teststore1", PostalCode=1234}
-            };
+            TestDataProvider dataProvider = new TestDataProvider();
+            _provider = dataProvider._provider;
+            _product = TestDataProvider.ChangeProductsToTo(dataProvider._product);
+            _sale = dataProvider._sale;
+            _store = dataProvider._store;
         }
 
         
@@ -68,7 +52,7 @@ namespace CocomeStore.Test.Services
 
         public IEnumerable<ProductTO> GetAvailableProducts(int storeId)
         {
-            return _produkt;
+            return _product;
         }
 
         public async Task<SaleTO> UpdateSaleDataAsync(int storeId, SaleTO saleTO)

@@ -9,7 +9,7 @@ using CocomeStore.Models.Database;
 using CocomeStore.Services.Mapping;
 using CocomeStore.Services;
 
-namespace CocomeStore.Test.Services
+namespace CocomeTest.Services
 {
     /// <summary>
     /// class <c>StoreService</c> implenents <see cref="IStoreService"/>
@@ -20,24 +20,15 @@ namespace CocomeStore.Test.Services
         private readonly List<Store> _store;
         private readonly List<Provider> _provider;
         private readonly List<OrderTO> _order;
+        private readonly List<StockItem> _stockItem;
 
         public StoreTestService()
         {
-            _store = new List<Store>()
-            {
-                new Store() { Id = 1, City = "Teststadt", Name="Teststore1", PostalCode=1234},
-                new Store() { Id = 2, City = "Teststadt", Name="Teststore2", PostalCode=1234},
-                new Store() { Id = 3, City = "Teststadt", Name="Teststore3", PostalCode=1234},
-                new Store() { Id = 4, City = "Teststadt", Name="Teststore4", PostalCode=1234}
-            };
-            _provider = new List<Provider>() {
-                new Provider() {Id = 1, Name = "Testprovider1"},
-                new Provider() { Id = 2, Name = "Testprovider2" }
-            };
-            _order = new List<OrderTO>()
-            {
-                new OrderTO() { Id = 1, Closed=false, Store=_store[0], PlacingDate=new DateTime().AddDays(-1), Provider=_provider[0]},
-            };
+            TestDataProvider dataProvider = new TestDataProvider();
+            _store = dataProvider._store;
+            _provider = dataProvider._provider;
+            _order = dataProvider._order;
+            _stockItem = dataProvider._stockItem;
         }
 
         /// <summary>
