@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using CocomeStore.Exceptions;
-using CocomeStore.Models;
 using CocomeStore.Models.Transfer;
 using CocomeStore.Models.Transfer.Pagination;
 using CocomeStore.Services;

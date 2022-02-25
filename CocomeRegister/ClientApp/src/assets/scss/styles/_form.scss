@@ -51,6 +51,29 @@ input {
   }
 }
 
+.checkbox-wrapper {
+  position: relative;
+  padding: $spacing-s $spacing-xs;
+  margin: $spacing-s 0;
+  background-color: transparent;
+  border-radius: 2px;
+  border: 1px solid $color-grey;
+  width: 300px;
+
+  > p {
+    position: absolute;
+    top: -12px;
+    left: 10px;
+    z-index: 2;
+    color: gray;
+    background-color: $color-white;
+  }
+
+  input + label {
+      margin-left: 5px;
+  }
+}
+
 .form-error {
   border: 2px solid red;
   color: red;

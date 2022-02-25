@@ -15,10 +15,13 @@ import { EnterpriseCreateProductComponent } from './create-product/create-produc
 import { EnterpriseStoresComponent } from './stores/stores.component';
 import { EnterpriseProvidersComponent } from './providers/providers.component';
 import { EnterpriseReportsComponent } from './reports/reports.component';
+import { EnterpriseUsersComponent } from './users/users.component';
+import { EnterpriseUserDetailComponent } from './user-detail/user-detail.component';
 
 import { EnterpriseStateService } from './enterprise.service';
 import { AuthorizeService } from '../api-authorization/authorize.service';
-import { EnterpriseGuard } from '../api-authorization/authorize.guard';
+
+
 
 const enterpriseRoutes: Routes = [
   { path: 'home', component: EnterpriseHomeComponent },
@@ -28,6 +31,7 @@ const enterpriseRoutes: Routes = [
   { path: 'filialen', component: EnterpriseStoresComponent },
   { path: 'lieferanten', component: EnterpriseProvidersComponent },
   { path: 'statistik', component: EnterpriseReportsComponent },
+  { path: 'nutzer', component: EnterpriseUsersComponent },
 ];
 @NgModule({
   imports: [
@@ -46,6 +50,8 @@ const enterpriseRoutes: Routes = [
     EnterpriseCreateProductComponent,
     EnterpriseProvidersComponent,
     EnterpriseReportsComponent,
+    EnterpriseUsersComponent,
+    EnterpriseUserDetailComponent,
   ],
   exports: [EnterpriseComponent],
   providers: [

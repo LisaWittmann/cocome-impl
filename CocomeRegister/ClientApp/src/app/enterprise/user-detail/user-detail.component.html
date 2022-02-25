@@ -1,0 +1,68 @@
+<app-accordion [header]="fullName">
+    <form class="user-form" (submit)="saveChanges()">
+        <div>
+            <div class="input-wrapper">
+                <label for="firstName">Vorname</label>
+                <input 
+                    name="firstName"
+                    type="text"
+                    readonly="readonly"
+                    [(ngModel)]="user.firstName"
+                    class="input--labeled"
+                >
+            </div>
+            <div class="input-wrapper">
+                <label for="lastName">Nachname</label>
+                <input
+                    name="lastName"
+                    type="text"
+                    readonly="readonly"
+                    [(ngModel)]="user.lastName"
+                    class="input--labeled"
+                >
+            </div>
+            <div class="input-wrapper">
+                <label for="email">E-Mail</label>
+                <input 
+                    name="email"
+                    type="text"
+                    readonly="readonly"
+                    [(ngModel)]="user.email"
+                    class="input--labeled"
+                >
+            </div>
+        </div>
+        <div>
+            <div class="input-wrapper" *ngIf="user.store">
+                <label for="store">Filiale</label>
+                <select
+                    name="store"
+                    [(ngModel)]="user.store"
+                    class="input--labeled"
+                >
+                    <option 
+                        *ngFor="let store of stores"
+                        [ngValue]="store"
+                    >{{ store.name }}</option>
+                </select>
+            </div>
+            <div class="checkbox-wrapper">
+                <p>Rolle</p>
+                <div *ngFor="let option of roles">
+                  <input
+                    [name]="option.role"
+                    type="checkbox"
+                    [value]="option.role"
+                    [checked]="option.selected"
+                    (change)="updateRole($event)"
+                  >
+                  <label [for]="option.role">{{option.role}}</label>
+                </div>
+              </div>
+            <button
+                type="submit"
+                class="button__form"
+            >Speichern</button>
+        </div>
+    </form>
+</app-accordion>

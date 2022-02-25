@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using CocomeStore.Models;
+using CocomeStore.Models.Authorization;
 using CocomeStore.Models.Transfer;
 
 namespace CocomeStore.Services.Mapping
@@ -244,6 +245,29 @@ namespace CocomeStore.Services.Mapping
             product.Description = productTO.Description;
             product.ImageUrl = productTO.ImageUrl;
             product.ProviderId = productTO.Provider.Id;
+        }
+
+        /// <summary>
+        /// method <c>CreateApplicationUser</c> creates a new application user
+        /// object based on the given tranfer data
+        /// </summary>
+        /// <param name="userTO">user transfer object containing the data</param>
+        /// <returns>new application user instance</returns>
+        public ApplicationUser CreateApplicationUser(UserTO userTO)
+        {
+            var applicationUser = new ApplicationUser()
+            {
+                SecurityStamp = Guid.NewGuid().ToString(),
+                FirstName = userTO.FirstName,
+                LastName = userTO.LastName,
+                Email = userTO.Email,
+                UserName = userTO.Email,
+            };
+            if (userTO.Store != null)
+            {
+                applicationUser.StoreId = userTO.Store.Id;
+            }
+            return applicationUser;
         }
     }
 }

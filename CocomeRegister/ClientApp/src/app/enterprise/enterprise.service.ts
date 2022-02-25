@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from 'src/models/Store';
@@ -7,17 +7,18 @@ import { StateService } from 'src/services/StateService';
 import { Product } from 'src/models/Product';
 import { Provider } from 'src/models/Provider';
 import { Report } from 'src/models/Transfer';
+import { User } from 'src/models/User';
 
 interface EnterpriseState {
     products: Product[];
-    stores: Store[];
-    providers: Provider[];
+    stores: Store[],
+    providers: Provider[],
 }
 
 const initialState: EnterpriseState = {
     products: [],
     stores: [],
-    providers: []
+    providers: [],
 };
 
 @Injectable({providedIn: 'root'})
@@ -25,6 +26,7 @@ export class EnterpriseStateService extends StateService<EnterpriseState> {
     products$: Observable<Product[]> = this.select(state => state.products);
     stores$: Observable<Store[]> = this.select(state => state.stores);
     providers$: Observable<Provider[]> = this.select(state => state.providers);
+    baseUrl: string;
     api: string;
 
     constructor(
@@ -33,6 +35,7 @@ export class EnterpriseStateService extends StateService<EnterpriseState> {
         @Inject('BASE_URL') baseUrl: string
     ) {
         super(initialState);
+        this.baseUrl = baseUrl;
         this.api = baseUrl + 'api/enterprise';
         this.fetchProducts();
         this.fetchStores();
@@ -221,5 +224,37 @@ export class EnterpriseStateService extends StateService<EnterpriseState> {
         return this.http.post<Store[]>(
             `${this.api}/stores/${storeId}/stock`, product
         );
+    }
+
+    /**
+     * request all registered user
+     * @returns observable http response
+     */
+    getUsers() {
+        return this.http.get<User[]>(`${this.baseUrl}api/user`);
+    }
+
+    /**
+     * request addinng a new user to application
+     * @param newUser user to add
+     * @returns observable http response
+     */
+    addUser(newUser: User) {
+      return this.http.post<User>(
+        `${this.baseUrl}api/user`,
+        newUser
+      );
+    }
+
+    /**
+     * request updating a user entry
+     * @param user user with updated data and identifying email
+     * @returns observable http response
+     */
+    updateUser(user: User) {
+      return this.http.put<User>(
+        `${this.baseUrl}api/user`,
+        user
+      );
     }
 }
