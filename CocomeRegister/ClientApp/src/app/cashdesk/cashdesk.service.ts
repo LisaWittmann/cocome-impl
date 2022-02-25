@@ -30,10 +30,10 @@ export class CashDeskStateService extends StateService<CashDeskState> {
     api: string;
 
     constructor(
-    private http: HttpClient,
-    private authService: AuthorizeService,
-    @Inject('BASE_URL') baseUrl: string
-  ) {
+        private http: HttpClient,
+        private authService: AuthorizeService,
+        @Inject('BASE_URL') baseUrl: string
+    ) {
         super(initialState);
         this.api = baseUrl + 'api/cashdesk';
         this.authService.getUser().subscribe(user => {
@@ -77,6 +77,11 @@ export class CashDeskStateService extends StateService<CashDeskState> {
         )});
     }
 
+    /**
+     * request confirmation for credit card payment
+     * @param creditCard credit card information
+     * @returns observable http response
+     */
     confirmPayment(creditCard: CreditCard) {
         return this.http.post(`${this.api}/checkout/card`, creditCard)
     }
@@ -129,6 +134,9 @@ export class CashDeskStateService extends StateService<CashDeskState> {
         );
     }
 
+    /**
+     * get discount based on states express mode
+     */
     get discount() {
         return this.state.expressMode ? expressModeDiscount : 0;
     }
@@ -175,10 +183,20 @@ export class CashDeskStateService extends StateService<CashDeskState> {
         return this.getCardSum() - this.getTotalDiscount();
     }
 
+    /**
+     * reset intern express mode to false
+     */
     resetExpressMode() {
         this.setState({ expressMode: false });
     }
 
+    /**
+     * add new sale to lastSales.
+     * remove sales from lastSales that are more than 60 minutes ago
+     * and changes intern express mode state if more than 50 % of the last sales
+     * fullfill the condition of an express checkout (less than 8 goods and cash payment)
+     * @param sale latest confirmed sale
+     */
     updateLastSales(sale: Sale) {
         const currentTime = new Date(Date.now()).getTime();
         this.lastSales.push(sale);

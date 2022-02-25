@@ -98,7 +98,7 @@ namespace CocomeStore.Services
                 return new List<int>();
             }
 
-            var locationParam = store.PostalCode.ToString().Substring(0, 1);
+            var locationParam = store.PostalCode.ToString().Substring(0, 2);
             return _context.Stores
                 .Where(store => store.PostalCode != 0)
                 .AsEnumerable()

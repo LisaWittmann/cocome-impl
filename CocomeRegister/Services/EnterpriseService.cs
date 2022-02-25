@@ -71,28 +71,6 @@ namespace CocomeStore.Services
         }
 
         /// <summary>
-        /// method <c>GetAllOrders</c> returns all
-        /// orders entries in database as transfer objects
-        /// including related objects
-        /// </summary>
-        /// <returns>
-        /// enumerable order entries as transfer objects
-        /// </returns>
-        public IEnumerable<OrderTO> GetAllOrders()
-        { 
-           return _context.Orders
-                .Include(order => order.Store)
-                .Include(order => order.Provider)
-                .AsEnumerable()
-                .GroupJoin(_context.OrderElements
-                    .Include(element => element.Product),
-                    order => order.Id,
-                    element => element.OrderId,
-                    (order, elements) =>
-                        _mapper.CreateOrderTO(order, elements.AsEnumerable()));
-        }
-
-        /// <summary>
         /// method <c>GetAllProducts</c> returns all
         /// product entries in database as transfer object
         /// including related objects

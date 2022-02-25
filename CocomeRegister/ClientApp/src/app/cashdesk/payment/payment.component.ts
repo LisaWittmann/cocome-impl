@@ -66,13 +66,15 @@ export class CashDeskPaymentComponent {
   }
 
   confirmPayment() {
-    this.cashdeskState.confirmPayment(this.creditCard).subscribe(() => {
-      this.cardPaymentError = false;
-      this.cardPaymentAccepted = true;
-    }, () => {
-      this.cardPaymentAccepted = false;
-      this.cardPaymentError = true;
-    });
+    if (!this.cardPaymentAccepted) {
+      this.cashdeskState.confirmPayment(this.creditCard).subscribe(() => {
+        this.cardPaymentError = false;
+        this.cardPaymentAccepted = true;
+      }, () => {
+        this.cardPaymentAccepted = false;
+        this.cardPaymentError = true;
+      });
+    }
   }
 
   confirmCheckout() {

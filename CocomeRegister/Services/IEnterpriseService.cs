@@ -7,7 +7,6 @@ namespace CocomeStore.Services
     public interface IEnterpriseService
     {
         IEnumerable<Store> GetAllStores();
-        IEnumerable<OrderTO> GetAllOrders();
         IEnumerable<ProductTO> GetAllProducts();
         IEnumerable<Provider> GetAllProvider();
 

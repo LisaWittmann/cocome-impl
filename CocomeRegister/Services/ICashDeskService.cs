@@ -9,6 +9,6 @@ namespace CocomeStore.Services
     {
         Task<SaleTO> UpdateSaleDataAsync(int storeId, SaleTO saleTO);
         Task CreateSaleAsync(SaleTO saleTO);
-        IEnumerable<Product> GetAvailableProducts(int storeId);
+        IEnumerable<ProductTO> GetAvailableProducts(int storeId);
     }
 }

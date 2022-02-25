@@ -109,7 +109,6 @@ export class StoreStateService extends StateService<StoreState> {
     }
   }
 
-
   /**
    * update state store and all depending store data
    * @param store store to set as new state store
@@ -166,7 +165,7 @@ export class StoreStateService extends StateService<StoreState> {
    */
   placeNewOrder() {
     this.http.post<Order[]>(
-      `${this.api}/orders/${this.state.store.id}/create`,
+      `${this.api}/orders/${this.state.store.id}`,
       this.state.currentOrder
     ).subscribe(result => {
       console.log(result);
@@ -194,8 +193,8 @@ export class StoreStateService extends StateService<StoreState> {
    * @param product product containing id of entry to update
    */
   updateProduct(product: Product) {
-    this.http.post<StockItem[]>(
-      `${this.api}/products/${this.state.store.id}/update`,
+    this.http.put<StockItem[]>(
+      `${this.api}/products/${this.state.store.id}`,
       product
     ).subscribe(result => {
       this.setState({ inventory: result });
@@ -209,7 +208,7 @@ export class StoreStateService extends StateService<StoreState> {
    */
   getProduct(id: number) {
     return this.http.get<Product>(
-      `${this.api}/${this.state.store.id}/product/${id}`
+      `${this.api}/products/${this.state.store.id}/${id}`
     );
   }
 
@@ -237,7 +236,7 @@ export class StoreStateService extends StateService<StoreState> {
   }
 
   /**
-   * mark stock exchange as placed
+   * mark stock exchange as placed and remove entries from stock
    * @param exchange exchange to perform changes on
    */
   startExchange(exchange: StockExchange) {
@@ -246,11 +245,12 @@ export class StoreStateService extends StateService<StoreState> {
       exchange
     ).subscribe(result => {
       this.setState({ exchanges: result });
+      this.fetchInventory();
     }, error => console.error(error));
   }
 
   /**
-   * mark stock exchange as delivered
+   * mark stock exchange as delivered and add entries to stock
    * @param exchange exchange to perform changes on
    */
   closeExchange(exchange: StockExchange) {
@@ -259,6 +259,7 @@ export class StoreStateService extends StateService<StoreState> {
       exchange
     ).subscribe(result => {
       this.setState({ exchanges: result });
+      this.fetchInventory();
     }, error => console.error(error));
   }
 }
