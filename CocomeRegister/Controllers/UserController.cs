@@ -10,6 +10,8 @@ using CocomeStore.Models.Authorization;
 using System.Threading.Tasks;
 using CocomeStore.Models.Database;
 using Microsoft.EntityFrameworkCore;
+using CocomeStore.Models.Transfer;
+using CocomeStore.Services.Mapping;
 
 namespace CocomeStore.Controllers
 {
@@ -20,61 +22,73 @@ namespace CocomeStore.Controllers
     {
 
         private readonly ILogger<UserController> _logger;
+        private readonly IModelMapper _mapper;
         private readonly CocomeDbContext _context;
-        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ClaimManager _claimManager;
 
         public UserController(
             ILogger<UserController> logger,
+            IModelMapper mapper,
             CocomeDbContext context,
-            RoleManager<IdentityRole> roleManager,
             UserManager<ApplicationUser> userManager,
             ClaimManager claimManager)
         {
             _logger = logger;
+            _mapper = mapper;
             _context = context;
-            _roleManager = roleManager;
             _userManager = userManager;
             _claimManager = claimManager;
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<ApplicationUser>> GetAllUsers()
+        public async Task<ActionResult<IEnumerable<UserTO>>> GetAllUsers()
         {
-            return _userManager.Users.Include(user => user.Store).ToArray();
-        }
-
-        [HttpGet]
-        [Route("roles")]
-        public ActionResult<IEnumerable<IdentityRole>> GetAllRoles()
-        {
-            return _roleManager.Roles.ToArray();
+            var users = new List<UserTO>();
+            foreach(var appUser in _userManager.Users)
+            {
+                var user = new UserTO()
+                {
+                    FirstName = appUser.FirstName,
+                    LastName = appUser.LastName,
+                    Email = appUser.Email
+                };
+                if (appUser.StoreId != null)
+                {
+                    user.Store = await _context.Stores.FindAsync(appUser.StoreId);
+                }
+                user.Roles = await _userManager.GetRolesAsync(appUser);
+                users.Add(user);
+            }
+            return users.ToArray();
         }
 
         [HttpPost]
-        public async Task<ApplicationUser> CreateNewUserAsync(ApplicationUser applicationUser, String password, String role)
+        public async Task<ApplicationUser> CreateNewUserAsync(UserTO userTO, string password)
         {
-            applicationUser.SecurityStamp = Guid.NewGuid().ToString();
-            await _userManager.CreateAsync(applicationUser, password);
+            var applicationUser = _mapper.CreateApplicationUser(userTO);
 
-            await _userManager.AddToRoleAsync(applicationUser, role);
+            await _userManager.CreateAsync(applicationUser, password);
+            if (userTO.Roles.Count() > 0)
+            {
+                await _userManager.AddToRolesAsync(applicationUser, userTO.Roles);
+            }
             await _userManager.AddClaimsAsync(applicationUser, await _claimManager.GetClaimsAsync(applicationUser));
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return applicationUser;
         }
 
         [HttpPost]
         [Route("role")]
-        public async Task<ApplicationUser> ChangeUserRoleAsync(String username, String role)
+        public async Task<ApplicationUser> ChangeUserRoleAsync(string username, IEnumerable<string> roles)
         {
             ApplicationUser user = await _userManager.FindByNameAsync(username);
 
-            await _userManager.AddToRoleAsync(user, role);
+            await _userManager.AddToRolesAsync(user, roles);
             await _userManager.AddClaimsAsync(user, await _claimManager.GetClaimsAsync(user));
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return user;
         }
 

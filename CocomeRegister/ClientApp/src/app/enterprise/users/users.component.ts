@@ -21,6 +21,7 @@ export class EnterpriseUsersComponent {
       this.stores = stores;
     });
     this.enterpriseService.getUsers().subscribe(users => {
+      console.log(users);
       this.users = users;
     });
   }
