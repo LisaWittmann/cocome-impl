@@ -2,9 +2,6 @@
 using CocomeStore.Models.Transfer;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CocomeTest.Services
 {
@@ -23,10 +20,10 @@ namespace CocomeTest.Services
         {
             _store = new List<Store>()
             {
-                new Store() { Id = 1, City = "Teststadt", Name = "Teststore1", PostalCode = 1234},
-                new Store() { Id = 2, City = "Teststadt", Name = "Teststore2", PostalCode = 1234},
-                new Store() { Id = 3, City = "Teststadt", Name = "Teststore3", PostalCode = 1234},
-                new Store() { Id = 4, City = "Teststadt", Name = "Teststore4", PostalCode = 1234}
+                new Store() { Id = 1, City = "Teststadt", Name = "Teststore1", PostalCode = 12345},
+                new Store() { Id = 2, City = "Teststadt", Name = "Teststore2", PostalCode = 12345},
+                new Store() { Id = 3, City = "Teststadt", Name = "Teststore3", PostalCode = 12345},
+                new Store() { Id = 4, City = "Teststadt", Name = "Teststore4", PostalCode = 12345}
             };
             _provider = new List<Provider>() {
                 new Provider() { Id = 1, Name = "Testprovider1"},

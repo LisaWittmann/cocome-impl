@@ -11,7 +11,7 @@ using CocomeStore.Services;
 
 namespace CocomeTest.Services
 {
-    /// <summary>
+    /*/// <summary>
     /// class <c>StoreService</c> implenents <see cref="IStoreService"/>
     /// and provides store intern functionalities
     /// </summary>
@@ -203,5 +203,5 @@ namespace CocomeTest.Services
             _mapper.UpdateProduct(product, productTO);
             _context.SaveChanges();
         }
-    }
+    }*/
 }

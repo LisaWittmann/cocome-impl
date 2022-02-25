@@ -9,7 +9,7 @@ using CocomeStore.Services;
 namespace CocomeTest.Services
 {
     
-    public class CashDeskTestService : ICashDeskService
+    /*public class CashDeskTestService : ICashDeskService
     {
         private readonly List<Provider> _provider;
         private readonly List<ProductTO> _product;
@@ -52,7 +52,10 @@ namespace CocomeTest.Services
 
         public IEnumerable<ProductTO> GetAvailableProducts(int storeId)
         {
-            return _product;
+            return _context.StockItems
+                .Include(item => item.Product)
+                .Where(item => item.StoreId == storeId && item.Stock > 0)
+                .Select(item => _mapper.CreateProductTO(item.Product));
         }
 
         public async Task<SaleTO> UpdateSaleDataAsync(int storeId, SaleTO saleTO)
@@ -65,5 +68,5 @@ namespace CocomeTest.Services
             saleTO.Store = store;
             return saleTO;
         }
-    }
+    }*/
 }
