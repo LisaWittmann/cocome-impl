@@ -15,7 +15,7 @@ namespace CocomeStore.Models.Database
         {
         }
 
-        public DbSet<Store> Stores { get; set; }
+        public virtual DbSet<Store> Stores { get; set; }
 
         public DbSet<Product> Products { get; set; }
 
