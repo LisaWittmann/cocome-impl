@@ -44,14 +44,14 @@ namespace CocomeStore.Services
             var incommingProducts = _context.ExchangeElements
                 .Include(element => element.StockExchange)
                 .Where(element =>
-                    element.StockExchange.DeliveringDate == DateTime.MinValue &&
+                    element.StockExchange.DeliveringDate <= element.StockExchange.PlacingDate &&
                     element.StockExchange.StoreId == storeId)
                 .Select(element => element.Product)
                 .ToList();
             incommingProducts.AddRange(_context.OrderElements
                 .Include(element => element.Order)
                 .Where(element =>
-                    element.Order.DeliveringDate == DateTime.MinValue &&
+                    element.Order.DeliveringDate < element.Order.PlacingDate &&
                     element.Order.StoreId == storeId)
                 .Select(element => element.Product));
             return incommingProducts.ToHashSet();
@@ -207,9 +207,10 @@ namespace CocomeStore.Services
             return _context.StockExchanges
                 .Where(exchange =>
                     (exchange.StoreId == storeId &&
-                    exchange.DeliveringDate == DateTime.MinValue) ||
+                    exchange.DeliveringDate != exchange.PlacingDate &&
+                    exchange.DeliveringDate < exchange.PlacingDate) ||
                     (exchange.ProviderId == storeId &&
-                    exchange.PlacingDate == DateTime.MinValue))
+                    exchange.PlacingDate <= exchange.DeliveringDate))
                 .Include(exchange => exchange.Provider)
                 .Include(exchange => exchange.Store)
                 .AsEnumerable()

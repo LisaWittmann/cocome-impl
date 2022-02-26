@@ -11,6 +11,7 @@ import { CashDeskStateService } from '../cashdesk.service';
 export class CashDeskPaymentComponent {
   expressMode: boolean;
 
+  transationStarted: boolean;
   paymentMethod: PaymentMethod = undefined;
   creditCard = {} as CreditCard;
   
@@ -78,15 +79,17 @@ export class CashDeskPaymentComponent {
   }
 
   confirmCheckout() {
+    this.transationStarted = true;
     this.cashdeskState.confirmCheckout(
       this.paymentMethod,
       this.cardPayment ? this.totalPrice : this.handedCash
     ).then(blob => {
+      this.transationStarted = false;
       this.router.navigate(['/kasse/home']);
 
       const fileUrl = URL.createObjectURL(blob);
       console.log(fileUrl);
-      // open printer wizard
+      
       const frame = document.createElement('iframe');
       document.body.appendChild(frame);
       frame.style.display = 'none';

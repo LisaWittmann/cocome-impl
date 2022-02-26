@@ -140,7 +140,7 @@ namespace CocomeStore.Services
             var dataset = _context.Orders
                 .Where(order =>
                     order.Provider.Id == providerId &&
-                    order.DeliveringDate != DateTime.MinValue)
+                    order.DeliveringDate > order.PlacingDate)
                 .OrderBy(order => order.PlacingDate)
                 .Select(order => (order.DeliveringDate - order.PlacingDate).TotalDays);
 

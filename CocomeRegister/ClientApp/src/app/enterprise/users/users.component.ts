@@ -73,6 +73,7 @@ export class EnterpriseUsersComponent {
     this.enterpriseService.addUser(this.newUser).subscribe(user => {
       this.users.push(user);
       this.initEmptyUser();
+      this.initSelectedRoles();
       this.registerError = false;
     }, error => {
       console.error(error);

@@ -76,7 +76,7 @@
                 <button 
                     *ngIf="(cardPayment && paymentAccepted) || cashPayment"
                     class="button button--filled"
-                    [class.disabled]="!paymentAccepted"
+                    [class.disabled]="!paymentAccepted || transationStarted"
                     (click)="confirmCheckout()"
                 >
                     Vorgang abschließen

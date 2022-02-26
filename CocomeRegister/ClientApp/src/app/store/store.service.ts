@@ -170,7 +170,7 @@ export class StoreStateService extends StateService<StoreState> {
     ).subscribe(result => {
       console.log(result);
       this.setState({ currentOrder: [] });
-      this.setState({ orders: result });
+      this.setState({ orders: [...this.state.orders, ...result] });
     }, error => console.error(error));
   }
 

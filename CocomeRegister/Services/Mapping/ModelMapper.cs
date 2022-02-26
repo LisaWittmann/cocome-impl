@@ -94,7 +94,7 @@ namespace CocomeStore.Services.Mapping
                 Provider = order.Provider,
                 PlacingDate = order.PlacingDate,
                 DeliveringDate = order.DeliveringDate,
-                Closed = (order.DeliveringDate != DateTime.MinValue)
+                Closed = order.DeliveringDate > order.PlacingDate
             };
         }
 

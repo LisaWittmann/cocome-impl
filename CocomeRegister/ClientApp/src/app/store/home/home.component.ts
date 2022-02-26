@@ -24,6 +24,12 @@ export class StoreHomeComponent implements AfterViewInit {
     private storeStateService: StoreStateService) {
     this.storeStateService.store$.subscribe(store => {
       this.store = store;
+      if (store) {
+        this.storeStateService.getLatestProfits().subscribe(profits => {
+          this.report = profits;
+          this.initChart();
+        });
+      }
     });
     this.storeStateService.inventory$.subscribe(() => {
       this.runningOutOfStock = this.storeStateService.runningOutOfStock;
@@ -44,23 +50,24 @@ export class StoreHomeComponent implements AfterViewInit {
 
   initChart() {
     this.chart = (document.getElementById('salesChart') as HTMLCanvasElement);
-    this.salesChart = new Chart(this.chart.getContext('2d'), {
-      type: 'line',
-      data: {
-        datasets: [{
-          label: this.report.label,
-          data: this.report.dataset
-        }],
-        labels: monthValues,
-      },
-      options: { responsive: true }
-    });
+    if (this.chart) {
+      this.salesChart = new Chart(this.chart.getContext('2d'), {
+        type: 'line',
+        data: {
+          datasets: [{
+            label: this.report.label,
+            data: this.report.dataset
+          }],
+          labels: monthValues,
+        },
+        options: { responsive: true }
+      });
+    }
   }
 
   ngAfterViewInit() {
-    this.storeStateService.getLatestProfits().subscribe(profits => {
-      this.report = profits;
+    if (this.report && !this.salesChart) {
       this.initChart();
-    });
+    }
   }
 }

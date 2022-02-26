@@ -11,7 +11,7 @@
                 (updateProductEvent)="updateProduct()"
             ></app-product-detail>
         </section>
-        <section>
+        <section *ngIf="availableStores.length">
             <h2>Erhältlich in folgenden Filialen:</h2>
             <ul class="table">
                 <li *ngFor="let store of availableStores">{{ store.id }} - {{ store.name }}</li>

@@ -158,7 +158,6 @@ namespace CocomeStore.Controllers
             
         }
 
-
         /// <summary>
         /// endpoint to request a stores latest orders by storeid
         /// </summary>
@@ -225,8 +224,7 @@ namespace CocomeStore.Controllers
             try
             {
                 _logger.LogInformation("place new order for store {}", storeId);
-                _storeService.PlaceOrder(storeId, elements);
-                return _storeService.GetOrders(storeId).ToArray();
+                return _storeService.PlaceOrder(storeId, elements).ToArray();
             }
             catch (Exception ex)
             {
@@ -357,7 +355,6 @@ namespace CocomeStore.Controllers
             }
         }
 
-
         /// <summary>
         /// endpoint to request a stores outstanding stock exchanges with another store
         /// </summary>
@@ -377,7 +374,6 @@ namespace CocomeStore.Controllers
         {
             return _exchangeService.GetStockExchanges(storeId).ToArray();
         }
-
 
         /// <summary>
         /// endpoint to initiate a stock exchange and therefore update the placing

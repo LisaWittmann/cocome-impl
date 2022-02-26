@@ -10,7 +10,7 @@ namespace CocomeStore.Services
 
         IEnumerable<OrderTO> GetOrders(int storeId);
         void CloseOrder(int storeId, int orderId);
-        void PlaceOrder(int storeId, IEnumerable<OrderElementTO> elements);
+        IEnumerable<OrderTO> PlaceOrder(int storeId, IEnumerable<OrderElementTO> elements);
 
         ProductTO GetProduct(int storeId, int productId);
         void UpdateProduct(int storeId, ProductTO productTO);

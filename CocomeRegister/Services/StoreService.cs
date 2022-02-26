@@ -55,7 +55,7 @@ namespace CocomeStore.Services
         {
             return _context.Orders
                 .Where(order => order.StoreId == storeId &&
-                    order.DeliveringDate == DateTime.MinValue)
+                    order.DeliveringDate < order.PlacingDate)
                 .Include(order => order.Store)
                 .Include(order => order.Provider)
                 .AsEnumerable()
@@ -111,8 +111,9 @@ namespace CocomeStore.Services
         /// </summary>
         /// <param name="storeId">unique identitfier of the store</param>
         /// <param name="elements">order transfer elements of the new order</param>
+        /// <returns>new created orders as transfer objects</returns>
         /// <exception cref="EntityNotFoundException"></exception>
-        public void PlaceOrder(int storeId, IEnumerable<OrderElementTO> elements)
+        public IEnumerable<OrderTO> PlaceOrder(int storeId, IEnumerable<OrderElementTO> elements)
         {
             DateTime dateTime = DateTime.Now;
             Store store = GetStore(storeId);
@@ -121,7 +122,9 @@ namespace CocomeStore.Services
                 throw new EntityNotFoundException("store with id " + storeId + " could not be found");
             }
 
+            var placedOrders = new List<OrderTO>();
             var groupedElements = elements.GroupBy(element => element.Product.Provider.Id);
+
             foreach (var element in groupedElements)
             {
                 Order order = new()
@@ -135,12 +138,13 @@ namespace CocomeStore.Services
                 var orderElements = element.ToArray()
                     .Select(element => _mapper.CreateOrderElement(order, element))
                     .ToArray();
-
+                
                 _context.AddRange(orderElements);
+                placedOrders.Add(_mapper.CreateOrderTO(order, orderElements));
             };
             _context.SaveChanges();
+            return placedOrders;
         }
-
 
         /// <summary>
         /// method <c>GetInventory</c> returns all stockitems entries related to

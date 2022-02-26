@@ -39,6 +39,7 @@ namespace CocomeStore.Services
             Product product = _mapper.CreateProduct(productTO);
             _context.Products.Add(product);
             _context.SaveChanges();
+            product.Provider = productTO.Provider;
             return _mapper.CreateProductTO(product);
         }
 
