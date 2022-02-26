@@ -1,6 +1,6 @@
-﻿# Credentails
+# credentials
 
-## superadmins
+## superuser
 
 access to admin, manager and cashdesk view
 
